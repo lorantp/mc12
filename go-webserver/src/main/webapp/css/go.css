@@ -1,0 +1,17 @@
+div .board {
+	position: absolute;
+}
+
+div .position {
+	position: absolute;
+	height:  48px;
+	width: 48px;
+}
+
+ [stone=black] {
+	background-image: url("../img/black.png");
+}
+
+[stone=white] {
+	background-image: url("../img/white.png");
+}
