@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class GameTest {
 	@Test
-	public void testPlayer() {
+	public void testEquals() {
 		EqualsVerifier.forClass(Game.class).verify();
 	}
 }
