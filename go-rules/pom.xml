@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>go-parent</artifactId>
+		<groupId>com.topdesk.mc12</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>go-rules</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>com.topdesk.mc12</groupId>
+			<artifactId>go-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>
