@@ -6,7 +6,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<description>Game of Go</description>
 	<packaging>pom</packaging>
-
+	
 	<modules>
 		<module>go-common</module>
 		<module>go-webserver</module>
@@ -55,6 +55,11 @@
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 			<version>3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>0.11.0</version>
 		</dependency>
 	</dependencies>
 </project>
