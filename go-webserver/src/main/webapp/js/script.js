@@ -1,9 +1,13 @@
 /* Author:
 
 */
+
+var stoneNumber = 0
+
 var drawBoard = function() {
 	var board = document.getElementById("board");
 	var boardSize = 19;
+	
 	for (var y = 0; y < boardSize; y++) {
 		for (var x = 0; x < boardSize; x++) {
 			board.appendChild(createSquare(x, y));
@@ -14,15 +18,12 @@ var drawBoard = function() {
 var createSquare = function(x, y) {
 	var div = document.createElement("div");
 	div.className = "position";
-	if (x % 2 === 0) {
-		div.setAttribute("stone", "black");
-	} else {
-		div.setAttribute("stone", "white");
-	}
+	div.id = "x" + x + "y" + y;
+	
 	div.setAttribute("column", x);
 	div.setAttribute("row", y);
 	
-	div.setAttribute("onClick", "createShow(" + x + ", " + y + ")");
+	div.setAttribute("onClick", "setStone(" + x + ", " + y + ")");
 
 	div.setAttribute("style", createLocationStyle(x, y));
 	
@@ -35,6 +36,11 @@ var createLocationStyle = function(x, y) {
 	return "top: " + top + "px; left: " + left + "px;";
 }
 
-var createShow = function(x, y) {
-	alert("x: " + x + " y: " + y);
+var setStone = function(x, y) {
+	var stone = "white";
+	if (stoneNumber++ % 2 === 0) {
+		stone = "black";
+	}
+	
+	document.getElementById("x"+x+"y"+y).setAttribute("stone", stone);
 }

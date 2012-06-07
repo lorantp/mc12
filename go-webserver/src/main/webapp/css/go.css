@@ -1,14 +1,11 @@
-div .board {
-	position: absolute;
-}
-
 div .position {
 	position: absolute;
 	height:  48px;
 	width: 48px;
+	background-color: #C9FAC9;
 }
 
- [stone=black] {
+[stone=black] {
 	background-image: url("../img/black.png");
 }
 
