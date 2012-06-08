@@ -13,7 +13,7 @@ public class Goodbye {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String bye() {
-		return "<html><body><form action=\"/bye\" method=\"post\"><input type=\"text\" name=\"mc12\"><input type=\"submit\" name=\"mysubmit\" value=\"Click!\" /></form></body></html>";
+		return "<html><body><form action=\"bye\" method=\"post\"><input type=\"date\" name=\"mc12\"><input type=\"submit\" name=\"mysubmit\" value=\"Click!\" /></form></body></html>";
 	}
 	
 	@POST
