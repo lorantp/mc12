@@ -16,12 +16,14 @@ var drawBoard = function() {
 }
 
 var createSquare = function(x, y) {
+//	var div = $('<div>').addClass("position").attr({
+//		id : "x" + x + "y" + y,
+//		column : x
+//	});
+	
 	var div = document.createElement("div");
 	div.className = "position";
 	div.id = "x" + x + "y" + y;
-	
-	div.setAttribute("column", x);
-	div.setAttribute("row", y);
 	
 	div.setAttribute("onClick", "setStone(" + x + ", " + y + ")");
 
@@ -41,6 +43,5 @@ var setStone = function(x, y) {
 	if (stoneNumber++ % 2 === 0) {
 		stone = "black";
 	}
-	
-	document.getElementById("x"+x+"y"+y).setAttribute("stone", stone);
+	$("#x"+x+"y"+y).attr("stone", stone);
 }
