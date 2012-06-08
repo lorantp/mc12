@@ -24,7 +24,9 @@
 			<groupId>com.topdesk.mc12</groupId>
 			<artifactId>go-webserver</artifactId>
 			<version>${project.version}</version>
-			<type>war</type>
+			<!-- 
+			 <type>war</type>
+			 -->
 		</dependency>
 	</dependencies>
 </project>
