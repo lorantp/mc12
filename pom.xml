@@ -9,10 +9,10 @@
 	
 	<modules>
 		<module>go-common</module>
-		<module>go-webserver</module>
+		<module>go-guts</module>
 		<module>go-persistence</module>
 		<module>go-rules</module>
-		<module>go-guts</module>
+		<module>go-rest</module>
 	</modules>
 	
 	<properties>

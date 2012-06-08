@@ -7,6 +7,6 @@ import com.google.inject.Module;
 public class PersistenceModule extends AbstractModule{
 	@Override
 	protected void configure() {
-		
+		bind(Backend.class).to(H2Backend.class);
 	}
 }
