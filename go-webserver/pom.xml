@@ -45,10 +45,11 @@
 
 	<build>
 		<plugins>
+			<!-- Jasmine to run JavaScript tests -->
 			<plugin>
 				<groupId>com.github.searls</groupId>
 				<artifactId>jasmine-maven-plugin</artifactId>
-				<version>1.1.0</version>
+				<version>1.1.0</version>				
 				<executions>
 					<execution>
 						<goals>
@@ -65,8 +66,10 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		
 		<pluginManagement>
 			<plugins>
+			<!-- Define where to deploy webapp -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>tomcat-maven-plugin</artifactId>
