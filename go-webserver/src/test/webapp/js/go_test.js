@@ -1,12 +1,16 @@
-test("location style has proper format", function() {
-  equal(createLocationStyle(0,0), "top: 0px; left: 0px;", "The format is incorrect");
+describe("location style format", function() {
+  it("should be of the format", function() {
+	  expect(createLocationStyle(0,0)).toBe("top: 0px; left: 0px;");
+  })
 });
 
-test("position square has proper attributes", function() {
-	var div = createSquare(0, 0);
-	equal(div.className, "position", "Incorrect class");
-	equal(div.id, "x0y0", "Incorrect id");
-	equal(div.style.top, '0px', "Incorrect top style");
-	equal(div.style.left, '0px', "Incorrect left style");
-	equal(div.getAttribute("onClick"), "setStone(0, 0)")
+describe("position square attributes", function() {
+	it("should have correct attributes", function() {
+		var div = createSquare(0, 0);
+		expect(div.className).toBe("position");
+		expect(div.id).toBe("x0y0");
+		expect(div.style.top).toBe('0px');
+		expect(div.style.left).toBe('0px');
+		expect(div.getAttribute("onClick")).toBe("setStone(0, 0)");
+	})
 });
