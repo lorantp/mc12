@@ -16,21 +16,11 @@ var drawBoard = function() {
 }
 
 var createSquare = function(x, y) {
-//	var div = $('<div>').addClass("position").attr({
-//		id : "x" + x + "y" + y,
-//		style : createLocationStyle(x, y),
-//		onClick : "setStone(" + x + ", " + y + ")"
-//	});
-	
-	var div = document.createElement("div");
-	div.className = "position";
-	div.id = "x" + x + "y" + y;
-	
-	div.setAttribute("style", createLocationStyle(x, y));
-	
-	div.setAttribute("onClick", "setStone(" + x + ", " + y + ")");
-
-	return div;
+	return $('<div>').addClass("position").attr({
+		id : "x" + x + "y" + y,
+		style : createLocationStyle(x, y),
+		onClick : "setStone(" + x + ", " + y + ")"
+	}).get(0);
 }
 
 var createLocationStyle = function(x, y) {
