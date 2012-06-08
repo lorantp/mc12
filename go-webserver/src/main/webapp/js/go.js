@@ -18,17 +18,18 @@ var drawBoard = function() {
 var createSquare = function(x, y) {
 //	var div = $('<div>').addClass("position").attr({
 //		id : "x" + x + "y" + y,
-//		column : x
+//		style : createLocationStyle(x, y),
+//		onClick : "setStone(" + x + ", " + y + ")"
 //	});
 	
 	var div = document.createElement("div");
 	div.className = "position";
 	div.id = "x" + x + "y" + y;
 	
-	div.setAttribute("onClick", "setStone(" + x + ", " + y + ")");
-
 	div.setAttribute("style", createLocationStyle(x, y));
 	
+	div.setAttribute("onClick", "setStone(" + x + ", " + y + ")");
+
 	return div;
 }
 
