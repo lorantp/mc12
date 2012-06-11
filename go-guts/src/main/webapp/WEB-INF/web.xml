@@ -14,24 +14,4 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
 	<listener>
 		<listener-class>com.topdesk.mc12.guice.GuiceServletConfig</listener-class>
 	</listener>
-	<!--
-	<servlet>
-		<servlet-name>rest</servlet-name>
-		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-		<init-param>
-			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-			<param-value>true</param-value>
-		</init-param>
-		<init-param>
-			<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>com.topdesk.mc12.webserver.rest</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>rest</servlet-name>
-		<url-pattern>/rest/*</url-pattern>
-	</servlet-mapping>
-	-->
-
 </web-app>
