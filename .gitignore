@@ -36,3 +36,6 @@ Desktop.ini
 
 # Mac crap
 .DS_Store
+
+# H2 databases
+*.db

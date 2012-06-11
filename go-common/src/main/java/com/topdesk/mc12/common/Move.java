@@ -1,14 +1,20 @@
 package com.topdesk.mc12.common;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Data @NoArgsConstructor @AllArgsConstructor
+@Entity
 public final class Move {
-	private long id;
-	private int x = -1;
-	private int y = -1;
-	@NonNull private Color color;
+	@Id @GeneratedValue private long id;
+	@Nullable private int x = -1;
+	@Nullable private int y = -1;
+	@Nonnull private Color color;
 }

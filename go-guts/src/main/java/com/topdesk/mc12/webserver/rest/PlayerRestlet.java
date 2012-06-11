@@ -15,7 +15,7 @@ public class PlayerRestlet {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Player get(@QueryParam("id") long id) {
-		return new Player(id, "Jorn");
+		return new Player(id, "Jorn", "jornh@topdesk.com");
 	}
 	
 	@POST

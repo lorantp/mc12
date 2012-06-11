@@ -4,7 +4,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public class WebServer {
-	private Server server;
+	private final Server server;
 	
 	public WebServer() {
 		server = new Server(80);

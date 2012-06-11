@@ -1,11 +1,18 @@
 package com.topdesk.mc12.common;
 
+import javax.annotation.Nonnull;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor
+@Entity
 public final class Player {
-	private long id;
-	private String nickname;
+	@Id @GeneratedValue private long id;
+	@Nonnull private String nickname;
+	@Nonnull private String email;
 }

@@ -17,6 +17,6 @@ import com.topdesk.mc12.common.Player;
 public class GameStateRestlet {
 	@GET
 	public Game get(@QueryParam("id") long id) {
-		return new Game(id, BoardSize.NINETEEN, new Player(1, "Jorn"), new Player(2, "Bernd"), 42, -1);
+		return new Game(id, BoardSize.NINETEEN, new Player(1, "Jorn", "jornh@topdesk.com"), new Player(2, "Bernd", "berndj@topdesk.com"), 42, -1);
 	}
 }
