@@ -7,9 +7,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.topdesk.mc12.common.BoardSize;
 import com.topdesk.mc12.common.Game;
-import com.topdesk.mc12.common.Player;
+import com.topdesk.mc12.guice.InjectorHolder;
+import com.topdesk.mc12.persistence.Backend;
 
 @Path("game")
 @Produces(MediaType.APPLICATION_JSON)
@@ -17,6 +17,10 @@ import com.topdesk.mc12.common.Player;
 public class GameStateRestlet {
 	@GET
 	public Game get(@QueryParam("id") long id) {
-		return new Game(id, BoardSize.NINETEEN, new Player(1, "Jorn", "jornh@topdesk.com"), new Player(2, "Bernd", "berndj@topdesk.com"), 42, -1);
+		return getBackend().get(Game.class, id);
+	}
+	
+	private Backend getBackend() {
+		return InjectorHolder.getInjector().getInstance(Backend.class);
 	}
 }
