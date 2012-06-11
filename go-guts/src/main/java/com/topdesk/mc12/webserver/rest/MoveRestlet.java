@@ -6,7 +6,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
 import com.topdesk.mc12.common.Move;
-import com.topdesk.mc12.common.Pass;
 
 @Path("move")
 public class MoveRestlet {
