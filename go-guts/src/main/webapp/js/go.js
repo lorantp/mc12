@@ -4,12 +4,10 @@
 
 var stoneNumber = 0
 
-var drawBoard = function() {
-	var board = document.getElementById("board");
-	var boardSize = 19;
-	
-	for (var y = 0; y < boardSize; y++) {
-		for (var x = 0; x < boardSize; x++) {
+var drawBoard = function(size) {
+	var board = $("#board").get(0);
+	for (var y = 0; y < size; y++) {
+		for (var x = 0; x < size; x++) {
 			board.appendChild(createSquare(x, y));
 		}
 	}
