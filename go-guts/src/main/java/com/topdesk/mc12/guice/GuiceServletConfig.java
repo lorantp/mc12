@@ -4,12 +4,14 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.topdesk.mc12.persistence.PersistenceModule;
+import com.topdesk.mc12.testdata.TestData;
 
 public class GuiceServletConfig extends GuiceServletContextListener {
 	@Override
 	protected Injector getInjector() {
 		Injector injector = Guice.createInjector(new PersistenceModule(), new WebModule());
 		InjectorHolder.init(injector);
+		TestData.create(injector);
 		return injector;
 	}
 }
