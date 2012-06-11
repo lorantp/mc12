@@ -10,5 +10,10 @@
 	</parent>
 	<artifactId>go-rest</artifactId>
 	<dependencies>
+		<dependency>
+			<groupId>com.topdesk.mc12</groupId>
+			<artifactId>go-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>

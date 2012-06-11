@@ -1,4 +1,4 @@
-package com.topdesk.mc12.webserver.rest;
+package com.topdesk.mc12.rest;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
