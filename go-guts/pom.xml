@@ -63,6 +63,7 @@
 						<url>http://masterclass.tis.local:8080/manager</url>
 						<server>tomcat</server>
 						<path>/test</path>
+						
 					</configuration>
 				</plugin>
 			</plugins>

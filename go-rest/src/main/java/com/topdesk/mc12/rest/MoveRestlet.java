@@ -6,13 +6,19 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
 import com.topdesk.mc12.common.Move;
+import com.topdesk.mc12.guice.InjectorHolder;
+import com.topdesk.mc12.persistence.Backend;
 
 @Path("move")
 public class MoveRestlet {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Move move(Move move) {
-		System.err.println("Got " + (move.getX() == -1 ? "pass" : move.toString()));
+		getBackend().insert(move);
 		return move;
+	}
+	
+	private Backend getBackend() {
+		return InjectorHolder.getInjector().getInstance(Backend.class);
 	}
 }

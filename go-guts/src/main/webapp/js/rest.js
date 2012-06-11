@@ -1,6 +1,13 @@
 var toString = function(object) {
 	for (x in object) {
-		console.log(x + ': ' + object[x]);
+		if (typeof object[x] == 'object') {
+			console.log(x + ': {')
+			toString(object[x])
+			console.log('}')
+		}
+		else {
+			console.log(x + ': ' + object[x]);
+		}
 	}
 }
 
@@ -16,7 +23,20 @@ var postData = function(url, data, success, error) {
 		},
 		type:'post',
 		success: success || function(data) {
-			console.log('success');
+			console.log('success, got generated id ' + data.id);
+		},
+		error: error || function() {
+			console.log('failed');
+		}
+	})
+}
+
+var getData = function(url, data, success, error) {
+	$.ajax({
+		url: url,
+		data: data,
+		success: success || function(data) {
+			toString(data)
 		},
 		error: error || function() {
 			console.log('failed');
@@ -25,51 +45,19 @@ var postData = function(url, data, success, error) {
 }
 
 var getPlayer = function(id) {
-	$.ajax({
-		url:'/rest/player',
-		data: {id: id},
-		success: function(data) {
-			console.log('got player with nickname ' + data.nickname);
-		},
-		error: function() {
-			console.log('failed');
-		}
-	})
+	getData('/rest/player', {id: id});
 }
 
 var sendPlayer = function(name) {
-	postData('/rest/player', {id:43, nickname:name}, function(data) {
-			console.log('sent, got ' + data);
-	});
+	postData('/rest/player', {id:43, nickname:name});
 }
 
 var getGame = function(id) {
-	$.ajax({
-		url:'/rest/game',
-		data: {id: id},
-		success: function(game) {
-			console.log('got ' + game.black.nickname + ' vs ' + game.white.nickname);
-		},
-		error: function() {
-			console.log('failed');
-		}
-	})
+	getData('/rest/game', {id: id})
 }
 
-var getBoard = function(id) {
-	$.ajax({
-		url:'/rest/board',
-		data: {id: id},
-		success: function(board) {
-			toString(board);
-			for (move in board.moves) {
-				toString(board.moves[move]);
-			}
-		},
-		error: function() {
-			console.log('failed');
-		}
-	})
+var getBoard = function(id, success, error) {
+	getData('/rest/board', {id: id})
 }
 
 var sendMove = function(x, y, color) {

@@ -8,6 +8,8 @@ import com.topdesk.mc12.persistence.PersistenceModule;
 public class GuiceServletConfig extends GuiceServletContextListener {
 	@Override
 	protected Injector getInjector() {
-		return Guice.createInjector(new PersistenceModule(), new WebModule());
+		Injector injector = Guice.createInjector(new PersistenceModule(), new WebModule());
+		InjectorHolder.init(injector);
+		return injector;
 	}
 }

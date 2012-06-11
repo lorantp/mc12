@@ -8,23 +8,23 @@
 	<!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
-
+		
 		<!-- Use the .htaccess and remove these lines to avoid edge case issues.
 		More info: h5bp.com/i/378 -->
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
+		
 		<title>Go!</title>
 		<meta name="description" content="">
-
+		
 		<!-- Mobile viewport optimized: h5bp.com/viewport -->
 		<meta name="viewport" content="width=device-width">
-
+		
 		<!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
-
+		
 		<link rel="stylesheet" href="../css/style.css">
-
+		
 		<!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
-
+		
 		<!-- All JavaScript at the bottom, except this Modernizr build.
 		Modernizr enables HTML5 elements & feature detects for optimal performance.
 		Create your own custom Modernizr build: www.modernizr.com/download/ -->
@@ -35,15 +35,19 @@
 		chromium.org/developers/how-tos/chrome-frame-getting-started -->
 		<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
 		<header>
-
+		
 		</header>
-		<input type=button value="Click" onclick="sendMove(5, 5, 'BLACK')" />
+		<input type=button value="Send move (5, 5, black)" onclick="sendMove(5, 5, 'BLACK')" />
+		<input type=button value="Send pass" onclick="sendPass('WHITE')" />
+		<input type=button value="Get board (id=1)" onclick="getBoard(1)" />
+		<input type=button value="Get player (id=1)" onclick="getPlayer(1)" />
+		<input type=button value="Get game (id=1)" onclick="getGame(1)" />
 		<footer>
-
+		
 		</footer>
-
+		
 		<!-- JavaScript at the bottom for fast page loading -->
-
+		
 		<!-- scripts concatenated and minified via build script -->
 		<script src="../js/libs/jquery-1.7.1.js"></script>
 		<script src="../js/plugins.js"></script>

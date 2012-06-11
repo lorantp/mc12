@@ -7,19 +7,20 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.google.inject.Inject;
 import com.topdesk.mc12.common.Board;
+import com.topdesk.mc12.guice.InjectorHolder;
 import com.topdesk.mc12.persistence.Backend;
 
 @Path("board")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class BoardRestlet {
-	@Inject private Backend backend;
-	
 	@GET
 	public Board get(@QueryParam("id") long id) {
-		return backend.get(Board.class, id);
-//		return new Board(4l, new Game(), ImmutableList.<Move>of(new Move(4l, 4, 3, Color.BLACK), new Move(4l, 4, 4, Color.WHITE)));
+		return getBackend().get(Board.class, id);
+	}
+	
+	private Backend getBackend() {
+		return InjectorHolder.getInjector().getInstance(Backend.class);
 	}
 }
