@@ -1,5 +1,7 @@
 package com.topdesk.mc12.persistence;
 
+import java.util.ArrayList;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -88,7 +90,7 @@ public class HibernateH2Backend implements Backend {
 	public static void main(String[] args) {
 		HibernateH2Backend backend = new HibernateH2Backend("test", true, true, ENTITIES);
 		Player player = new Player(-1, "hi", "ya");
-		backend.insert(player, new Move(-1, -1, -1, Color.BLACK), new Game(-1, BoardSize.NINETEEN, player, player, 0, 0));
+		backend.insert(player, new Move(-1, -1, -1, Color.BLACK), new Game(-1, new Board(1, BoardSize.NINETEEN.getSize(), new ArrayList<Move>()), player, player, 0, 0));
 		backend.delete(backend.get(Move.class, 1));
 	}
 }

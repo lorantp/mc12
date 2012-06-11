@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public final class Game {
 	@Id @GeneratedValue private long id;
-	private BoardSize size;
+	@OneToOne private Board board;
 	@ManyToOne private Player black;
 	@ManyToOne private Player white;
 	
