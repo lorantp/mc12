@@ -1,12 +1,13 @@
-var toString = function(object) {
+var toString = function(object, indent) {
+	if (!indent) indent = '';
 	for (x in object) {
 		if (typeof object[x] == 'object') {
-			console.log(x + ': {')
-			toString(object[x])
-			console.log('}')
+			console.log(indent + x + ': {')
+			toString(object[x], indent + '    ')
+			console.log(indent + '}')
 		}
 		else {
-			console.log(x + ': ' + object[x]);
+			console.log(indent + x + ': ' + object[x]);
 		}
 	}
 }

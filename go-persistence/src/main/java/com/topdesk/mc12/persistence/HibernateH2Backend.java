@@ -1,5 +1,6 @@
 package com.topdesk.mc12.persistence;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -7,8 +8,6 @@ import org.hibernate.service.ServiceRegistryBuilder;
 
 import com.google.inject.Inject;
 import com.topdesk.mc12.common.Board;
-import com.topdesk.mc12.common.BoardSize;
-import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.common.Game;
 import com.topdesk.mc12.common.Move;
 import com.topdesk.mc12.common.Player;
@@ -19,13 +18,13 @@ public class HibernateH2Backend implements Backend {
 	
 	@Inject
 	public HibernateH2Backend() {
-		this("test", true, true, ENTITIES);
+		this("test", true, true);
 	}
 	
-	public HibernateH2Backend(String dbName, boolean inMemory, boolean debug, Class<?>... entities) {
+	public HibernateH2Backend(String dbName, boolean inMemory, boolean debug) {
 		Configuration configuration = new Configuration().setProperty("hibernate.hbm2ddl.auto", "update");
 		
-		for (Class<?> entity : entities) {
+		for (Class<?> entity : ENTITIES) {
 			configuration.addAnnotatedClass(entity);
 		}
 		
@@ -68,6 +67,9 @@ public class HibernateH2Backend implements Backend {
 		@SuppressWarnings("unchecked")
 		T value = (T) session.byId(type).getReference(id);
 		
+		if (type == Board.class) {
+			Hibernate.initialize(((Board) value).getMoves());
+		}
 		session.getTransaction().commit();
 		session.close();
 		return value;
@@ -82,13 +84,5 @@ public class HibernateH2Backend implements Backend {
 		}
 		session.getTransaction().commit();
 		session.close();
-		
-	}
-	
-	public static void main(String[] args) {
-		HibernateH2Backend backend = new HibernateH2Backend("test", true, true, ENTITIES);
-		Player player = new Player(-1, "hi", "ya");
-		backend.insert(player, new Move(-1, -1, -1, Color.BLACK), new Game(-1, BoardSize.NINETEEN, player, player, 0, 0));
-		backend.delete(backend.get(Move.class, 1));
 	}
 }
