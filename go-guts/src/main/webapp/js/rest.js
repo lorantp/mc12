@@ -51,11 +51,21 @@ var REST = function() {
 	}
 	
 	that.sendMove = function(x, y, color) {
-		that.postData('/rest/move', {x: x, y: y, color: color});
+		that.postData('/rest/move?gameid=1', {x: x, y: y, color: color}, function(data) {
+			for (index in data.moves) {
+				var move = data.moves[index]
+				if (move.x == 5 && move.y == 5) {
+					toString(move)
+				}
+				else {
+					console.log('pass')
+				}
+			}
+		});
 	}
 	
 	that.sendPass = function(color) {
-		that.postData('/rest/move', {color: color});
+		that.postData('/rest/move?gameid=1', {color: color});
 	}
 
 	return that;

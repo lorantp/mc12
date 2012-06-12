@@ -1,6 +1,7 @@
 package com.topdesk.mc12.common;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -17,9 +18,9 @@ import org.joda.time.DateTime;
 @Entity
 public final class Game {
 	@Id @GeneratedValue private long id;
-	@OneToOne private Board board;
-	@ManyToOne private Player black;
-	@ManyToOne private Player white;
+	@OneToOne(fetch=FetchType.EAGER) private Board board;
+	@ManyToOne(fetch=FetchType.EAGER) private Player black;
+	@ManyToOne(fetch=FetchType.EAGER) private Player white;
 	private long start;
 	
 	/**

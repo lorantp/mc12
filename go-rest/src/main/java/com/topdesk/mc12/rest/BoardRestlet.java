@@ -20,7 +20,10 @@ public class BoardRestlet {
 	
 	@GET
 	public Board get(@QueryParam("id") long id) {
-		Board board = backend.get(Board.class, id);
+		return fixRecursion(backend.get(Board.class, id));
+	}
+	
+	public static Board fixRecursion(Board board) {
 		for (Move move : board.getMoves()) {
 			move.setBoard(null);
 		}

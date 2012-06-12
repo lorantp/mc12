@@ -5,7 +5,7 @@ import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import com.topdesk.mc12.rest.BoardRestlet;
-import com.topdesk.mc12.rest.GameStateRestlet;
+import com.topdesk.mc12.rest.GameRestlet;
 import com.topdesk.mc12.rest.MoveRestlet;
 import com.topdesk.mc12.rest.PlayerRestlet;
 import com.topdesk.mc12.rest.RestInterfaceConfig;
@@ -16,7 +16,7 @@ public class WebModule extends JerseyServletModule {
 	protected void configureServlets() {
 		bind(RestInterfaceConfig.class);
 		
-		bind(GameStateRestlet.class);
+		bind(GameRestlet.class);
 		bind(BoardRestlet.class);
 		bind(MoveRestlet.class);
 		bind(PlayerRestlet.class);

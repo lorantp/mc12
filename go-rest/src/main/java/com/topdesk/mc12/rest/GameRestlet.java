@@ -14,11 +14,13 @@ import com.topdesk.mc12.persistence.Backend;
 @Path("game")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class GameStateRestlet {
+public class GameRestlet {
 	@Inject Backend backend;
 	
 	@GET
 	public Game get(@QueryParam("id") long id) {
-		return backend.get(Game.class, id);
+		Game game = backend.get(Game.class, id);
+		BoardRestlet.fixRecursion(game.getBoard());
+		return game;
 	}
 }

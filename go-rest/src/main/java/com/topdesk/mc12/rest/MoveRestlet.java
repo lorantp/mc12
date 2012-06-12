@@ -18,11 +18,10 @@ public class MoveRestlet {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Move move(Move move, @QueryParam("gameid") long gameId) {
-		backend.insert(move);
+	public Board move(Move move, @QueryParam("gameid") long gameId) {
 		Board board = backend.get(Game.class, gameId).getBoard();
-		board.getMoves().add(move);
-		backend.update(board);
-		return move;
+		move.setBoard(board);
+		backend.insert(move);
+		return BoardRestlet.fixRecursion(board);
 	}
 }
