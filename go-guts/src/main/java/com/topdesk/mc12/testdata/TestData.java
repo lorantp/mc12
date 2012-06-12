@@ -34,7 +34,7 @@ public class TestData {
 	
 	private void createGame() {
 		Board board = new Board(0, BoardSize.NINETEEN.getSize(), createMoves());
-		Game game = new Game(0, board, bart, bernd, 0, 0);
+		Game game = new Game(0, board, bart, bernd, 5, 9);
 		backend.insert(board, game);
 	}
 	

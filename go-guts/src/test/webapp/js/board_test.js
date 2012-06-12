@@ -1,4 +1,7 @@
-var board = BOARD({size: 19});
+var boardMock = {size: 19};
+var actionsMock = {placeMove: function(x, y) {}};
+
+var board = BOARD(boardMock, actionsMock);
 
 describe("location style format", function() {
   it("should be of the format", function() {
@@ -13,14 +16,12 @@ describe("position square attributes", function() {
 		expect(div.id).toBe("x0y0");
 		expect(div.style.top).toBe('100px');
 		expect(div.style.left).toBe('0px');
-	})
-});
+	});
 
-describe("position click behaviour", function() {
-	it("should call setStone", function() {
+	it("should call placeMove", function() {
 		var div = board.createSquare(0, 0);
-		spyOn(board, "setStone");
+		spyOn(actionsMock, "placeMove");
 		div.click();
-		expect(board.setStone).toHaveBeenCalledWith(0, 0);
+		expect(actionsMock.placeMove).toHaveBeenCalledWith(0, 0);
 	})
 });
