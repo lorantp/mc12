@@ -55,10 +55,8 @@ var REST = function() {
 			for (index in data.moves) {
 				var move = data.moves[index]
 				if (move.x == x && move.y == y) {
+					console.log('inserted move:')
 					DEBUG.toString(move)
-				}
-				else {
-					console.log('that\'s not it')
 				}
 			}
 		});
