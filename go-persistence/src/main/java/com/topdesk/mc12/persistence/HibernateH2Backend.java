@@ -1,6 +1,5 @@
 package com.topdesk.mc12.persistence;
 
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -66,13 +65,6 @@ public class HibernateH2Backend implements Backend {
 		
 		@SuppressWarnings("unchecked")
 		T value = (T) session.byId(type).getReference(id);
-		
-		if (type == Game.class) {
-			Hibernate.initialize(((Game) value).getBoard().getMoves());
-		}
-		if (type == Board.class) {
-			Hibernate.initialize(((Board) value).getMoves());
-		}
 		session.getTransaction().commit();
 		session.close();
 		return value;

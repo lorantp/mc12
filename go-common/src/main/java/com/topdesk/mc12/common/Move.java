@@ -2,7 +2,6 @@ package com.topdesk.mc12.common;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -16,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public final class Move {
 	@Id @GeneratedValue private long id;
-	@ManyToOne(fetch=FetchType.EAGER, optional=false) private Board board;
+	@ManyToOne(optional=false) private Board board;
 	private int x = -1;
 	private int y = -1;
 	@Column(nullable=false) private Color color;

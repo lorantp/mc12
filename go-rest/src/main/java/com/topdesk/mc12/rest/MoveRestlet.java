@@ -16,7 +16,7 @@ import com.topdesk.mc12.persistence.Backend;
 @Path("move")
 @Slf4j
 public class MoveRestlet {
-	@Inject Backend backend;
+	@Inject private Backend backend;
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

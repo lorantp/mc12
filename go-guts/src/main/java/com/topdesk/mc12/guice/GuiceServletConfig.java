@@ -10,12 +10,15 @@ import com.topdesk.mc12.testdata.TestData;
 public class GuiceServletConfig extends GuiceServletContextListener {
 	@Override
 	protected Injector getInjector() {
-		Injector injector = Guice.createInjector(new PersistenceModule(), new WebModule(), new AbstractModule() {
-			@Override
-			protected void configure() {
-				bind(TestData.class);
-			}
-		});
+		Injector injector = Guice.createInjector(
+				new PersistenceModule(), 
+				new WebModule(), 
+				new AbstractModule() {
+					@Override
+					protected void configure() {
+						bind(TestData.class);
+					}
+				});
 		injector.getInstance(TestData.class).create();
 		return injector;
 	}

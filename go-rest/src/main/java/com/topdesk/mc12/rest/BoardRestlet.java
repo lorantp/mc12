@@ -16,7 +16,7 @@ import com.topdesk.mc12.persistence.Backend;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class BoardRestlet {
-	@Inject Backend backend;
+	@Inject private Backend backend;
 	
 	@GET
 	public Board get(@QueryParam("id") long id) {

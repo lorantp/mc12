@@ -14,7 +14,7 @@ import com.topdesk.mc12.persistence.Backend;
 
 @Path("player")
 public class PlayerRestlet {
-	@Inject Backend backend;
+	@Inject private Backend backend;
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

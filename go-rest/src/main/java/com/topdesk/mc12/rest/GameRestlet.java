@@ -15,7 +15,7 @@ import com.topdesk.mc12.persistence.Backend;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class GameRestlet {
-	@Inject Backend backend;
+	@Inject private Backend backend;
 	
 	@GET
 	public Game get(@QueryParam("id") long id) {
