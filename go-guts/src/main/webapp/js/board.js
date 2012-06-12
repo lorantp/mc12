@@ -27,12 +27,12 @@ var BOARD = function(board, actions) {
 	
 	that.createSquare = function(x, y) {
 		return $('<div />')
-		.addClass("position")
-		.attr({id: "x" + x + "y" + y})
-		.css(that.createLocationStyle(x, y))
-		.click(function () {
-			actions.placeMove(x, y);
-		});
+			.addClass("position")
+			.attr({id: "x" + x + "y" + y})
+			.css(that.createLocationStyle(x, y))
+			.click(function () {
+				actions.placeMove(x, y);
+			});
 	}
 	
 	that.setStone = function(x, y, stone) {
@@ -40,7 +40,7 @@ var BOARD = function(board, actions) {
 	}
 	
 	that.createLocationStyle = function(x, y) {
-		var top = y * 48 + 100;
+		var top = y * 48 + 140;
 		var left = x * 48;
 		return {top: top + "px", left: left + "px"}
 	}

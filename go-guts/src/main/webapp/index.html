@@ -32,12 +32,12 @@
   
   <script type="text/javascript">
   	var draw = function() {
-		REST().getGame(1, function(data) {
+  		var rest = REST();
+		rest.getGame(1, function(data) {
 	  		if (data) {
-	  			var actions = {placeMove: function(x, y) {
-	  				alert("x: " + x + ", y: " + y);
-	  			}};
+		  		var actions = ACTIONS(rest, data.board.id, data.board.moves.length);
 	  			var board = BOARD(data.board, actions);
+	  			
 	  			board.drawBoard();
 				METADATA($).showData(data);
 			}
@@ -64,6 +64,7 @@
 			<div id="turn"></div>
 		</div>
 	</div>
+	<button id="confirm">Confirm move</button>
   <footer>
 
   </footer>
@@ -78,6 +79,7 @@
   <script src="js/rest.js"></script>
   <script src="js/board.js"></script>
   <script src="js/metadata.js"></script>
+  <script src="js/actions.js"></script>
   <!-- end scripts -->
 </body>
 </html>

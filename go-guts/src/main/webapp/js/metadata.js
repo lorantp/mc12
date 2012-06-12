@@ -1,4 +1,4 @@
-// Has jQuery as argument for testability
+// Has jQuery as argument for testability, shadows the global jQuery argument.
 var METADATA = function($) {
 	var that = {};
 	

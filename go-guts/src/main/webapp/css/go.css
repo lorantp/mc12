@@ -12,3 +12,7 @@ div .position {
 [stone=white] {
 	background-image: url("../img/white.png");
 }
+
+[target=true] {
+	background-image: url("../img/target48x48.png");
+}
