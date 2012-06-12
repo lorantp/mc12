@@ -14,6 +14,7 @@ var ACTIONS = function(rest, boardId, turn) {
 			var color = turn % 2 === 0 ? "black" : "white";
 			rest.sendMove(boardId, target.x, target.y, color)
 			$("[target=true]").attr({target: "false", stone: color})
+			location.reload(true);
 		}
 	};
 	

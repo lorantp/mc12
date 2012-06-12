@@ -51,7 +51,7 @@ var REST = function() {
 	}
 	
 	that.sendMove = function(boardid, x, y, color) {
-		that.postData('/rest/move?boardid=' + boardid, {x: x, y: y, color: color}, function(data) {
+		that.postData('/rest/move?boardid=' + boardid, {x: x, y: y, color: color.toUpperCase()}, function(data) {
 			for (index in data.moves) {
 				var move = data.moves[index]
 				if (move.x == x && move.y == y) {
@@ -65,7 +65,7 @@ var REST = function() {
 	}
 	
 	that.sendPass = function(color) {
-		that.postData('/rest/move?gameid=1', {color: color});
+		that.postData('/rest/move?gameid=1', {color: color.toUpperCase()});
 	}
 
 	return that;
