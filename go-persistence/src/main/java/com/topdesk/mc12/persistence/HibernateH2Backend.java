@@ -88,4 +88,27 @@ public class HibernateH2Backend implements Backend {
 		session.getTransaction().commit();
 		session.close();
 	}
+<<<<<<< HEAD
+=======
+	
+	public static void main(String[] args) {
+		HibernateH2Backend backend = new HibernateH2Backend();
+		Board board = new Board(0, 42, ImmutableList.<Move>of());
+		backend.insert(board);
+		System.err.println(board);
+		
+		Move move = new Move(0, board, 1, 1, Color.BLACK);
+		backend.insert(move);
+		
+		board = backend.get(Board.class, 1);
+		System.err.println(board);
+		
+		Move newMove = new Move(0, board, 2, 2, Color.WHITE);
+		board.getMoves().add(newMove);
+		backend.insert(newMove);
+//		backend.update(sameBoard);
+		
+		System.err.println(backend.get(Board.class, 1));
+	}
+>>>>>>> Fixed guice, now done (part 2)
 }

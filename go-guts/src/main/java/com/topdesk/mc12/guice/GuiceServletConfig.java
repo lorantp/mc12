@@ -16,7 +16,6 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 				bind(TestData.class);
 			}
 		});
-		InjectorHolder.init(injector);
 		injector.getInstance(TestData.class).create();
 		return injector;
 	}

@@ -8,26 +8,24 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.google.inject.Inject;
 import com.topdesk.mc12.common.Player;
-import com.topdesk.mc12.guice.InjectorHolder;
 import com.topdesk.mc12.persistence.Backend;
 
 @Path("player")
 public class PlayerRestlet {
+	@Inject Backend backend;
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Player get(@QueryParam("id") long id) {
-		return getBackend().get(Player.class, id);
+		return backend.get(Player.class, id);
 	}
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Player post(Player player) {
-		getBackend().insert(player);
+		backend.insert(player);
 		return player;
-	}
-	
-	private Backend getBackend() {
-		return InjectorHolder.getInjector().getInstance(Backend.class);
 	}
 }

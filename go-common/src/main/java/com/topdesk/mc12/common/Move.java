@@ -14,7 +14,19 @@ import lombok.NoArgsConstructor;
 @Entity
 public final class Move {
 	@Id @GeneratedValue private long id;
+<<<<<<< HEAD
 	@Nullable private int x = -1;
 	@Nullable private int y = -1;
 	@Nonnull private Color color;
+=======
+	@ManyToOne(optional=false) private Board board;
+	private int x = -1;
+	private int y = -1;
+	@Column(nullable=false) private Color color;
+	
+	@Override
+	public String toString() {
+		return String.format("[%s: %d,%d]", color, x, y);
+	}
+>>>>>>> Fixed guice, now done (part 2)
 }
