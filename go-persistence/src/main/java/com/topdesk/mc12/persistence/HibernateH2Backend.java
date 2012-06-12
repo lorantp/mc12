@@ -6,8 +6,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistryBuilder;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.topdesk.mc12.common.Board;
+import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.common.Game;
 import com.topdesk.mc12.common.Move;
 import com.topdesk.mc12.common.Player;
@@ -88,8 +90,6 @@ public class HibernateH2Backend implements Backend {
 		session.getTransaction().commit();
 		session.close();
 	}
-<<<<<<< HEAD
-=======
 	
 	public static void main(String[] args) {
 		HibernateH2Backend backend = new HibernateH2Backend();
@@ -110,5 +110,4 @@ public class HibernateH2Backend implements Backend {
 		
 		System.err.println(backend.get(Board.class, 1));
 	}
->>>>>>> Fixed guice, now done (part 2)
 }
