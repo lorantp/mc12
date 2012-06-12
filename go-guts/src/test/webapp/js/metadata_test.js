@@ -17,8 +17,13 @@ describe("showing data format", function() {
 	});
 	
 	it('should set innerText to player info', function() {
-		md.showPlayer({nickname: "Wonderful Wizzard", email: "inyour@dreams.com"}, "", "turqoise", 17);
+		md.showPlayer({nickname: "Wonderful Wizzard", email: "inyour@dreams.com"}, "", "turqoise", 17, false);
 		expect(mockJQ.innerText).toBe("Player turqoise: Wonderful Wizzard &lt;inyour@dreams.com&gt; - Captured: 17");
+	});
+	
+	it('should set innerText to player info with turn', function() {
+		md.showPlayer({nickname: "Wonderful Wizzard", email: "inyour@dreams.com"}, "", "turqoise", 17, true);
+		expect(mockJQ.innerText).toBe("Player turqoise: Wonderful Wizzard &lt;inyour@dreams.com&gt; - Captured: 17 &lt;HAS TURN&gt;");
 	});
 	
 	it('should set innerText to epoch start time', function() {
