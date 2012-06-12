@@ -33,7 +33,7 @@
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
+			<artifactId>javax.servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -41,6 +41,12 @@
 			<artifactId>jetty-webapp</artifactId>
 			<version>8.1.4.v20120524</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>javax.servlet</artifactId>
+					<groupId>org.eclipse.jetty.orbit</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 	
@@ -55,7 +61,6 @@
 						<url>http://masterclass.tis.local:8080/manager</url>
 						<server>tomcat</server>
 						<path>/test</path>
-						
 					</configuration>
 				</plugin>
 			</plugins>
