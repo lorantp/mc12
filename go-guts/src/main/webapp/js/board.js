@@ -26,10 +26,15 @@ var BOARD = function(board, actions) {
 	}
 	
 	that.placeStones = function(moves) {
-		for (move in moves) {
-			DEBUG.toString(move);
+		for (i in moves) {
+			var move = moves[i];
+			that.setStone(
+					move.x, 
+					move.y, 
+					move.color.toLowerCase());
 		}
 	}
+
 	
 	that.createSquare = function(x, y) {
 		return $('<div />')
