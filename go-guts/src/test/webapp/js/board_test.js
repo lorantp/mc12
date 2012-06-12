@@ -43,10 +43,8 @@ describe("stones are placed when drawing board", function() {
 		spyOn(board, "setStone");
 		board.drawBoard();
 		
-		var moves = boardMock.moves;
-		for (i in moves) {			
-			var move = moves[i];
+		boardMock.moves.forEach(function(move) {
 			expect(board.setStone).toHaveBeenCalledWith(move.x, move.y, move.color.toLowerCase());
-		}
-	})	
+		});
+	})
 });

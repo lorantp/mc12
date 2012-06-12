@@ -15,14 +15,17 @@ var BOARD = function(board, actions) {
 		that.placeStones(moves);
 	}
 	
+	that.activateButton = function() {
+		$("#confirm").click(actions.confirmMove)
+	}
+	
 	that.placeStones = function(moves) {
-		for (i in moves) {
-			var move = moves[i];
+		moves.forEach(function(move) {
 			that.setStone(
 					move.x, 
 					move.y, 
 					move.color.toLowerCase());
-		}
+		});
 	}
 	
 	that.createSquare = function(x, y) {
