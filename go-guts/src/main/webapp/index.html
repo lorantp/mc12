@@ -34,9 +34,12 @@
   	var draw = function() {
 		REST().getGame(1, function(data) {
 	  		if (data) {
-	  			var board = BOARD(data.board);
+	  			var actions = {placeMove: function(x, y) {
+	  				alert("x: " + x + ", y: " + y);
+	  			}};
+	  			var board = BOARD(data.board, actions);
 	  			board.drawBoard();
-				METADATA($).showData(data);
+				METADATA().showData(data);
 			}
 		});
 	};
@@ -71,6 +74,7 @@
   <!-- scripts concatenated and minified via build script -->
   <script src="js/libs/jquery-1.7.1.js"></script>
   <script src="js/plugins.js"></script>
+  <script src="js/debug.js"></script>
   <script src="js/rest.js"></script>
   <script src="js/board.js"></script>
   <script src="js/metadata.js"></script>
