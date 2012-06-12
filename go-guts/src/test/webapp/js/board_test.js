@@ -13,14 +13,13 @@ describe("position square attributes", function() {
 		expect(div.id).toBe("x0y0");
 		expect(div.style.top).toBe('100px');
 		expect(div.style.left).toBe('0px');
-	})
-});
+	});
 
-describe("position click behaviour", function() {
 	it("should call setStone", function() {
 		var div = board.createSquare(0, 0);
 		spyOn(board, "setStone");
 		div.click();
 		expect(board.setStone).toHaveBeenCalledWith(0, 0);
-	})
+	});
 });
+
