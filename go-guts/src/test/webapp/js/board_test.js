@@ -39,12 +39,6 @@ describe("position square attributes", function() {
 });
 
 describe("stones are placed when drawing board", function() {
-	it("should call placeStones while drawing the board", function() {		
-		spyOn(board, "placeStones");
-		board.drawBoard();
-		expect(board.placeStones).toHaveBeenCalledWith(boardMock.moves);
-	})
-	
 	it("should lay out stones from the moves provided", function() {
 		spyOn(board, "setStone");
 		board.drawBoard();
