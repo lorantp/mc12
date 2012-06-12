@@ -35,23 +35,23 @@ var REST = function() {
 	}
 	
 	that.getPlayer = function(id) {
-		return that.getData('/rest/player', {id: id});
+		return that.getData('rest/player', {id: id});
 	}
 	
 	that.sendPlayer = function(name) {
-		that.postData('/rest/player', {id:43, nickname:name});
+		that.postData('rest/player', {id:43, nickname:name});
 	}
 	
 	that.getGame = function(id, success) {
-		that.getData('/rest/game', {id: id}, success)
+		that.getData('rest/game', {id: id}, success)
 	}
 	
 	that.getBoard = function(id, success, error) {
-		return that.getData('/rest/board', {id: id})
+		return that.getData('rest/board', {id: id})
 	}
 	
 	that.sendMove = function(boardid, x, y, color) {
-		that.postData('/rest/move?boardid=' + boardid, {x: x, y: y, color: color.toUpperCase()}, function(data) {
+		that.postData('rest/move?boardid=' + boardid, {x: x, y: y, color: color.toUpperCase()}, function(data) {
 			for (index in data.moves) {
 				var move = data.moves[index]
 				if (move.x == x && move.y == y) {
@@ -63,7 +63,7 @@ var REST = function() {
 	}
 	
 	that.sendPass = function(color) {
-		that.postData('/rest/move?gameid=1', {color: color.toUpperCase()});
+		that.postData('rest/move?gameid=1', {color: color.toUpperCase()});
 	}
 
 	return that;
