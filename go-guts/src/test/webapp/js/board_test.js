@@ -3,6 +3,7 @@ var Move = function(x, y, color) {
 	this.y = y;
 	this.color = color;
 }
+
 var boardMock = {
 		size: 19,
 		moves: [
@@ -41,13 +42,14 @@ describe("stones are placed when drawing board", function() {
 	it("should call placeStones while drawing the board", function() {		
 		spyOn(board, "placeStones");
 		board.drawBoard();
-		expect(board.placeStones).toHaveBeenCalled();
+		expect(board.placeStones).toHaveBeenCalledWith(boardMock.moves);
 	})
 	
 	it("should lay out stones from the moves provided", function() {
 		spyOn(board, "setStone");
+		board.drawBoard();
+		
 		var moves = boardMock.moves;
-		board.placeStones(moves);
 		for (i in moves) {			
 			var move = moves[i];
 			expect(board.setStone).toHaveBeenCalledWith(move.x, move.y, move.color.toLowerCase());
