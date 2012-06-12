@@ -50,12 +50,22 @@ var REST = function() {
 		return that.getData('/rest/board', {id: id})
 	}
 	
-	that.sendMove = function(x, y, color) {
-		that.postData('/rest/move', {x: x, y: y, color: color});
+	that.sendMove = function(boardid, x, y, color) {
+		that.postData('/rest/move?boardid=' + boardid, {x: x, y: y, color: color}, function(data) {
+			for (index in data.moves) {
+				var move = data.moves[index]
+				if (move.x == x && move.y == y) {
+					DEBUG.toString(move)
+				}
+				else {
+					console.log('that\'s not it')
+				}
+			}
+		});
 	}
 	
 	that.sendPass = function(color) {
-		that.postData('/rest/move', {color: color});
+		that.postData('/rest/move?gameid=1', {color: color});
 	}
 
 	return that;

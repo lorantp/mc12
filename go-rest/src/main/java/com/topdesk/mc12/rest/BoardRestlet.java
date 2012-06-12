@@ -7,20 +7,29 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.google.inject.Inject;
 import com.topdesk.mc12.common.Board;
-import com.topdesk.mc12.guice.InjectorHolder;
+import com.topdesk.mc12.common.Move;
 import com.topdesk.mc12.persistence.Backend;
 
 @Path("board")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class BoardRestlet {
+	@Inject Backend backend;
+	
 	@GET
 	public Board get(@QueryParam("id") long id) {
-		return getBackend().get(Board.class, id);
+		return fixRecursion(backend.get(Board.class, id));
 	}
 	
-	private Backend getBackend() {
-		return InjectorHolder.getInjector().getInstance(Backend.class);
+	/**
+	 * Until we can convince the auto-JSON thingy to exclude the board field in move, we need to null it before sending
+	 */
+	public static Board fixRecursion(Board board) {
+		for (Move move : board.getMoves()) {
+			move.setBoard(null);
+		}
+		return board;
 	}
 }

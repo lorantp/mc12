@@ -1,20 +1,28 @@
 package com.topdesk.mc12.common;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode(exclude="board")
 @Entity
 public final class Move {
 	@Id @GeneratedValue private long id;
-	@Nullable private int x = -1;
-	@Nullable private int y = -1;
-	@Nonnull private Color color;
+	@ManyToOne(fetch=FetchType.EAGER, optional=false) private Board board;
+	private int x = -1;
+	private int y = -1;
+	@Column(nullable=false) private Color color;
+	
+	@Override
+	public String toString() {
+		return String.format("[%s: %d,%d]", color, x, y);
+	}
 }
