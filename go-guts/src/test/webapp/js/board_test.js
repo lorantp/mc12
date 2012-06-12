@@ -1,15 +1,16 @@
-var boardMock = {size: 19};
-var actionsMock = {placeMove: function(x, y) {}};
-
 var Move = function(x, y, color) {
 	this.x = x;
 	this.y = y;
 	this.color = color;
 }
-var moves = [
-    new Move(0, 0, "BLACK"),
-    new Move(1, 2, "WHITE")
-];
+var boardMock = {
+		size: 19,
+		moves: [
+		        new Move(0, 0, "BLACK"),
+		        new Move(1, 2, "WHITE")
+]};
+
+var actionsMock = {placeMove: function(x, y) {}};
 
 var board = BOARD(boardMock, actionsMock);
 
@@ -45,6 +46,7 @@ describe("stones are placed when drawing board", function() {
 	
 	it("should lay out stones from the moves provided", function() {
 		spyOn(board, "setStone");
+		var moves = boardMock.moves;
 		board.placeStones(moves);
 		for (i in moves) {			
 			var move = moves[i];
