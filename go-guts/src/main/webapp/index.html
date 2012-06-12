@@ -29,21 +29,6 @@
        Modernizr enables HTML5 elements & feature detects for optimal performance.
        Create your own custom Modernizr build: www.modernizr.com/download/ -->
   <script src="js/libs/modernizr-2.5.3.min.js"></script>
-  
-  <script type="text/javascript">
-  	var draw = function() {
-  		var rest = REST();
-		rest.getGame(1, function(data) {
-	  		if (data) {
-		  		var actions = ACTIONS(rest, data.board.id, data.board.moves.length);
-	  			var board = BOARD(data.board, actions);
-	  			
-	  			board.drawBoard();
-				METADATA($).showData(data);
-			}
-		});
-	};
-  </script>
 </head>
 <body onload="draw();">
   <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
@@ -80,6 +65,7 @@
   <script src="js/board.js"></script>
   <script src="js/metadata.js"></script>
   <script src="js/actions.js"></script>
+  <script src="js/go.js"></script>
   <!-- end scripts -->
 </body>
 </html>
