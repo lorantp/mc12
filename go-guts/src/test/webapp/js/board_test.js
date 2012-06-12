@@ -1,6 +1,16 @@
 var boardMock = {size: 19};
 var actionsMock = {placeMove: function(x, y) {}};
 
+var Move = function(x, y, color) {
+	this.x = x;
+	this.y = y;
+	this.color = color;
+}
+var moves = [
+    new Move(0, 0, "BLACK"),
+    new Move(1, 2, "WHITE")
+];
+
 var board = BOARD(boardMock, actionsMock);
 
 describe("location style format", function() {
@@ -16,7 +26,7 @@ describe("position square attributes", function() {
 		expect(div.id).toBe("x0y0");
 		expect(div.style.top).toBe('100px');
 		expect(div.style.left).toBe('0px');
-	});
+	})
 
 	it("should call placeMove", function() {
 		var div = board.createSquare(0, 0);
@@ -24,4 +34,21 @@ describe("position square attributes", function() {
 		div.click();
 		expect(actionsMock.placeMove).toHaveBeenCalledWith(0, 0);
 	})
+});
+
+describe("stones are placed when drawing board", function() {
+	it("should call placeStones while drawing the board", function() {		
+		spyOn(board, "placeStones");
+		board.drawBoard();
+		expect(board.placeStones).toHaveBeenCalled();
+	})
+	
+	it("should lay out stones from the moves provided", function() {
+		spyOn(board, "setStone");
+		board.placeStones(moves);
+		for (i in moves) {			
+			var move = moves[i];
+			expect(board.setStone).toHaveBeenCalledWith(move.x, move.y, move.color.toLowerCase());
+		}
+	})	
 });
