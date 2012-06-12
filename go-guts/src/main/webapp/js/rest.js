@@ -51,14 +51,14 @@ var REST = function() {
 	}
 	
 	that.sendMove = function(boardid, x, y, color) {
-		that.postData('/rest/move?boardid=1', {x: x, y: y, color: color}, function(data) {
+		that.postData('/rest/move?boardid=' + boardid, {x: x, y: y, color: color}, function(data) {
 			for (index in data.moves) {
 				var move = data.moves[index]
-				if (move.x == 5 && move.y == 5) {
-					toString(move)
+				if (move.x == x && move.y == y) {
+					DEBUG.toString(move)
 				}
 				else {
-					console.log('pass')
+					console.log('that\'s not it')
 				}
 			}
 		});
