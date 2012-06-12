@@ -32,9 +32,9 @@ var BOARD = function(board) {
 	}
 	
 	that.createLocationStyle = function(x, y) {
-		var topLoc = y * 48;
-		var leftLoc = x * 48;
-		return {top: topLoc + "px", left: leftLoc + "px"}
+		var top = y * 48 + 100;
+		var left = x * 48;
+		return {top: top + "px", left: left + "px"}
 	}
 	
 	return that;

@@ -67,6 +67,9 @@ public class HibernateH2Backend implements Backend {
 		@SuppressWarnings("unchecked")
 		T value = (T) session.byId(type).getReference(id);
 		
+		if (type == Game.class) {
+			Hibernate.initialize(((Game) value).getBoard().getMoves());
+		}
 		if (type == Board.class) {
 			Hibernate.initialize(((Board) value).getMoves());
 		}

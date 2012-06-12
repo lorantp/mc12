@@ -33,8 +33,9 @@ public class TestData {
 	}
 	
 	private void createGame() {
-		Game game = new Game(0, new Board(0, BoardSize.NINETEEN.getSize(), createMoves()), bart, bernd, 0, 0);
-		backend.insert(game);
+		Board board = new Board(0, BoardSize.NINETEEN.getSize(), createMoves());
+		Game game = new Game(0, board, bart, bernd, 0, 0);
+		backend.insert(board, game);
 	}
 	
 	private ImmutableList<Move> createMoves() {
