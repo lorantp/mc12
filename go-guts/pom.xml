@@ -45,19 +45,6 @@
 			<version>8.1.4.v20120524</version>
 			<scope>test</scope>
 		</dependency>
-		
-		<!-- Jersey CLIENT 
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>1.5</version>
-		</dependency>
-		-->
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-			<version>1.5</version>
-		</dependency>
 	</dependencies>
 	
 	<build>
