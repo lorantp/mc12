@@ -23,6 +23,9 @@ public class BoardRestlet {
 		return fixRecursion(backend.get(Board.class, id));
 	}
 	
+	/**
+	 * Until we can convince the auto-JSON thingy to exclude the board field in move, we need to null it before sending
+	 */
 	public static Board fixRecursion(Board board) {
 		for (Move move : board.getMoves()) {
 			move.setBoard(null);

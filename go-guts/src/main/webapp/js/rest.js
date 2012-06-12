@@ -50,8 +50,8 @@ var REST = function() {
 		return that.getData('/rest/board', {id: id})
 	}
 	
-	that.sendMove = function(x, y, color) {
-		that.postData('/rest/move?gameid=1', {x: x, y: y, color: color}, function(data) {
+	that.sendMove = function(boardid, x, y, color) {
+		that.postData('/rest/move?boardid=1', {x: x, y: y, color: color}, function(data) {
 			for (index in data.moves) {
 				var move = data.moves[index]
 				if (move.x == 5 && move.y == 5) {

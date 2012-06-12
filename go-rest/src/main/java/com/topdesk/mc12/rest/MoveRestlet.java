@@ -8,7 +8,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.inject.Inject;
 import com.topdesk.mc12.common.Board;
-import com.topdesk.mc12.common.Game;
 import com.topdesk.mc12.common.Move;
 import com.topdesk.mc12.persistence.Backend;
 
@@ -18,8 +17,8 @@ public class MoveRestlet {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Board move(Move move, @QueryParam("gameid") long gameId) {
-		Board board = backend.get(Game.class, gameId).getBoard();
+	public Board move(Move move, @QueryParam("boardid") long boardId) {
+		Board board = backend.get(Board.class, boardId);
 		move.setBoard(board);
 		backend.insert(move);
 		return BoardRestlet.fixRecursion(board);
