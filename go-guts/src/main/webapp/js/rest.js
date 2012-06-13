@@ -9,14 +9,15 @@ var REST = function() {
 			data: data,
 			processData:false,
 			beforeSend: function (jqXHR, settings) {
-				settings.data = JSON.stringify(settings.data);
+				settings.data = JSON.stringify(settings.data)
 			},
 			type:'post',
 			success: success || function(data) {
-				console.log('success, got generated id ' + data.id);
+				console.log('success, got generated id ' + data.id)
+				location.reload(true);
 			},
-			error: error || function() {
-				console.log('failed');
+			error: error || function(data) {
+				alert(data.statusText)
 			}
 		})
 	};
