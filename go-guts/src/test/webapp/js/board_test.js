@@ -38,7 +38,7 @@ describe("position square attributes", function() {
 	})
 });
 
-describe("stones are placed when drawing board", function() {
+describe("board rendering code", function() {
 	it("should lay out stones from the moves provided", function() {
 		spyOn(board, "setStone");
 		board.drawBoard();
