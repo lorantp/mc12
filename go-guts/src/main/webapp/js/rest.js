@@ -60,6 +60,7 @@ var REST = function() {
 					DEBUG.toString(move)
 				}
 			}
+			location.reload(true);
 		});
 	}
 	
