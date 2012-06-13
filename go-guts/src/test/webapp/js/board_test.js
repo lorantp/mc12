@@ -26,7 +26,7 @@ describe("position square attributes", function() {
 describe("stones are placed when drawing board", function() {
 	it("should lay out stones from the moves provided", function() {
 		spyOn(board, "setStone");
-		board.drawBoard();
+		board.draw();
 		
 		boardMock.moves.forEach(function(move) {
 			expect(board.setStone).toHaveBeenCalledWith(move.x, move.y, move.color.toLowerCase());

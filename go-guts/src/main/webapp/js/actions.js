@@ -2,7 +2,7 @@ var ACTIONS = function($, rest, board) {
 	var that = {};
 	
 	var boardId = board.id;
-	var turn = board.moves.length;
+	var turnColor = board.moves.length % 2 === 0 ? "black" : "white";
 	
 	var target;
 	
@@ -12,17 +12,20 @@ var ACTIONS = function($, rest, board) {
 		$("#x" + x + "y" + y).attr("target", "true");
 	};
 	
+	that.confirmMove = function() {
+		if (target && (target.x || target.x == 0) && (target.y || target.y == 0)) {
+			rest.sendMove(boardId, target.x, target.y, turnColor)
+			$("[target=true]").attr({target: "false", stone: turnColor})
+		}
+	};
+
+	that.pass = function() {
+		rest.sendPass(boardId, turnColor)
+	};
+	
 	that.clearMove = function() {
 		target = undefined;
 	}
-	
-	that.confirmMove = function() {
-		if (target && (target.x || target.x == 0) && (target.y || target.y == 0)) {
-			var color = turn % 2 === 0 ? "black" : "white";
-			rest.sendMove(boardId, target.x, target.y, color)
-			$("[target=true]").attr({target: "false", stone: color})
-		}
-	};
 	
 	return that;
 };

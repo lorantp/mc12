@@ -1,7 +1,3 @@
-var restMock = {}
-
-restMock.sendMove = function() {};
-
 var actions = ACTIONS(mockJQ, restMock, boardMock);
 
 describe("place move on board", function() {
@@ -49,5 +45,19 @@ describe("confirm move", function() {
 		spyOn(restMock, "sendMove");
 		actions.confirmMove();
 		expect(restMock.sendMove).not.toHaveBeenCalled();
+	});
+});
+
+describe("passing", function() {
+	it("should send a pass to the server", function() {
+		spyOn(restMock, "sendPass");
+		actions.pass();
+		expect(restMock.sendPass).toHaveBeenCalled();
+	});
+	
+	it("should send a pass for the right player", function() {
+		spyOn(restMock, "sendPass");
+		actions.pass();
+		expect(restMock.sendPass).toHaveBeenCalledWith(boardMock.id, "black");
 	});
 });
