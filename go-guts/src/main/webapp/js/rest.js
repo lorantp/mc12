@@ -12,11 +12,15 @@ var REST = function() {
 				settings.data = JSON.stringify(settings.data)
 			},
 			type:'post',
-			success: success || function(data) {
+			success: success || function(data, textStatus, jqXHR) {
 				console.log('success, got generated id ' + data.id)
 				location.reload(true);
 			},
-			error: error || function(data) {
+			error: error || function(jqXHR, textStatus, errorThrown) {
+				console.log('begin')
+				DEBUG.toString(jqXHR)
+				console.log('end')
+				console.log(errorThrown)
 				alert(data.statusText)
 			}
 		})
@@ -64,8 +68,8 @@ var REST = function() {
 		});
 	}
 	
-	that.sendPass = function(color) {
-		that.postData('rest/move?gameid=1', {color: color.toUpperCase()});
+	that.sendPass = function(boardid, color) {
+		that.postData('rest/move?boardid=' + boardid + '&pass=true', {color: color.toUpperCase()});
 	}
 
 	return that;
