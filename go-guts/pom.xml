@@ -67,6 +67,7 @@
 					<jsSrcDir>src/main/webapp/js</jsSrcDir>
 					<jsTestSrcDir>src/test/webapp/js</jsTestSrcDir>
 					<specIncludes>
+						<include>mocks.js</include>
 						<include>*_test.js</include>
 					</specIncludes>
 				</configuration>

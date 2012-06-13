@@ -1,18 +1,3 @@
-var Move = function(x, y, color) {
-	this.x = x;
-	this.y = y;
-	this.color = color;
-}
-
-var boardMock = {
-		size: 19,
-		moves: [
-		        new Move(0, 0, "BLACK"),
-		        new Move(1, 2, "WHITE")
-]};
-
-var actionsMock = {placeMove: function(x, y) {}};
-
 var board = BOARD(boardMock, actionsMock);
 
 describe("location style format", function() {

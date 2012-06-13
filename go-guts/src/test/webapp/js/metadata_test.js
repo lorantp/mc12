@@ -1,14 +1,3 @@
-// Mocking jQuery here
-var mockJQ = function mock() {
-	return mock;
-};
-	
-mockJQ.innerText = "";
-
-mockJQ.append = function(text) {
-	mockJQ.innerText += text;
-};
-
 var md = METADATA(mockJQ);
 
 describe("showing data format", function() {

@@ -1,0 +1,1 @@
+var actions = ACTIONS(mockJQ, {}, boardMock);
