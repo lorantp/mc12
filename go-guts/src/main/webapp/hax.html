@@ -47,6 +47,7 @@
 				<input type="number" id="x">
 				<input type="number" id="y">
 				<input type="button" value="Send move" onclick="hax.move()">
+				<input type="button" value="Send pass" onclick="hax.pass()">
 			</div>
 			<iframe src="index.html" height="480" width="320"></iframe>
 		</form>
@@ -64,6 +65,9 @@
 			var hax = {};
 			hax.move = function() {
 				rest.sendMove(1, $('#x').val(), $('#y').val(), $('#color').val())
+			}
+			hax.pass = function() {
+				rest.sendPass(1, $('#color').val())
 			}
 		</script>
 		<!-- end scripts -->
