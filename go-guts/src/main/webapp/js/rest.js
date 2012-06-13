@@ -17,11 +17,7 @@ var REST = function() {
 				location.reload(true);
 			},
 			error: error || function(jqXHR, textStatus, errorThrown) {
-				console.log('begin')
-				DEBUG.toString(jqXHR)
-				console.log('end')
-				console.log(errorThrown)
-				alert(data.statusText)
+				alert(jqXHR.responseText)
 			}
 		})
 	};
