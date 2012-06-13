@@ -12,12 +12,15 @@ var ACTIONS = function($, rest, board) {
 		$("#x" + x + "y" + y).attr("target", "true");
 	};
 	
+	that.clearMove = function() {
+		target = undefined;
+	}
+	
 	that.confirmMove = function() {
-		if (target) {
+		if (target && (target.x || target.x == 0) && (target.y || target.y == 0)) {
 			var color = turn % 2 === 0 ? "black" : "white";
 			rest.sendMove(boardId, target.x, target.y, color)
 			$("[target=true]").attr({target: "false", stone: color})
-			location.reload(true);
 		}
 	};
 	
