@@ -14,7 +14,14 @@ var boardMock = {
 		        new MockMove(1, 2, "WHITE")
 ]};
 
-var actionsMock = {placeMove: function(x, y) {}};
+var actionsMock = {
+		placeMove: function() {}
+};
+
+var restMock = {
+		sendMove: function() {},
+		sendPass: function() {}
+};
 
 // Mocking JQuery here.
 
@@ -23,15 +30,15 @@ var mockJQ = function mock() {
 	return mock;
 };
 	
-mockJQ.innerText = "";
-mockJQ.attribsMap = {}
-
+mockJQ.innerText = ""; // stores text set through the append function.
 mockJQ.append = function(text) {
 	mockJQ.innerText += text;
 	return mockJQ(mockJQ.values);
 };
 
 // By now it may be time to test our mocking code...
+mockJQ.attribsMap = {} // stores identifiers to attribute name/value pairs set through the attr command.
+
 mockJQ.attr = function(name, value) {
 	if (!value) { // assume name is an object with multiple values
 		for (attr in name) {
@@ -41,6 +48,7 @@ mockJQ.attr = function(name, value) {
 		}
 		return mockJQ(mockJQ.values);
 	}
+	
 	var attribObject = mockJQ.attribsMap[mockJQ.values[0]];
 	if (attribObject) {
 		attribObject[name] = value;
