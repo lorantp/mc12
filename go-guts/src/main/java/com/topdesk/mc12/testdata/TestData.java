@@ -41,15 +41,16 @@ public class TestData {
 	}
 	
 	private void createMoves(Board board) {
+		int totalMoves = 0;
 		for (int x = 0; x < 19; x += 2) {
 			for (int y = 1; y < 19; y += 2) {
-				Move move = new Move(0, board, x, y, getRandomColor());
+				Move move = new Move(0, board, x, y, getColor(totalMoves++));
 				backend.insert(move);
 			}
 		}
 	}
 	
-	private Color getRandomColor() {
-		return Color.values()[Math.random() < 0.5 ? 0 : 1];
+	private Color getColor(int turn) {
+		return Color.values()[turn % 2];
 	}
 }
