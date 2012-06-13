@@ -28,11 +28,11 @@ describe("showing data format", function() {
 	
 	it('should set innerText to epoch start time', function() {
 		md.showStartTime(new Date(0));
-		expect(mockJQ.innerText).toBe("Start time: Thu, 01 Jan 1970 00:00:00 GMT");
+		expect(mockJQ.innerText).toBe("Thu, 01 Jan 1970 00:00:00 GMT");
 	});
 	
 	it('should set innerText to show turn number', function() {
 		md.showTurn(7);
-		expect(mockJQ.innerText).toBe("Turn number: 7");
+		expect(mockJQ.innerText).toBe("7");
 	});
 });
