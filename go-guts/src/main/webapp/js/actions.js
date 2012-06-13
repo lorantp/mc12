@@ -1,5 +1,8 @@
-var ACTIONS = function(rest, boardId, turn) {
+var ACTIONS = function($, rest, board) {
 	var that = {};
+	
+	var boardId = board.id;
+	var turn = board.moves.length;
 	
 	var target;
 	
