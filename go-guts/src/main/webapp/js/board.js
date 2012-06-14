@@ -1,5 +1,8 @@
-var BOARD = function(size, stones, actions) {
+var BOARD = function($, rest, boardId, turnColor, size, stones) {
 	var that = {};
+	
+	var cellSize = 48;
+	var target;
 	
 	that.draw = function() {
 		var board = $("#board");
@@ -13,31 +16,39 @@ var BOARD = function(size, stones, actions) {
 	
 	that.buildCell = function(x, y) {
 		return $('<div />')
-		.addClass("position")
+		.addClass("cell")
 		.attr({id: "x" + x + "y" + y})
-		.css(that.createLocationStyle(x, y))
+		.css({top: (y * cellSize) + "px", left: (x * cellSize) + "px"})
 		.click(function () {
-			actions.placeMove(x, y);
+			that.placeMove(x, y);
 		});
 	}
 	
 	that.placeStones = function(stones) {
 		stones.forEach(function(stone) {
-			that.setStone(
-					stone.x, 
-					stone.y, 
-					stone.color);
+			$("#x" + stone.x + "y" + stone.y).attr("stone", stone.color);
 		});
 	}
 	
-	that.setStone = function(x, y, stone) {
-		$("#x" + x + "y" + y).attr("stone", stone);
-	}
+	that.placeMove = function(x, y) {
+		target = {x: x, y: y};
+		$("[target=" + turnColor + "]").attr("target", "false");
+		$("#x" + x + "y" + y).attr("target", turnColor);
+	};
 	
-	that.createLocationStyle = function(x, y) {
-		var top = y * 48;
-		var left = x * 48;
-		return {top: top + "px", left: left + "px"}
+	that.confirmMove = function() {
+		if (target) {
+			rest.sendMove(boardId, target.x, target.y, turnColor);
+			$("[target=" + turnColor + "]").attr({target: "false", stone: turnColor});
+		}
+	};
+
+	that.pass = function() {
+		rest.sendPass(boardId, turnColor);
+	};
+	
+	that.clearMove = function() {
+		target = undefined;
 	}
 	
 	return that;
