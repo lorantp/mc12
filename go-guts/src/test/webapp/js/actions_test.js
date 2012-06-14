@@ -7,12 +7,12 @@ describe("place move on board", function() {
 	
 	it("should set targeted divs to false", function() {
 		actions.placeMove(0, 0);
-		expect(mockJQ.attribsMap["[target=true]"]).toEqual({target: "false"});
+		expect(mockJQ.attribsMap["[target=BLACK]"]).toEqual({target: "false"});
 	});
 	
 	it("should set position to targeted", function() {
 		actions.placeMove(0, 0);
-		expect(mockJQ.attribsMap["#x0y0"]).toEqual({target: "true"});
+		expect(mockJQ.attribsMap["#x0y0"]).toEqual({target: "BLACK"});
 	});
 });
 
@@ -29,16 +29,16 @@ describe("confirm move", function() {
 		actions.placeMove(0, 0);
 		spyOn(restMock, "sendMove");
 		actions.confirmMove();
-		expect(restMock.sendMove).toHaveBeenCalledWith(boardMock.id, 0, 0, "black");
+		expect(restMock.sendMove).toHaveBeenCalledWith(boardMock.id, 0, 0, "BLACK");
 	});
 	
 	it("should set targeted position to no longer be targeted", function() {
 		actions.placeMove(0,0);
-		expect(mockJQ.attribsMap["#x0y0"]).toEqual({target: "true"}) // position is targeted
-		expect(mockJQ.attribsMap["[target=true]"]).toEqual({target: "false"}); // old positions are no longer targeted
-		delete mockJQ.attribsMap["[target=true]"]; // clear command
+		expect(mockJQ.attribsMap["#x0y0"]).toEqual({target: "BLACK"}) // position is targeted
+		expect(mockJQ.attribsMap["[target=BLACK]"]).toEqual({target: "false"}); // old positions are no longer targeted
 		actions.confirmMove();
-		expect(mockJQ.attribsMap["[target=true]"]).toEqual({target: "false"}); // targeted position should no longer be targeted
+		expect(mockJQ.attribsMap["[target=BLACK]"]).toEqual({target: "false"}); // targeted position should no longer be targeted
+		delete mockJQ.attribsMap["[target=BLACK]"]; // clear command
 	});
 	
 	it("should do nothing without a move having been placed", function() {
@@ -58,6 +58,6 @@ describe("passing", function() {
 	it("should send a pass for the right player", function() {
 		spyOn(restMock, "sendPass");
 		actions.pass();
-		expect(restMock.sendPass).toHaveBeenCalledWith(boardMock.id, "black");
+		expect(restMock.sendPass).toHaveBeenCalledWith(boardMock.id, "BLACK");
 	});
 });

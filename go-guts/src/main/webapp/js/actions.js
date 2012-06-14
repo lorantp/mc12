@@ -8,7 +8,7 @@ var ACTIONS = function($, rest, board) {
 	
 	that.placeMove = function(x, y) {
 		target = {x: x, y: y};
-		$("div").not(".target, false").attr("target", "false");
+		$("[target=" + turnColor + "]").attr("target", "false");
 		$("#x" + x + "y" + y).attr("target", turnColor);
 	};
 	
