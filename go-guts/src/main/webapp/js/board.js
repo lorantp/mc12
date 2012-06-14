@@ -1,37 +1,33 @@
-var BOARD = function(board, actions) {
+var BOARD = function(size, stones, actions) {
 	var that = {};
 	
-	var size = board.size;
-	var moves = board.moves;
-	var stoneNumber = 0;
-
 	that.draw = function() {
 		var board = $("#board");
 		for (var y = 0; y < size; y++) {
 			for (var x = 0; x < size; x++) {
-				board.append(that.createSquare(x, y));
+				board.append(that.buildCell(x, y));
 			}
 		}
-		that.placeStones(moves);
+		that.placeStones(stones);
 	}
 	
-	that.placeStones = function(moves) {
-		moves.forEach(function(move) {
-			that.setStone(
-					move.x, 
-					move.y, 
-					move.color.toLowerCase());
+	that.buildCell = function(x, y) {
+		return $('<div />')
+		.addClass("position")
+		.attr({id: "x" + x + "y" + y})
+		.css(that.createLocationStyle(x, y))
+		.click(function () {
+			actions.placeMove(x, y);
 		});
 	}
 	
-	that.createSquare = function(x, y) {
-		return $('<div />')
-			.addClass("position")
-			.attr({id: "x" + x + "y" + y})
-			.css(that.createLocationStyle(x, y))
-			.click(function () {
-				actions.placeMove(x, y);
-			});
+	that.placeStones = function(stones) {
+		stones.forEach(function(stone) {
+			that.setStone(
+					stone.x, 
+					stone.y, 
+					stone.color);
+		});
 	}
 	
 	that.setStone = function(x, y, stone) {

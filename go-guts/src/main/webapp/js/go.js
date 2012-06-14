@@ -8,7 +8,11 @@ var draw = function() {
 	
 	rest.getGame(1, function(data) {
   		var actions = ACTIONS($, rest, data.board);
-		var board = BOARD(data.board, actions);
+  		var goBoard = data.board;
+		var board = BOARD(
+				goBoard.size,
+				goBoard.moves, 
+				actions);
 		
 		board.draw();
 		activateButtons(actions);

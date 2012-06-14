@@ -5,11 +5,11 @@ div .position {
 	background-color: #C9FAC9;
 }
 
-[stone=black] {
+[stone=BLACK] {
 	background-image: url("../img/black.png");
 }
 
-[stone=white] {
+[stone=WHITE] {
 	background-image: url("../img/white.png");
 }
 
