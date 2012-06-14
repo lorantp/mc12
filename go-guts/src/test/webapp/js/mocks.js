@@ -19,6 +19,20 @@ var restMock = {
 		sendPass: function() {}
 };
 
+var spyArgsMap = {};
+
+var expect$methodToBeCalledWith = function (jqMethodName, expectedArguments, callThrough) {
+	if (spyArgsMap.hasOwnProperty(jqMethodName)) {
+		spyArgsMap[jqMethodName] += [expectedArguments];
+	}
+	var spy = spyOn($.fn, jqMethodName).andCallFake(function(arguments) {
+		expect(arguments).toBe(expectedArguments);
+	});
+	if (callThrough) {
+		spy.andCallThrough();
+	}
+};
+
 // Mocking JQuery here.
 
 var mockJQ = function mock() {

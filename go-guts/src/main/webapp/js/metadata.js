@@ -1,4 +1,4 @@
-var METADATA = function() {
+var METADATA = function($parent) {
 	var that = {};
 	
 	that.showData = function(game) {
@@ -18,11 +18,12 @@ var METADATA = function() {
 	}
 	
 	that.showStartTime = function(date) {
-		$("#starttime").append(date.toUTCString());
+		$parent.find("#starttime").append(date.toUTCString());
 	}
 	
 	that.showTurn = function(turn) {
-		$("#turn").append(turn);
+		var $turn = $parent.find("#turn");
+		$turn.append(String(turn));
 	}
 	
 	return that;
