@@ -31,7 +31,7 @@ var GAME = function(gameRest) {
 			
 			board.draw();
 			that.activateButtons(board);
-			METADATA($("#metadata")).showData(game);
+			METADATA($("#content")).showData(game);
 		});
 	}
 	

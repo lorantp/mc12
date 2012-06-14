@@ -21,7 +21,7 @@ describe("place move on board", function() {
 describe("position square attributes", function() {
 	it("should have correct attributes", function() {
  		var div = board.buildCell(0, 0);
-		expect(div.attr("class")).toBe("cell");
+		expect(div.attr("class")).toBe("abs cell");
 		expect(div.attr("id")).toBe("x0y0");
 		expect(div.css("top")).toBe('0px');
 		expect(div.css("left")).toBe('0px');

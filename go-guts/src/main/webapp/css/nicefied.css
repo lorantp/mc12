@@ -1,0 +1,98 @@
+body {
+	background-color: #FFFFFF;
+	font-family: verdana;
+	text-align: center;
+	color: #AA1221;
+}
+
+.shadowed {
+	box-shadow: 6px 10px 6px #332355;
+}
+
+.bordered {
+	border-style: solid;
+	border-color: #000000;
+	border-width: 2px;
+}
+
+.infobox {
+	width: 912px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.capture {
+	background-color: #AADE22;
+}
+
+.left {
+	float: left;
+	margin-left: 50px;
+}
+
+.right {
+	float: right;
+	margin-right: 50px;
+}
+
+.turn {
+	padding-left: 50px;
+	padding-right: 50px;
+	background-repeat: no-repeat;
+}
+
+#content {
+	margin-top: 12px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#metadata {
+	background-color: #22AADD;
+}
+
+#playerdata {
+	font-family: Impact;
+	font-size: 5em;
+}
+
+#playerone {
+	color: #000000;
+	font-weight: bold;
+	text-shadow: -1px 0 #FFFFFF, 0 1px #FFFFFF, 1px 0 #FFFFFF, 0 -1px #FFFFFF;
+}
+
+#playertwo {
+	color: #FFFFFF;
+	font-weight: bold;
+	text-shadow: -1px 0 #000000, 0 1px #000000, 1px 0 #000000, 0 -1px #000000;
+}
+
+#gamedata {
+	height: 60px;
+	margin-bottom: 5px;
+	
+	font-family: Impact;
+	font-size: 2.2em;
+	text-align: center;
+}
+
+#battlebox {
+	margin-top: 8px;
+	padding-left: 10px;
+	height: 1.6em;
+	background-color: #AADE22;
+	
+	font-variant: small-caps;
+	font-weight: bold;
+	text-align: left;
+}
+
+#box {
+	background-color: #BE8640;
+	margin: 12px;
+	padding: 12px;
+	width: 912px;
+	margin-left: auto;
+	margin-right: auto;
+}

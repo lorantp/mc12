@@ -15,6 +15,7 @@ var BOARD = function($parent, gameRest, gameId, playerId, size, stones, turnColo
 	
 	that.buildCell = function(x, y) {
 		return $('<div />')
+		.addClass("abs")
 		.addClass("cell")
 		.attr({id: "x" + x + "y" + y})
 		.css({top: (y * cellSize) + "px", left: (x * cellSize) + "px"})
