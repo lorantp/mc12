@@ -7,7 +7,7 @@ var METADATA = function($) {
 		that.showPlayer(game.black, "#playerone", "black", game.blackCaptured, blackTurn);
 		that.showPlayer(game.white, "#playertwo", "white", game.whiteCaptured, !blackTurn);
 		
-		that.showStartTime(new Date(0))
+		that.showStartTime(new Date(0));
 		that.showTurn(game.board.moves.length);
 	}
 	
@@ -23,7 +23,7 @@ var METADATA = function($) {
 	}
 	
 	that.showTurn = function(turn) {
-		$("#turn").append("Turn number: " + turn)
+		$("#turn").append("Turn number: " + turn);
 	}
 	
 	return that;

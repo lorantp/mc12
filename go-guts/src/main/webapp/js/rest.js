@@ -1,4 +1,4 @@
-var REST = function() {
+var REST = function(prefix) {
 	var that = {};
 
 	that.postData = function(url, data, success, error) {
@@ -18,7 +18,7 @@ var REST = function() {
 			error: error || function() {
 				console.log('failed');
 			}
-		})
+		});
 	};
 	
 	that.getData = function(url, data, success, error) {
@@ -31,39 +31,39 @@ var REST = function() {
 			error: error || function() {
 				console.log('failed');
 			}
-		})
+		});
 	}
 	
 	that.getPlayer = function(id) {
-		return that.getData('rest/player', {id: id});
+		return that.getData(prefix + '/player', {id: id});
 	}
 	
 	that.sendPlayer = function(name) {
-		that.postData('rest/player', {id:43, nickname:name});
+		that.postData(prefix + '/player', {id:43, nickname:name});
 	}
 	
 	that.getGame = function(id, success) {
-		that.getData('rest/game', {id: id}, success)
+		that.getData(prefix + '/game', {id: id}, success);
 	}
 	
 	that.getBoard = function(id, success, error) {
-		return that.getData('rest/board', {id: id})
+		return that.getData(prefix + '/board', {id: id});
 	}
 	
 	that.sendMove = function(boardid, x, y, color) {
-		that.postData('rest/move?boardid=' + boardid, {x: x, y: y, color: color.toUpperCase()}, function(data) {
+		that.postData(prefix + '/move?boardid=' + boardid, {x: x, y: y, color: color.toUpperCase()}, function(data) {
 			for (index in data.moves) {
-				var move = data.moves[index]
+				var move = data.moves[index];
 				if (move.x == x && move.y == y) {
-					console.log('inserted move:')
-					DEBUG.toString(move)
+					console.log('inserted move:');
+					DEBUG.toString(move);
 				}
 			}
 		});
 	}
 	
 	that.sendPass = function(color) {
-		that.postData('rest/move?gameid=1', {color: color.toUpperCase()});
+		that.postData(prefix + '/move?gameid=1', {color: color.toUpperCase()});
 	}
 
 	return that;

@@ -16,7 +16,7 @@ var BOARD = function(board, actions) {
 	}
 	
 	that.activateButton = function() {
-		$("#confirm").click(actions.confirmMove)
+		$("#confirm").click(actions.confirmMove);
 	}
 	
 	that.placeStones = function(moves) {
@@ -49,4 +49,4 @@ var BOARD = function(board, actions) {
 	}
 	
 	return that;
-}
+};

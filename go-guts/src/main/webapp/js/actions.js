@@ -12,8 +12,8 @@ var ACTIONS = function(rest, boardId, turn) {
 	that.confirmMove = function() {
 		if (target) {
 			var color = turn % 2 === 0 ? "black" : "white";
-			rest.sendMove(boardId, target.x, target.y, color)
-			$("[target=true]").attr({target: "false", stone: color})
+			rest.sendMove(boardId, target.x, target.y, color);
+			$("[target=true]").attr({target: "false", stone: color});
 			location.reload(true);
 		}
 	};
