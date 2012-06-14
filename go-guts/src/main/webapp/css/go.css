@@ -1,4 +1,13 @@
-.board {
+#box {
+	position: relative;
+	background-color: #BE8640;
+	margin: 12px;
+	padding: 12px;
+	width: 912px;
+	box-shadow: 6px 10px 6px #BBBBBB;
+}
+
+#board {
 	position: relative;
 	height: 912px;
 	width: 912px;

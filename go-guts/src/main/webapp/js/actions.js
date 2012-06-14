@@ -13,7 +13,7 @@ var ACTIONS = function($, rest, board) {
 	};
 	
 	that.confirmMove = function() {
-		if (target && (target.x || target.x == 0) && (target.y || target.y == 0)) {
+		if (target) {
 			rest.sendMove(boardId, target.x, target.y, turnColor);
 			$("[target=true]").attr({target: "false", stone: turnColor});
 		}
