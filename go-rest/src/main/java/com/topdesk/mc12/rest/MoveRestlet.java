@@ -25,8 +25,9 @@ public class MoveRestlet {
 	@Path("/pass")
 	public Board pass(Move move, @QueryParam("boardid") long boardId) {
 		Board board = backend.get(Board.class, boardId);
-		move.setX(null);
-		move.setY(null);
+		if (move.getX() != null || move.getY() != null) {
+			throw new IllegalStateException("Got pass with move coordinate");
+		}
 		
 		Move last = Iterables.getLast(board.getMoves(), null);
 		checkTurn(move, last);
@@ -72,7 +73,10 @@ public class MoveRestlet {
 		}
 	}
 	
-	private void checkBounds(int size, int c) {
+	private void checkBounds(int size, Integer c) {
+		if (c == null) {
+			throw new IllegalStateException("Got move without coordinate");
+		}
 		if (c < 0 || c >= size) {
 			throw new IllegalStateException("Move does not fit on board");
 		}

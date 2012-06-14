@@ -1,6 +1,6 @@
 var REST = function() {
 	var that = {};
-
+	
 	that.postData = function(url, data, success, error) {
 		$.ajax({
 			url: url,
@@ -44,28 +44,28 @@ var REST = function() {
 	}
 	
 	that.getGame = function(id, success) {
-		that.getData('rest/game', {id: id}, success)
+		that.getData('rest/game', {id: id}, success);
 	}
 	
 	that.getBoard = function(id, success, error) {
-		return that.getData('rest/board', {id: id})
+		return that.getData('rest/board', {id: id});
 	}
 	
 	that.sendMove = function(boardid, x, y, color) {
-		that.postData('rest/move?boardid=' + boardid, {x: x, y: y, color: color.toUpperCase()}, function(data) {
+		that.postData('rest/move?boardid=' + boardid, {x: x, y: y, color: color}, function(data) {
 			for (index in data.moves) {
 				var move = data.moves[index]
 				if (move.x == x && move.y == y) {
-					console.log('inserted move:')
-					DEBUG.toString(move)
+					console.log('inserted move:');
+					DEBUG.toString(move);
 				}
 			}
 		});
 	}
 	
 	that.sendPass = function(boardid, color) {
-		that.postData('rest/move?boardid=' + boardid + '&pass=true', {color: color.toUpperCase()});
+		that.postData('rest/move/pass?boardid=' + boardid, {color: color});
 	}
-
+	
 	return that;
 }

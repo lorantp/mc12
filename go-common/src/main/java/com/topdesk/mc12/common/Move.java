@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 public final class Move {
 	@Id @GeneratedValue private long id;
 	@ManyToOne(optional=false) private Board board;
-	private Integer x = -1;
-	private Integer y = -1;
+	private Integer x;
+	private Integer y;
 	@Column(nullable=false) private Color color;
 	
 	@Override
