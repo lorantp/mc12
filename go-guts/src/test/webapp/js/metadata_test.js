@@ -7,15 +7,9 @@ var container = $("<div id='test' />")
 var md = METADATA(container);
 
 describe("showing data format", function() {
-	it('should show player info', function() {
-		expect$methodToBeCalledWith("append", ["Player turqoise: Wonderful Wizzard &lt;inyour@dreams.com&gt; - Captured: 17"])
-		md.showPlayer(mockPlayer, "", "turqoise", 17, false);
-	});
-	
-	it('should show player info with turn', function() {
-		var checkFunction = expect$methodToBeCalledWithXTimesFunction("append", ["Player turqoise: Wonderful Wizzard &lt;inyour@dreams.com&gt; - Captured: 17"], [" &lt;HAS TURN&gt;"]);
-		md.showPlayer(mockPlayer, "", "turqoise", 17, true);
-		checkFunction();
+	it('should show player nick and captured stones', function() {
+		var checkFunction = expect$methodToBeCalledWithXTimesFunction("append", ["WONDERFUL WIZZARD"], [17] )
+		md.showPlayer(mockPlayer, "", 17, "turqoise");
 	});
 	
 	it('should show epoch start time', function() {
@@ -24,7 +18,7 @@ describe("showing data format", function() {
 	});
 	 
 	it('should show turn number', function() {
-		expect$methodToBeCalledWith("append", ["7"])
-		md.showTurn(7);
+		expect$methodToBeCalledWith("append", ["7 - TURQOISE MOVES"])
+		md.showTurn(7, "TURQOISE");
 	});
 });

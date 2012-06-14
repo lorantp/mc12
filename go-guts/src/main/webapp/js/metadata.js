@@ -7,7 +7,7 @@ var METADATA = function($parent) {
 		that.showPlayer(game.white, "#playertwo", game.whiteCaptured, "white");
 		
 		that.showStartTime(new Date(game.start));
-		that.showTurn(game.moves.length, blackTurn ? "BLACK" : "WHITE");
+		that.showTurn(game.moves.length + 1, blackTurn ? "BLACK" : "WHITE");
 	}
 	
 	that.showPlayer = function(player, idSelector, captured, color) {
