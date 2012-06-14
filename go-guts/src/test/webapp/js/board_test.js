@@ -1,5 +1,6 @@
 var container = $("<div id='test' />")
-	.append("<div id='x0y0' />");
+	.append("<div id='x0y0' />")
+	.append("<div id='x1y2' />");
 
 var board = BOARD(
 		container,
