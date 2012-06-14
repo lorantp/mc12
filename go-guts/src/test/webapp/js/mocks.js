@@ -15,7 +15,7 @@ var boardMock = {
 ]};
 
 var restMock = {
-		sendMove: function() {},
+		doMove: function() {},
 		sendPass: function() {}
 };
 

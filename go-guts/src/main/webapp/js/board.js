@@ -1,4 +1,4 @@
-var BOARD = function(rest, boardId, turnColor, size, stones) {
+var BOARD = function(size, stones, nextStone) {
 	var that = {};
 	
 	var cellSize = 48;
@@ -50,6 +50,14 @@ var BOARD = function(rest, boardId, turnColor, size, stones) {
 	that.clearMove = function() {
 		target = undefined;
 	}
+	
+	that.placeMove = function(x, y) {
+		var turnColor = nextStone.color;
+		nextStone.x = x;
+		nextStone.y = y;
+		$("[target=" + turnColor + "]").attr("target", "false");		
+		$("#x" + x + "y" + y).attr("target", turnColor);
+	};
 	
 	return that;
 };

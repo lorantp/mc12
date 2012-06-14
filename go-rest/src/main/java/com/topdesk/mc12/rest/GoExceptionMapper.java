@@ -7,9 +7,9 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class GoExceptionMapper implements ExceptionMapper<IllegalStateException> {
+public class GoExceptionMapper implements ExceptionMapper<Exception> {
 	@Override
-	public Response toResponse(IllegalStateException exception) {
+	public Response toResponse(Exception exception) {
 		return Response.status(Status.INTERNAL_SERVER_ERROR).entity(exception.getMessage()).type(MediaType.APPLICATION_JSON).build();
 	}
 }

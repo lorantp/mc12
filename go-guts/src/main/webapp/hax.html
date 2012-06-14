@@ -41,8 +41,8 @@
 		<form>
 			<div>
 				<select id="color">
-					<option value="BLACK">Black</option>
-					<option value="WHITE">White</option>
+					<option value="3">Black</option>
+					<option value="2">White</option>
 				</select>
 				<input type="number" id="x">
 				<input type="number" id="y">
@@ -59,15 +59,16 @@
 		<script src="js/libs/jquery-1.7.1.js"></script>
 		<script src="js/plugins.js"></script>
 		<script src="js/debug.js"></script>
-		<script src="js/rest.js"></script>
+		<script src="js/rest/rest.js"></script>
+		<script src="js/rest/game_rest.js"></script>
 		<script type="application/javascript">
-			var rest = REST('rest');
+			var rest = GAME_REST(REST());
 			var hax = {};
 			hax.move = function() {
-				rest.sendMove(1, $('#x').val(), $('#y').val(), $('#color').val());
+				rest.doMove(1, $('#color').val(), $('#x').val(), $('#y').val());
 			}
 			hax.pass = function() {
-				rest.sendPass(1, $('#color').val());
+				rest.doPass(1, $('#color').val());
 			}
 		</script>
 		<!-- end scripts -->

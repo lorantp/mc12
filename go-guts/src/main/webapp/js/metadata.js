@@ -2,12 +2,12 @@ var METADATA = function($parent) {
 	var that = {};
 	
 	that.showData = function(game) {
-		var blackTurn = game.board.moves.length % 2 === 0;
+		var blackTurn = game.moves.length % 2 === 0;
 		that.showPlayer(game.black, "#playerone", "black", game.blackCaptured, blackTurn);
 		that.showPlayer(game.white, "#playertwo", "white", game.whiteCaptured, !blackTurn);
 		
-		that.showStartTime(new Date(0));
-		that.showTurn(game.board.moves.length);
+		that.showStartTime(new Date(game.start));
+		that.showTurn(game.moves.length);
 	}
 	
 	that.showPlayer = function(player, idSelector, colour, captured, hasTurn) {
