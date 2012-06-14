@@ -5,7 +5,7 @@ var BOARD = function(board, actions) {
 	var moves = board.moves;
 	var stoneNumber = 0;
 
-	that.drawBoard = function() {
+	that.draw = function() {
 		var board = $("#board");
 		for (var y = 0; y < size; y++) {
 			for (var x = 0; x < size; x++) {
@@ -13,10 +13,6 @@ var BOARD = function(board, actions) {
 			}
 		}
 		that.placeStones(moves);
-	}
-	
-	that.activateButton = function() {
-		$("#confirm").click(actions.confirmMove);
 	}
 	
 	that.placeStones = function(moves) {

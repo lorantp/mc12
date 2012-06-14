@@ -8,7 +8,7 @@ DEBUG.toString = function(object, i) {
 			DEBUG.toString(object[x], indent + '    ')
 			console.log(indent + '}');
 		}
-		else {
+		else if (typeof object[x] != 'function') {
 			console.log(indent + x + ': ' + object[x]);
 		}
 	}

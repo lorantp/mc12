@@ -9,14 +9,15 @@ var REST = function(prefix) {
 			data: data,
 			processData:false,
 			beforeSend: function (jqXHR, settings) {
-				settings.data = JSON.stringify(settings.data);
+				settings.data = JSON.stringify(settings.data)
 			},
 			type:'post',
-			success: success || function(data) {
-				console.log('success, got generated id ' + data.id);
+			success: success || function(data, textStatus, jqXHR) {
+				console.log('success, got generated id ' + data.id)
+				location.reload(true);
 			},
-			error: error || function() {
-				console.log('failed');
+			error: error || function(jqXHR, textStatus, errorThrown) {
+				alert(jqXHR.responseText)
 			}
 		});
 	};
@@ -59,11 +60,12 @@ var REST = function(prefix) {
 					DEBUG.toString(move);
 				}
 			}
+			location.reload(true);
 		});
 	}
 	
-	that.sendPass = function(color) {
-		that.postData(prefix + '/move?gameid=1', {color: color.toUpperCase()});
+	that.sendPass = function(boardid, color) {
+		that.postData(prefix + '/move?boardid=' + boardid + '&pass=true', {color: color.toUpperCase()});
 	}
 
 	return that;

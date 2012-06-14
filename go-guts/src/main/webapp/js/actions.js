@@ -1,5 +1,8 @@
-var ACTIONS = function(rest, boardId, turn) {
+var ACTIONS = function($, rest, board) {
 	var that = {};
+	
+	var boardId = board.id;
+	var turnColor = board.moves.length % 2 === 0 ? "black" : "white";
 	
 	var target;
 	
@@ -10,13 +13,19 @@ var ACTIONS = function(rest, boardId, turn) {
 	};
 	
 	that.confirmMove = function() {
-		if (target) {
-			var color = turn % 2 === 0 ? "black" : "white";
-			rest.sendMove(boardId, target.x, target.y, color);
-			$("[target=true]").attr({target: "false", stone: color});
-			location.reload(true);
+		if (target && (target.x || target.x == 0) && (target.y || target.y == 0)) {
+			rest.sendMove(boardId, target.x, target.y, turnColor);
+			$("[target=true]").attr({target: "false", stone: turnColor});
 		}
 	};
+
+	that.pass = function() {
+		rest.sendPass(boardId, turnColor);
+	};
+	
+	that.clearMove = function() {
+		target = undefined;
+	}
 	
 	return that;
 };

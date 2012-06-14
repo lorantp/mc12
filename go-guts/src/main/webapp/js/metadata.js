@@ -19,11 +19,11 @@ var METADATA = function($) {
 	}
 	
 	that.showStartTime = function(date) {
-		$("#starttime").append("Start time: " + date.toUTCString());
+		$("#starttime").append(date.toUTCString());
 	}
 	
 	that.showTurn = function(turn) {
-		$("#turn").append("Turn number: " + turn);
+		$("#turn").append(turn);
 	}
 	
 	return that;

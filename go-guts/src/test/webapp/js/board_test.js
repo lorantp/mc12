@@ -1,18 +1,3 @@
-var Move = function(x, y, color) {
-	this.x = x;
-	this.y = y;
-	this.color = color;
-};
-
-var boardMock = {
-		size: 19,
-		moves: [
-		        new Move(0, 0, "BLACK"),
-		        new Move(1, 2, "WHITE")
-]};
-
-var actionsMock = {placeMove: function(x, y) {}};
-
 var board = BOARD(boardMock, actionsMock);
 
 describe("location style format", function() {
@@ -41,7 +26,7 @@ describe("position square attributes", function() {
 describe("board rendering code", function() {
 	it("should lay out stones from the moves provided", function() {
 		spyOn(board, "setStone");
-		board.drawBoard();
+		board.draw();
 		
 		boardMock.moves.forEach(function(move) {
 			expect(board.setStone).toHaveBeenCalledWith(move.x, move.y, move.color.toLowerCase());
