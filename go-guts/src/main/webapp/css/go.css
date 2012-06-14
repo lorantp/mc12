@@ -1,8 +1,17 @@
+.board {
+	position: relative;
+	height: 912px;
+	width: 912px;
+	background-image: url("../img/grid19x19.svg");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-color: #C9FAC9;
+}
+
 div .position {
 	position: absolute;
 	height:  48px;
 	width: 48px;
-	background-color: #C9FAC9;
 }
 
 [stone=BLACK] {

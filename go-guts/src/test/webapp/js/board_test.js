@@ -5,7 +5,7 @@ var board = BOARD(
 
 describe("location style format", function() {
   it("should be of the format", function() {
-	  expect(board.createLocationStyle(0, 0)).toEqual({top: "140px", left: "0px"});
+	  expect(board.createLocationStyle(0, 0)).toEqual({top: "0px", left: "0px"});
   });
 });
 
@@ -14,7 +14,7 @@ describe("position square attributes", function() {
  		var div = board.buildCell(0, 0);
 		expect(div.attr("class")).toBe("position");
 		expect(div.attr("id")).toBe("x0y0");
-		expect(div.css("top")).toBe('140px');
+		expect(div.css("top")).toBe('0px');
 		expect(div.css("left")).toBe('0px');
 	});
 

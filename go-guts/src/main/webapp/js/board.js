@@ -35,7 +35,7 @@ var BOARD = function(size, stones, actions) {
 	}
 	
 	that.createLocationStyle = function(x, y) {
-		var top = y * 48 + 140;
+		var top = y * 48;
 		var left = x * 48;
 		return {top: top + "px", left: left + "px"}
 	}
