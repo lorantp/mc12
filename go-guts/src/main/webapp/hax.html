@@ -41,13 +41,13 @@
 		<form>
 			<div>
 				<select id="color">
-					<option value="black">Black</option>
-					<option value="white">White</option>
+					<option value="BLACK">Black</option>
+					<option value="WHITE">White</option>
 				</select>
 				<input type="number" id="x">
 				<input type="number" id="y">
-				<input type="button" value="Send move" onclick="hax.move()">
-				<input type="button" value="Send pass" onclick="hax.pass()">
+				<input type="button" value="Send move" onclick="hax.move();">
+				<input type="button" value="Send pass" onclick="hax.pass();">
 			</div>
 			<iframe src="index.html" height="480" width="320"></iframe>
 		</form>
@@ -61,13 +61,13 @@
 		<script src="js/debug.js"></script>
 		<script src="js/rest.js"></script>
 		<script type="application/javascript">
-			var rest = REST();
+			var rest = REST('rest');
 			var hax = {};
 			hax.move = function() {
-				rest.sendMove(1, $('#x').val(), $('#y').val(), $('#color').val())
+				rest.sendMove(1, $('#x').val(), $('#y').val(), $('#color').val());
 			}
 			hax.pass = function() {
-				rest.sendPass(1, $('#color').val())
+				rest.sendPass(1, $('#color').val());
 			}
 		</script>
 		<!-- end scripts -->

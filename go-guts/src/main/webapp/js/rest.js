@@ -1,6 +1,6 @@
 var REST = function(prefix) {
 	var that = {};
-
+	
 	that.postData = function(url, data, success, error) {
 		$.ajax({
 			url: url,
@@ -52,7 +52,7 @@ var REST = function(prefix) {
 	}
 	
 	that.sendMove = function(boardid, x, y, color) {
-		that.postData(prefix + '/move?boardid=' + boardid, {x: x, y: y, color: color.toUpperCase()}, function(data) {
+		that.postData(prefix + '/move?boardid=' + boardid, {x: x, y: y, color: color}, function(data) {
 			for (index in data.moves) {
 				var move = data.moves[index];
 				if (move.x == x && move.y == y) {
@@ -65,8 +65,8 @@ var REST = function(prefix) {
 	}
 	
 	that.sendPass = function(boardid, color) {
-		that.postData(prefix + '/move?boardid=' + boardid + '&pass=true', {color: color.toUpperCase()});
+		that.postData(prefix + '/move/pass?boardid=' + boardid, {color: color});
 	}
-
+	
 	return that;
 }

@@ -17,8 +17,23 @@ import com.topdesk.mc12.persistence.Backend;
 
 @Slf4j
 @Path("move")
+@Consumes(MediaType.APPLICATION_JSON)
 public class MoveRestlet {
 	@Inject private Backend backend;
+	
+	@POST
+	@Path("/pass")
+	public Board pass(Move move, @QueryParam("boardid") long boardId) {
+		Board board = backend.get(Board.class, boardId);
+		if (move.getX() != null || move.getY() != null) {
+			throw new IllegalStateException("Got pass with move coordinate");
+		}
+		
+		Move last = Iterables.getLast(board.getMoves(), null);
+		checkTurn(move, last);
+		saveMove(move, board);
+		return BoardRestlet.fixRecursion(backend.get(Board.class, boardId));
+	}
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -43,6 +58,18 @@ public class MoveRestlet {
 			}
 		}
 		
+		checkTurn(move, last);
+		saveMove(move, board);
+		return BoardRestlet.fixRecursion(backend.get(Board.class, boardId));
+	}
+	
+	private void saveMove(Move move, Board board) {
+		move.setBoard(board);
+		log.info("Adding move {} to {}", move, board);
+		backend.insert(move);
+	}
+	
+	private void checkTurn(Move move, Move last) {
 		if (last == null) {
 			if (move.getColor() != Color.BLACK) {
 				throw new IllegalStateException("The first move must be made by the black player");
@@ -51,14 +78,12 @@ public class MoveRestlet {
 		else if (last.getColor() == move.getColor()) {
 			throw new IllegalStateException("It is not the " + move.getColor() + " player's turn");
 		}
-		
-		move.setBoard(board);
-		log.info("Adding move {} to {}", move, board);
-		backend.insert(move);
-		return BoardRestlet.fixRecursion(backend.get(Board.class, boardId));
 	}
 	
-	private void checkBounds(int size, int c) {
+	private void checkBounds(int size, Integer c) {
+		if (c == null) {
+			throw new IllegalStateException("Got move without coordinate");
+		}
 		if (c < 0 || c >= size) {
 			throw new IllegalStateException("Move does not fit on board");
 		}
