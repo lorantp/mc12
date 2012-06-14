@@ -18,7 +18,6 @@ var draw = function() {
 	rest.getGame(1, function(data) {
   		var goBoard = data.board;
 		var board = BOARD(
-				$,
 				rest,
 				goBoard.id,
 				determineColor(goBoard),

@@ -1,14 +1,11 @@
-var board = BOARD(mockJQ,
-		restMock,
+var board = BOARD(restMock,
 		boardMock.id,
 		"BLACK",
 		boardMock.size,
 		boardMock.moves);
 
 describe("place move on board", function() {
-	beforeEach(function() {
-		mockJQ.attribsMap = {};
-	});
+	mockJQ.setup()
 	
 	it("should set targeted divs to false", function() {
 		board.placeMove(0, 0);
@@ -22,13 +19,7 @@ describe("place move on board", function() {
 });
 
 describe("confirm move", function() {
-	beforeEach(function() {
-		mockJQ.attribsMap = {};
-	});
-	
-	afterEach(function() {
-		board.clearMove();
-	});
+	mockJQ.setup(function() {}, board.clearMove);
 	
 	it("should send a move to the placed location", function() {
 		board.placeMove(0, 0);
@@ -70,7 +61,7 @@ describe("passing", function() {
 describe("position square attributes", function() {
 	it("should have correct attributes", function() {
  		var div = board.buildCell(0, 0);
-		expect(div.attr("class")).toBe("position");
+		expect(div.attr("class")).toBe("cell");
 		expect(div.attr("id")).toBe("x0y0");
 		expect(div.css("top")).toBe('0px');
 		expect(div.css("left")).toBe('0px');
@@ -78,19 +69,19 @@ describe("position square attributes", function() {
 
 	it("should call placeMove", function() {
 		var div = board.buildCell(0, 0);
-		spyOn(actionsMock, "placeMove");
+		spyOn(board, "placeMove");
 		div.click();
-		expect(actionsMock.placeMove).toHaveBeenCalledWith(0, 0);
+		expect(board.placeMove).toHaveBeenCalledWith(0, 0);
 	});
 });
 
 describe("board rendering code", function() {
+	mockJQ.setup();
+	
 	it("should lay out stones from the moves provided", function() {
-		spyOn(board, "setStone");
 		board.draw();
-		
 		boardMock.moves.forEach(function(move) {
-			expect(board.setStone).toHaveBeenCalledWith(move.x, move.y, move.color);
+			expect(mockJQ.attribsMap["#x" + move.x + "y" + move.y]).toEqual({stone: move.color});
 		});
 	});
 });

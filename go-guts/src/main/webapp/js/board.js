@@ -1,4 +1,4 @@
-var BOARD = function($, rest, boardId, turnColor, size, stones) {
+var BOARD = function(rest, boardId, turnColor, size, stones) {
 	var that = {};
 	
 	var cellSize = 48;
