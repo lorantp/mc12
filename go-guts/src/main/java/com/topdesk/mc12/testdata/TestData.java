@@ -17,6 +17,8 @@ import com.topdesk.mc12.persistence.Backend;
 
 @Slf4j
 public class TestData {
+	private static final boolean TEST_MOVES = false;
+	
 	@Inject private Backend backend;
 	private final Player jorn = new Player(0, "Jorn", "jornh@topdesk.com");
 	private final Player bernd = new Player(0, "Bernd", "berndj@topdesk.com");
@@ -36,7 +38,9 @@ public class TestData {
 		Board board = new Board(0, BoardSize.NINETEEN.getSize(), Collections.<Move>emptyList());
 		Game game = new Game(0, board, bart, bernd, new DateTime().getMillis(), 5, 9);
 		backend.insert(board, game);
-		createMoves(board);
+		if (TEST_MOVES) {
+			createMoves(board);
+		}
 		log.info("Created game: {}", backend.get(Game.class, game.getId()));
 	}
 	
