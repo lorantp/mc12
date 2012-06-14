@@ -36,14 +36,14 @@ describe("position square attributes", function() {
 	});
 });
 
-describe("board rendering code", function() {
-	it("should lay out stones from the moves provided", function() {
-		board.draw();
-		boardMock.moves.forEach(function(move) {
-			expect(container.find("#x" + move.x + "y" + move.y).attr("stone")).toEqual(move.color);
-		});
-	});
-});
+//describe("board rendering code", function() {
+//	it("should lay out stones from the moves provided", function() {
+//		board.draw();
+//		boardMock.moves.forEach(function(move) {
+//			expect(container.find("#x" + move.x + "y" + move.y).attr("stone")).toEqual(move.color);
+//		});
+//	});
+//});
 
 describe("confirm move", function() {
 	afterEach(function() {
