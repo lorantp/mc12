@@ -17,32 +17,51 @@ import com.topdesk.mc12.persistence.Backend;
 
 @Slf4j
 @Path("move")
+@Consumes(MediaType.APPLICATION_JSON)
 public class MoveRestlet {
 	@Inject private Backend backend;
 	
 	@POST
+	@Path("/pass")
+	public Board pass(Move move, @QueryParam("boardid") long boardId) {
+		Board board = backend.get(Board.class, boardId);
+		move.setX(null);
+		move.setY(null);
+		
+		Move last = Iterables.getLast(board.getMoves(), null);
+		checkTurn(move, last);
+		saveMove(move, board);
+		return BoardRestlet.fixRecursion(backend.get(Board.class, boardId));
+	}
+	
+	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Board move(Move move, @QueryParam("boardid") long boardId, @QueryParam("pass") boolean pass) {
+	public Board move(Move move, @QueryParam("boardid") long boardId) {
 		Board board = backend.get(Board.class, boardId);
 		
+		checkBounds(board.getSize(), move.getX());
+		checkBounds(board.getSize(), move.getY());
+		
 		Move last = null;
-		if (pass) {
-			last = Iterables.getLast(board.getMoves(), null);
-			move.setX(null);
-			move.setY(null);
-		}
-		else {
-			checkBounds(board.getSize(), move.getX());
-			checkBounds(board.getSize(), move.getY());
-			
-			for (Move m : board.getMoves()) {
-				if (m.getX() == move.getX() && m.getY() == move.getY()) {
-					throw new IllegalStateException("There's already a stone at " + m.getX() + ", " + m.getY());
-				}
-				last = m;
+		for (Move m : board.getMoves()) {
+			if (m.getX() == move.getX() && m.getY() == move.getY()) {
+				throw new IllegalStateException("There's already a stone at " + m.getX() + ", " + m.getY());
 			}
+			last = m;
 		}
 		
+		checkTurn(move, last);
+		saveMove(move, board);
+		return BoardRestlet.fixRecursion(backend.get(Board.class, boardId));
+	}
+	
+	private void saveMove(Move move, Board board) {
+		move.setBoard(board);
+		log.info("Adding move {} to {}", move, board);
+		backend.insert(move);
+	}
+	
+	private void checkTurn(Move move, Move last) {
 		if (last == null) {
 			if (move.getColor() != Color.BLACK) {
 				throw new IllegalStateException("The first move must be made by the black player");
@@ -51,11 +70,6 @@ public class MoveRestlet {
 		else if (last.getColor() == move.getColor()) {
 			throw new IllegalStateException("It is not the " + move.getColor() + " player's turn");
 		}
-		
-		move.setBoard(board);
-		log.info("Adding move {} to {}", move, board);
-		backend.insert(move);
-		return BoardRestlet.fixRecursion(backend.get(Board.class, boardId));
 	}
 	
 	private void checkBounds(int size, int c) {
