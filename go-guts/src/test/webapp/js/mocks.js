@@ -14,23 +14,43 @@ var boardMock = {
 		        new MockMove(1, 2, "WHITE")
 ]};
 
+var nextStone = {color: "BLACK"};
+
+var mockPlayer = {
+		nickname: "Wonderful Wizzard",
+		email: "inyour@dreams.com"
+}
+
 var restMock = {
 		doMove: function() {},
 		sendPass: function() {}
 };
 
-var spyArgsMap = {};
-
 var expect$methodToBeCalledWith = function (jqMethodName, expectedArguments, callThrough) {
-	if (spyArgsMap.hasOwnProperty(jqMethodName)) {
-		spyArgsMap[jqMethodName] += [expectedArguments];
-	}
-	var spy = spyOn($.fn, jqMethodName).andCallFake(function(arguments) {
-		expect(arguments).toBe(expectedArguments);
+	var spy = spyOn($.fn, jqMethodName).andCallFake(function() {
+		for (i in expectedArguments) {
+			expect(arguments[i]).toEqual(expectedArguments[i]);
+		}
 	});
 	if (callThrough) {
 		spy.andCallThrough();
 	}
+};
+
+var expect$methodToBeCalledWithXTimesFunction = function(jqMethodName) {
+	var spy = spyOn($.fn, jqMethodName);
+	args = [];
+	for (i in arguments) {
+		if(i > 0) {
+			args[i-1] = arguments[i];
+		}
+	}
+	var checkFunction = function() {
+		for(i in args) {
+			expect(spy.argsForCall[i]).toEqual(args[i]);
+		}
+	};
+	return checkFunction;
 };
 
 // Mocking JQuery here.

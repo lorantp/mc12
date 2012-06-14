@@ -23,7 +23,7 @@ var GAME = function(gameRest) {
 					game.white.id;
 			var board = BOARD(
 					game.size,
-					game.moves, 
+					game.moves,
 					nextStone);
 			
 			board.draw();
