@@ -1,5 +1,4 @@
-// Has jQuery as argument for testability, shadows the global jQuery argument.
-var METADATA = function($) {
+var METADATA = function() {
 	var that = {};
 	
 	that.showData = function(game) {

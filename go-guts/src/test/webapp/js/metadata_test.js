@@ -1,9 +1,7 @@
-var md = METADATA(mockJQ);
+var md = METADATA();
 
 describe("showing data format", function() {
-	beforeEach(function() {
-		mockJQ.innerText = "";
-	});
+	mockJQ.setup()
 	
 	it('should show player info', function() {
 		md.showPlayer({nickname: "Wonderful Wizzard", email: "inyour@dreams.com"}, "", "turqoise", 17, false);
