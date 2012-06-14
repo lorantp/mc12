@@ -13,6 +13,10 @@ div .position {
 	background-image: url("../img/white.png");
 }
 
-[target=true] {
-	background-image: url("../img/target48x48.png");
+[target=BLACK] {
+	background-image: url("../img/target_black.png");
+}
+
+[target=WHITE] {
+	background-image: url("../img/target_white.png");
 }

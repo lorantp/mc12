@@ -2,14 +2,14 @@ var ACTIONS = function($, rest, board) {
 	var that = {};
 	
 	var boardId = board.id;
-	var turnColor = board.moves.length % 2 === 0 ? "black" : "white";
+	var turnColor = board.moves.length % 2 === 0 ? "BLACK" : "WHITE";
 	
 	var target;
 	
 	that.placeMove = function(x, y) {
 		target = {x: x, y: y};
-		$("[target=true]").attr("target", "false");
-		$("#x" + x + "y" + y).attr("target", "true");
+		$("div").not(".target, false").attr("target", "false");
+		$("#x" + x + "y" + y).attr("target", turnColor);
 	};
 	
 	that.confirmMove = function() {
