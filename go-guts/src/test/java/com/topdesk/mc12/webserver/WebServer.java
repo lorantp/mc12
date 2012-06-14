@@ -9,7 +9,7 @@ public class WebServer {
 	private final Server server;
 	
 	public WebServer() {
-		server = new Server(80);
+		server = new Server(8080);
 		WebAppContext context = new WebAppContext("src/main/webapp", "/");
 		server.setHandler(context);
 	}
