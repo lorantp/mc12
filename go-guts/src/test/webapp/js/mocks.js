@@ -19,7 +19,7 @@ var actionsMock = {
 };
 
 var restMock = {
-		sendMove: function() {},
+		doMove: function() {},
 		sendPass: function() {}
 };
 

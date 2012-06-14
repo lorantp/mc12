@@ -1,4 +1,4 @@
-var BOARD = function(size, stones, actions) {
+var BOARD = function(size, stones, nextStone) {
 	var that = {};
 	
 	that.draw = function() {
@@ -17,7 +17,7 @@ var BOARD = function(size, stones, actions) {
 		.attr({id: "x" + x + "y" + y})
 		.css(that.createLocationStyle(x, y))
 		.click(function () {
-			actions.placeMove(x, y);
+			that.placeMove(x, y);
 		});
 	}
 	
@@ -39,6 +39,14 @@ var BOARD = function(size, stones, actions) {
 		var left = x * 48;
 		return {top: top + "px", left: left + "px"}
 	}
+	
+	that.placeMove = function(x, y) {
+		var turnColor = nextStone.color;
+		nextStone.x = x;
+		nextStone.y = y;
+		$("[target=" + turnColor + "]").attr("target", "false");		
+		$("#x" + x + "y" + y).attr("target", turnColor);
+	};
 	
 	return that;
 };

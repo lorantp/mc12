@@ -6,13 +6,12 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistryBuilder;
 
 import com.google.inject.Inject;
-import com.topdesk.mc12.common.Board;
 import com.topdesk.mc12.common.Game;
 import com.topdesk.mc12.common.Move;
 import com.topdesk.mc12.common.Player;
 
 public class HibernateH2Backend implements Backend {
-	private static final Class<?>[] ENTITIES = {Player.class, Move.class, Game.class, Board.class};
+	private static final Class<?>[] ENTITIES = {Player.class, Move.class, Game.class};
 	private final SessionFactory factory;
 	
 	@Inject
@@ -37,6 +36,7 @@ public class HibernateH2Backend implements Backend {
 	}
 	
 	@Override
+	@Transactional
 	public void update(Object... entities) {
 		Session session = factory.openSession();
 		session.beginTransaction();
@@ -79,5 +79,9 @@ public class HibernateH2Backend implements Backend {
 		}
 		session.getTransaction().commit();
 		session.close();
+	}
+	
+	public static void main(String[] args) {
+		new HibernateH2Backend();
 	}
 }

@@ -27,9 +27,9 @@ describe("confirm move", function() {
 	
 	it("should send a move to the placed location", function() {
 		actions.placeMove(0, 0);
-		spyOn(restMock, "sendMove");
+		spyOn(restMock, "doMove");
 		actions.confirmMove();
-		expect(restMock.sendMove).toHaveBeenCalledWith(boardMock.id, 0, 0, "BLACK");
+		expect(restMock.doMove).toHaveBeenCalledWith(boardMock.id, 0, 0, "BLACK");
 	});
 	
 	it("should set targeted position to no longer be targeted", function() {
@@ -42,9 +42,9 @@ describe("confirm move", function() {
 	});
 	
 	it("should do nothing without a move having been placed", function() {
-		spyOn(restMock, "sendMove");
+		spyOn(restMock, "doMove");
 		actions.confirmMove();
-		expect(restMock.sendMove).not.toHaveBeenCalled();
+		expect(restMock.doMove).not.toHaveBeenCalled();
 	});
 });
 
