@@ -34,7 +34,52 @@ public class CaptureResolverTest {
 		assertCapture(initialBoard, expectedBoard);
 	}
 	
-	@Ignore
+	
+	@Test
+	public void doubleSurroundedStoneIsCaptured() {
+		String[] initialBoard = new String[]{
+				"----",
+				"-ww-",
+				"wbb-",
+				"-ww-",
+		};
+		String[] expectedBoard = new String[]{
+				"----",
+				"-ww-",
+				"w--W",
+				"-ww-",
+		};
+		assertCapture(initialBoard, expectedBoard);
+	}
+	
+	@Test
+	public void dontKillYourFriend() {
+		String[] initialBoard = new String[]{
+				"-w-",
+				"w-w",
+				"-w-",
+		};
+		String[] expectedBoard = new String[]{
+				"-w-",
+				"wWw",
+				"-w-",
+		};
+		assertCapture(initialBoard, expectedBoard);
+	}
+	
+	@Test
+	public void cornerCapture() {
+		String[] initialBoard = new String[]{
+				"wb",
+				"--",
+		};
+		String[] expectedBoard = new String[]{
+				"w-",
+				"-W",
+		};
+		assertCapture(initialBoard, expectedBoard);
+	}
+	
 	@Test
 	public void captureBeforeSuicide() {
 		String[] initialBoard = new String[]{

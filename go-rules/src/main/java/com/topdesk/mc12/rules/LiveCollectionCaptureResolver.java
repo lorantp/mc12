@@ -16,15 +16,22 @@ public class LiveCollectionCaptureResolver extends AbstractPositionBasedCaptureR
 	@Override
 	protected Set<Stone> calculateFromPositions(Stone move, Map<Position, Stone> stoneMap, int boardSize) {
 		stoneMap.put(new Position(move.getX(), move.getY()), move);
-		return findDeadStones(stoneMap, boardSize);
+		Set<Stone> stones = findDeadStones(move, stoneMap, boardSize, false);
+		if (stones.contains(move)) {
+			Set<Stone> otherStones = findDeadStones(move, stoneMap, boardSize, true);
+			if (!otherStones.isEmpty()) {
+				return otherStones;
+			}
+		}
+		return stones;
 	}
 
-	private Set<Stone> findDeadStones(Map<Position, Stone> stoneMap, int boardSize) {
+	private Set<Stone> findDeadStones(Stone move, Map<Position, Stone> stoneMap, int boardSize, boolean moveLives) {
 		Set<Stone> liveStones = Sets.newHashSet();
 		Set<Stone> deadStones = Sets.newHashSet();
 		
 		for (Stone stone : stoneMap.values()) {
-			if (lives(stone, stoneMap, boardSize)) {
+			if (lives(stone, stoneMap, boardSize) || (moveLives && stone.equals(move))) {
 				liveStones.add(stone);
 			} else {
 				deadStones.add(stone);
