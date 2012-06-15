@@ -9,7 +9,7 @@ var initGame = function() {
 var GAME = function(gameRest) {
 	var that = {};
 	
-	that.nextStone = {};
+	var nextStone = {};
 	
 	var gameId;
 	var playerId;
@@ -38,8 +38,8 @@ var GAME = function(gameRest) {
 	}
 	
 	that.activateButtons = function(board) {
-		$("#confirm").click(board.confirmMove);
-		$("#pass").click(board.pass);
+		$("#confirm").click(that.confirmMove);
+		$("#pass").click(that.pass);
 	}
 	
 	that.updateNextStone = function(x, y) {
