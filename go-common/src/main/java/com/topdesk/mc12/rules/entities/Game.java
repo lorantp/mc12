@@ -26,6 +26,7 @@ public class Game {
 		this.black = black;
 		this.white = white;
 		this.size = size;
+		this.totalMoves = totalMoves;
 	}
 	
 	public void applyMove(Integer x, Integer y, Color color) {
