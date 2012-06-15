@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 @Entity
-public final class Player {
+public final class Player implements DatabaseEntity {
 	@Id @GeneratedValue private long id;
 	@Nonnull private String nickname;
 	@Nonnull private String email;

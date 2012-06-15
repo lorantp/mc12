@@ -1,26 +1,27 @@
 package com.topdesk.mc12.rules.entities;
 
+import java.util.Collection;
 import java.util.List;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import com.google.common.collect.Lists;
-import com.topdesk.mc12.persistence.entities.Color;
+import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.persistence.entities.Player;
 
-@Data @NoArgsConstructor
+@Data
 public class Game {
-	private long id;
-	private Player black;
-	private Player white;
-	private int size;
-	private int totalMoves;
-	private List<Stone> stones = Lists.newArrayList();
+	private final long id;
+	private final Player black;
+	private final Player white;
+	private final int size;
+	private final int totalMoves;
+	private final long start;
+	
+	private final List<Stone> stones = Lists.newArrayList();
 	private int blackCaptured = 0;
 	private int whiteCaptured = 0;
 	private Color nextTurn = Color.BLACK;
-	private long start;
 	
 	public Game(long id, Player black, Player white, int size, int totalMoves, long start) {
 		this.id = id;
@@ -31,9 +32,28 @@ public class Game {
 		this.start = start;
 	}
 	
-	public void applyMove(Integer x, Integer y, Color color) {
+	public void addStone(int x, int y, Color color) {
 		stones.add(new Stone(x, y, color));
 		nextTurn();
+	}
+	
+	public void removeStones(Collection<Stone> toRemove) {
+		stones.removeAll(toRemove);
+	}
+	
+	public void applyPass() {
+		nextTurn();
+	}
+	
+	public void capture(int amount, Color color) {
+		switch (color) {
+		case BLACK:
+			whiteCaptured += amount;
+			break;
+		case WHITE:
+			blackCaptured += amount;
+			break;
+		}
 	}
 	
 	private void nextTurn() {

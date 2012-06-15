@@ -8,7 +8,6 @@ import lombok.Data;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.topdesk.mc12.persistence.entities.Color;
 import com.topdesk.mc12.rules.entities.Stone;
 
 public class LiveCollectionCaptureResolver implements CaptureResolver {
@@ -87,9 +86,5 @@ public class LiveCollectionCaptureResolver implements CaptureResolver {
 			result.add(new Position(x, y + 1));
 		}
 		return null;
-	}
-
-	private boolean isFoe(Color color, Stone stone) {
-		return color != stone.getColor();
 	}
 }

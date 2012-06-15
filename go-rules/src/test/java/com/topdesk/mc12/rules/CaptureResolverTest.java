@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
-import com.topdesk.mc12.persistence.entities.Color;
+import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.rules.entities.Stone;
 
 public class CaptureResolverTest {

@@ -1,11 +1,17 @@
 package com.topdesk.mc12.persistence;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistryBuilder;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 import com.google.inject.Inject;
+import com.topdesk.mc12.persistence.entities.DatabaseEntity;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
 import com.topdesk.mc12.persistence.entities.Player;
@@ -59,7 +65,7 @@ public class HibernateH2Backend implements Backend {
 	}
 	
 	@Override
-	public <T> T get(Class<T> type, long id) {
+	public <T extends DatabaseEntity> T get(Class<T> type, long id) {
 		Session session = factory.openSession();
 		session.beginTransaction();
 		
@@ -71,7 +77,29 @@ public class HibernateH2Backend implements Backend {
 	}
 	
 	@Override
+	public <T extends DatabaseEntity> List<T> get(Class<T> type, Iterable<Long> ids) {
+		Session session = factory.openSession();
+		session.beginTransaction();
+		
+		Builder<T> builder = ImmutableList.builder();
+		for (long id : ids) {
+			@SuppressWarnings("unchecked")
+			T object = (T) session.byId(type).getReference(id);
+			builder.add(object);
+		}
+		
+		session.getTransaction().commit();
+		session.close();
+		return builder.build();
+	}
+	
+	@Override
 	public void delete(Object... entities) {
+		delete(Arrays.asList(entities));
+	}
+	
+	@Override
+	public void delete(Iterable<? extends Object> entities) {
 		Session session = factory.openSession();
 		session.beginTransaction();
 		for (Object object : entities) {

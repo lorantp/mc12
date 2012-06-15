@@ -8,7 +8,7 @@ import lombok.Data;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.topdesk.mc12.persistence.entities.Color;
+import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.rules.entities.Stone;
 
 public class RecursiveCaptureResolver implements CaptureResolver {
