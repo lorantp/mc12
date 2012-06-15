@@ -17,14 +17,14 @@ var GAME = function(gameRest) {
 	that.draw = function(id) {
 		gameRest.getGame(id, function(game) {
 			gameId = game.id;
-			playerId = game.moves.length % 2 == 0 ? 
+			playerId = game.totalMoves % 2 == 0 ? 
 					game.black.id :
 					game.white.id;
 			var board = BOARD(
 					$("#board"),
 					game.size,
-					game.moves,
-					that.colorOfTurn(game.moves.length),
+					game.stones,
+					that.colorOfTurn(game.totalMoves),
 					that.updateNextStone);
 			
 			board.draw();

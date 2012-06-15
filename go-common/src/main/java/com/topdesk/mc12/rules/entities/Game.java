@@ -11,6 +11,7 @@ import com.topdesk.mc12.persistence.entities.Player;
 
 @Data @NoArgsConstructor
 public class Game {
+	private long id;
 	private Player black;
 	private Player white;
 	private int size;
@@ -20,7 +21,8 @@ public class Game {
 	private int whiteCaptured = 0;
 	private Color nextTurn = Color.BLACK;
 	
-	public Game(Player black, Player white, int size, int totalMoves) {
+	public Game(long id, Player black, Player white, int size, int totalMoves) {
+		this.id = id;
 		this.black = black;
 		this.white = white;
 		this.size = size;
