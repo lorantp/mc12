@@ -13,9 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import com.google.inject.Inject;
 import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.persistence.Backend;
+import com.topdesk.mc12.persistence.entities.Color;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
-import com.topdesk.mc12.persistence.entities.Player;
 import com.topdesk.mc12.rest.entities.RestMove;
 import com.topdesk.mc12.rest.entities.RestPass;
 import com.topdesk.mc12.rules.RuleEngine;
@@ -32,56 +32,41 @@ public class GameRestlet {
 	@GET
 	@Path("/{id}")
 	public Game get(@PathParam("id") long id) {
-		GameData game = backend.get(GameData.class, id);
-		return ruleEngine.turnMovesIntoBoard(game);
+		GameData gameData = backend.get(GameData.class, id);
+		return ruleEngine.applyMoves(gameData);
 	}
 	
 	@POST
 	@Path("/pass")
 	public void pass(RestPass pass) {
-		GameData game = backend.get(GameData.class, pass.getGameId());
-		Player player = getPlayer(game, pass.getPlayerId());
-		checkTurn(game, player);
-		Move newMove = new Move(0, game, null, null, player);
+		GameData gameData = backend.get(GameData.class, pass.getGameId());
+		Game game = ruleEngine.applyMoves(gameData);
+		Color color = getPlayerColor(gameData, pass.getPlayerId());
+		ruleEngine.applyPass(game, color);
+		
 		log.info("Player {} passed in game {}", pass.getPlayerId(), game);
-		backend.insert(newMove);
+		backend.insert(new Move(0, gameData, null, null, color));
 	}
 	
 	@POST
 	@Path("/move")
 	public void move(RestMove restMove) {
 		GameData gameData = backend.get(GameData.class, restMove.getGameId());
-		
-		ruleEngine.checkBounds(gameData.getBoardSize(), restMove.getX());
-		ruleEngine.checkBounds(gameData.getBoardSize(), restMove.getY());
-		
-		Player player = getPlayer(gameData, restMove.getPlayerId());
-		Move move = new Move(0, gameData, restMove.getX(), restMove.getY(), player);
-		ruleEngine.checkValidPosition(move, gameData);
-		ruleEngine.checkTurn(gameData, player);
+		Game game = ruleEngine.applyMoves(gameData);
+		Color color = getPlayerColor(gameData, restMove.getPlayerId());
+		game.addStone(restMove.getX(), restMove.getY(), color);
 		
 		log.info("Player {} made move {} in game {}", restMove.getPlayerId(), gameData);
-		backend.insert(new Move(0, gameData, restMove.getX(), restMove.getY(), player));
+		backend.insert(new Move(0, gameData, restMove.getX(), restMove.getY(), color));
 	}
 	
-	private Player getPlayer(GameData game, long playerId) {
+	private Color getPlayerColor(GameData game, long playerId) {
 		if (game.getBlack().getId() == playerId) {
-			return game.getBlack();
+			return Color.BLACK;
 		}
 		else if (game.getWhite().getId() == playerId) {
-			return game.getWhite();
+			return Color.WHITE;
 		}
 		throw GoException.createNotAcceptable("Player " + playerId + " does not participate in game " + game.getId());
-	}
-	
-	private void checkTurn(GameData game, Player player) {
-		if (game.getMoves().size() % 2 == 0) {
-			if (!player.equals(game.getBlack())) {
-				throw GoException.createNotAcceptable("It's not " + player.getNickname() + "'s turn");
-			}
-		}
-		else if (!player.equals(game.getWhite())) {
-			throw GoException.createNotAcceptable("It's not " + player.getNickname() + "'s turn");
-		}
 	}
 }

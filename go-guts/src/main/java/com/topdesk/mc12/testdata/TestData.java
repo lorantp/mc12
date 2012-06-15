@@ -8,6 +8,7 @@ import org.joda.time.DateTimeZone;
 import com.google.inject.Inject;
 import com.topdesk.mc12.persistence.Backend;
 import com.topdesk.mc12.persistence.entities.BoardSize;
+import com.topdesk.mc12.persistence.entities.Color;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
 import com.topdesk.mc12.persistence.entities.Player;
@@ -35,7 +36,7 @@ public class TestData {
 	
 	private void createGame() {
 		DateTime start = new DateTime(DateTimeZone.forID("Europe/Berlin")).withZoneRetainFields(DateTimeZone.UTC);
-		GameData game = new GameData(0, bart, bernd, null, start.getMillis(), SIZE, 5, 9);
+		GameData game = new GameData(0, bart, bernd, null, start.getMillis(), SIZE);
 		backend.insert(game);
 		if (ADD_MOVES) {
 			createMoves(game);
@@ -47,7 +48,7 @@ public class TestData {
 		int moves = 0;
 		for (int x = 0; x < SIZE.getSize(); x += 2) {
 			for (int y = 1; y < SIZE.getSize(); y += 2) {
-				backend.insert(new Move(0, game, x, y, moves++ % 2 == 0 ? bart : bernd));
+				backend.insert(new Move(0, game, x, y, moves++ % 2 == 0 ? Color.BLACK : Color.WHITE));
 			}
 		}
 	}

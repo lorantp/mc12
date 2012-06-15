@@ -11,7 +11,7 @@ import com.topdesk.mc12.rest.producers.RuntimeExceptionMapper;
 import com.topdesk.mc12.rest.restlets.GameRestlet;
 import com.topdesk.mc12.rest.restlets.ResetRestlet;
 import com.topdesk.mc12.rules.RuleEngine;
-import com.topdesk.mc12.rules.RuleEngineImpl;
+import com.topdesk.mc12.rules.GoRuleEngine;
 
 // see http://code.google.com/p/google-guice/wiki/ServletModule
 public class WebModule extends JerseyServletModule {
@@ -25,7 +25,7 @@ public class WebModule extends JerseyServletModule {
 		bind(GameRestlet.class);
 		bind(ResetRestlet.class);
 		
-		bind(RuleEngine.class).to(RuleEngineImpl.class);
+		bind(RuleEngine.class).to(GoRuleEngine.class);
 		
 		serve("/rest/*").with(GuiceContainer.class, ImmutableMap.<String, String> builder()
 				.put(JSONConfiguration.FEATURE_POJO_MAPPING, "true")
