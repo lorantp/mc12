@@ -1,67 +1,34 @@
-var board = BOARD(restMock,
-		boardMock.id,
-		"BLACK",
+var container = $("<div id='test' />")
+	.append("<div id='x0y0' />")
+	.append("<div id='x1y2' />");
+
+var nextStoneCheckFuction = function() {};
+
+var board = BOARD(
+		container,
 		boardMock.size,
-		boardMock.moves);
+		boardMock.moves,
+		"BLACK",
+		function(x, y) { nextStoneCheckFuction(x, y)});
 
 describe("place move on board", function() {
-	mockJQ.setup()
-	
-	it("should set targeted divs to false", function() {
+	it("should set targeted divs to false and target to BLACK", function() {
+		var checkFunction = expect$methodToBeCalledWithXTimesFunction("attr", ["target", "false"], ["target", "BLACK"])
 		board.placeMove(0, 0);
-		expect(mockJQ.attribsMap["[target=BLACK]"]).toEqual({target: "false"});
+		checkFunction();
 	});
 	
-	it("should set position to targeted", function() {
+	it("update nextStone's coordinates", function() {
+		spyOn(window, "nextStoneCheckFuction");
 		board.placeMove(0, 0);
-		expect(mockJQ.attribsMap["#x0y0"]).toEqual({target: "BLACK"});
-	});
-});
-
-describe("confirm move", function() {
-	mockJQ.setup(function() {}, board.clearMove);
-	
-	it("should send a move to the placed location", function() {
-		board.placeMove(0, 0);
-		spyOn(restMock, "sendMove");
-		board.confirmMove();
-		expect(restMock.sendMove).toHaveBeenCalledWith(boardMock.id, 0, 0, "BLACK");
-	});
-	
-	it("should set targeted position to no longer be targeted", function() {
-		board.placeMove(0,0);
-		expect(mockJQ.attribsMap["#x0y0"]).toEqual({target: "BLACK"}) // position is targeted
-		expect(mockJQ.attribsMap["[target=BLACK]"]).toEqual({target: "false"}); // old positions are no longer targeted
-		delete mockJQ.attribsMap["[target=BLACK]"]; // clear command
-		board.confirmMove();
-		expect(mockJQ.attribsMap["[target=BLACK]"]).toEqual({target: "false"}); // targeted position should no longer be targeted
-	});
-	
-	it("should do nothing without a move having been placed", function() {
-		spyOn(restMock, "sendMove");
-		board.confirmMove();
-		expect(restMock.sendMove).not.toHaveBeenCalled();
-	});
-});
-
-describe("passing", function() {
-	it("should send a pass to the server", function() {
-		spyOn(restMock, "sendPass");
-		board.pass();
-		expect(restMock.sendPass).toHaveBeenCalled();
-	});
-	
-	it("should send a pass for the right player", function() {
-		spyOn(restMock, "sendPass");
-		board.pass();
-		expect(restMock.sendPass).toHaveBeenCalledWith(boardMock.id, "BLACK");
+		expect(window.nextStoneCheckFuction).toHaveBeenCalledWith(0, 0);
 	});
 });
 
 describe("position square attributes", function() {
 	it("should have correct attributes", function() {
  		var div = board.buildCell(0, 0);
-		expect(div.attr("class")).toBe("cell");
+		expect(div.attr("class")).toBe("abs cell");
 		expect(div.attr("id")).toBe("x0y0");
 		expect(div.css("top")).toBe('0px');
 		expect(div.css("left")).toBe('0px');
@@ -76,12 +43,10 @@ describe("position square attributes", function() {
 });
 
 describe("board rendering code", function() {
-	mockJQ.setup();
-	
 	it("should lay out stones from the moves provided", function() {
 		board.draw();
 		boardMock.moves.forEach(function(move) {
-			expect(mockJQ.attribsMap["#x" + move.x + "y" + move.y]).toEqual({stone: move.color});
+			expect(container.find("#x" + move.x + "y" + move.y).attr("stone")).toEqual(move.color);
 		});
 	});
 });

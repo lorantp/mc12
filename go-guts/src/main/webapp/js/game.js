@@ -16,19 +16,20 @@ var GAME = function(gameRest) {
 	
 	that.draw = function(id) {
 		gameRest.getGame(id, function(game) {
-			nextStone.color = that.colorOfTurn(game.moves.length);
 			gameId = game.id;
 			playerId = game.moves.length % 2 == 0 ? 
-					game.black.id: 
+					game.black.id :
 					game.white.id;
 			var board = BOARD(
+					$("#board"),
 					game.size,
-					game.moves, 
-					nextStone);
+					game.moves,
+					that.colorOfTurn(game.moves.length),
+					that.updateNextStone);
 			
 			board.draw();
-			that.activateButtons();
-			METADATA($).showData(game);
+			that.activateButtons(board);
+			METADATA($("#content")).showData(game);
 		});
 	}
 	
@@ -36,10 +37,15 @@ var GAME = function(gameRest) {
 		return turn % 2 === 0 ? "BLACK" : "WHITE";
 	}
 	
-	that.activateButtons = function() {
+	that.activateButtons = function(board) {
 		$("#confirm").click(that.confirmMove);
 		$("#pass").click(that.pass);
 	}
+	
+	that.updateNextStone = function(x, y) {
+		nextStone.x = x;
+		nextStone.y = y;
+	};
 	
 	that.confirmMove = function() {
 		if (nextStone && (nextStone.x || nextStone.x == 0) && (nextStone.y || nextStone.y == 0)) {
@@ -50,6 +56,11 @@ var GAME = function(gameRest) {
 	
 	that.pass = function() {
 		gameRest.doPass(gameId, playerId);
+	};
+	
+	that.clearMove = function() {
+		delete nextStone.x;
+		delete nextStone.y;
 	};
 	
 	return that;

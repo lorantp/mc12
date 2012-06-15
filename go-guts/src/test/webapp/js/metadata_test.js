@@ -1,25 +1,24 @@
-var md = METADATA();
+var container = $("<div id='test' />")
+	.append("<div id='playerone' />")
+	.append("<div id='playertwo' />")
+	.append("<div id='turn' />")
+	.append("<div id='starttime' />");
+
+var md = METADATA(container);
 
 describe("showing data format", function() {
-	mockJQ.setup()
-	
-	it('should show player info', function() {
-		md.showPlayer({nickname: "Wonderful Wizzard", email: "inyour@dreams.com"}, "", "turqoise", 17, false);
-		expect(mockJQ.innerText).toBe("Player turqoise: Wonderful Wizzard &lt;inyour@dreams.com&gt; - Captured: 17");
-	});
-	
-	it('should show player info with turn', function() {
-		md.showPlayer({nickname: "Wonderful Wizzard", email: "inyour@dreams.com"}, "", "turqoise", 17, true);
-		expect(mockJQ.innerText).toBe("Player turqoise: Wonderful Wizzard &lt;inyour@dreams.com&gt; - Captured: 17 &lt;HAS TURN&gt;");
+	it('should show player nick and captured stones', function() {
+		var checkFunction = expect$methodToBeCalledWithXTimesFunction("append", ["WONDERFUL WIZZARD"], [17] )
+		md.showPlayer(mockPlayer, "", 17, "turqoise");
 	});
 	
 	it('should show epoch start time', function() {
+		expect$methodToBeCalledWith("append", ["Thu, 01 Jan 1970 00:00:00 GMT"])
 		md.showStartTime(new Date(0));
-		expect(mockJQ.innerText).toBe("Thu, 01 Jan 1970 00:00:00 GMT");
 	});
-	
+	 
 	it('should show turn number', function() {
-		md.showTurn(7);
-		expect(mockJQ.innerText).toBe("7");
+		expect$methodToBeCalledWith("append", ["7 - TURQOISE MOVES"])
+		md.showTurn(7, "TURQOISE");
 	});
 });
