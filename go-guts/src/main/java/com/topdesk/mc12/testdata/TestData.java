@@ -1,10 +1,9 @@
 package com.topdesk.mc12.testdata;
 
-import java.util.Collections;
-
 import lombok.extern.slf4j.Slf4j;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import com.google.inject.Inject;
 import com.topdesk.mc12.persistence.Backend;
@@ -12,6 +11,7 @@ import com.topdesk.mc12.persistence.entities.BoardSize;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
 import com.topdesk.mc12.persistence.entities.Player;
+import com.topdesk.mc12.rules.entities.Game;
 
 @Slf4j
 public class TestData {
@@ -35,7 +35,8 @@ public class TestData {
 	}
 	
 	private void createGame() {
-		GameData game = new GameData(0, bart, bernd, Collections.<Move>emptyList(), new DateTime().getMillis(), SIZE, 5, 9);
+		DateTime start = new DateTime(DateTimeZone.forID("Europe/Berlin")).withZoneRetainFields(DateTimeZone.UTC);
+		Game game = new Game(0, bart, bernd, null, start.getMillis(), SIZE, 5, 9);
 		backend.insert(game);
 		if (ADD_MOVES) {
 			createMoves(game);
