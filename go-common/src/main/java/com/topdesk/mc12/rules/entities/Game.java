@@ -18,6 +18,7 @@ public class Game {
 	private List<Stone> stones = Lists.newArrayList();
 	private int blackCaptured = 0;
 	private int whiteCaptured = 0;
+	private Color nextTurn = Color.BLACK;
 	
 	public Game(Player black, Player white, int size, int totalMoves) {
 		this.black = black;
@@ -27,5 +28,10 @@ public class Game {
 	
 	public void applyMove(Integer x, Integer y, Color color) {
 		stones.add(new Stone(x, y, color));
+		nextTurn();
+	}
+	
+	private void nextTurn() {
+		nextTurn = nextTurn == Color.BLACK ? Color.WHITE : Color.BLACK;
 	}
 }

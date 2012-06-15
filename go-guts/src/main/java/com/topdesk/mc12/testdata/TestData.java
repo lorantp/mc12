@@ -11,7 +11,6 @@ import com.topdesk.mc12.persistence.entities.BoardSize;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
 import com.topdesk.mc12.persistence.entities.Player;
-import com.topdesk.mc12.rules.entities.Game;
 
 @Slf4j
 public class TestData {
@@ -36,7 +35,7 @@ public class TestData {
 	
 	private void createGame() {
 		DateTime start = new DateTime(DateTimeZone.forID("Europe/Berlin")).withZoneRetainFields(DateTimeZone.UTC);
-		Game game = new Game(0, bart, bernd, null, start.getMillis(), SIZE, 5, 9);
+		GameData game = new GameData(0, bart, bernd, null, start.getMillis(), SIZE, 5, 9);
 		backend.insert(game);
 		if (ADD_MOVES) {
 			createMoves(game);

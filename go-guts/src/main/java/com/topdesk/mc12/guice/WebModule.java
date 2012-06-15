@@ -9,6 +9,7 @@ import com.topdesk.mc12.rest.GameRestlet;
 import com.topdesk.mc12.rest.GoExceptionMapper;
 import com.topdesk.mc12.rest.RestInterfaceConfig;
 import com.topdesk.mc12.rules.RuleEngine;
+import com.topdesk.mc12.rules.RuleEngineImpl;
 
 // see http://code.google.com/p/google-guice/wiki/ServletModule
 public class WebModule extends JerseyServletModule {
@@ -20,7 +21,7 @@ public class WebModule extends JerseyServletModule {
 		
 		bind(GameRestlet.class);
 		
-		bind(RuleEngine.class);
+		bind(RuleEngine.class).to(RuleEngineImpl.class);
 		
 		serve("/rest/*").with(GuiceContainer.class, ImmutableMap.<String, String> builder()
 				.put(JSONConfiguration.FEATURE_POJO_MAPPING, "true")

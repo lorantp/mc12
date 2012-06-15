@@ -26,7 +26,7 @@ public class RuleEngineImpl implements RuleEngine {
 		}
 		return false;
 	}
-
+	
 	@Override
 	public void checkBounds(BoardSize size, Integer coordinate) {
 		if (coordinate == null) {
@@ -37,13 +37,12 @@ public class RuleEngineImpl implements RuleEngine {
 		}
 		
 	}
-
+	
 	@Override
 	public Boolean validPosition(Move move, GameData game) {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
 	public Game turnMovesIntoBoard(GameData game) {
 		Game board = new Game(game.getBlack(), game.getWhite(), game.getSize(), game.getMoves().size());
