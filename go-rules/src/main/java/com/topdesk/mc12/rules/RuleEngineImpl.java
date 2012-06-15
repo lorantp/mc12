@@ -40,7 +40,8 @@ public class RuleEngineImpl implements RuleEngine {
 				gameData.getBlack(),
 				gameData.getWhite(), 
 				gameData.getSize(), 
-				gameData.getMoves().size());
+				gameData.getMoves().size(),
+				gameData.getStart());
 		
 		for(Move move: gameData.getMoves()) {
 			if (!move.isPass()) {
