@@ -9,9 +9,7 @@ import com.topdesk.mc12.rules.entities.Game;
 public class RuleEngineImpl implements RuleEngine {
 
 	public Boolean varifyMove(Move move, long gameId) {
-		
 		return false;
-		
 	}
 	
 	@Override
@@ -40,7 +38,6 @@ public class RuleEngineImpl implements RuleEngine {
 
 	@Override
 	public Boolean validPosition(Move move, GameData game) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
