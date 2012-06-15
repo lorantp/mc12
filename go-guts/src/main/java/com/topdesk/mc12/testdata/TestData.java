@@ -7,11 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 
 import com.google.inject.Inject;
-import com.topdesk.mc12.common.BoardSize;
-import com.topdesk.mc12.common.Game;
-import com.topdesk.mc12.common.Move;
-import com.topdesk.mc12.common.Player;
 import com.topdesk.mc12.persistence.Backend;
+import com.topdesk.mc12.persistence.entities.BoardSize;
+import com.topdesk.mc12.persistence.entities.GameData;
+import com.topdesk.mc12.persistence.entities.Move;
+import com.topdesk.mc12.persistence.entities.Player;
 
 @Slf4j
 public class TestData {
@@ -35,15 +35,15 @@ public class TestData {
 	}
 	
 	private void createGame() {
-		Game game = new Game(0, bart, bernd, Collections.<Move>emptyList(), new DateTime().getMillis(), SIZE, 5, 9);
+		GameData game = new GameData(0, bart, bernd, Collections.<Move>emptyList(), new DateTime().getMillis(), SIZE, 5, 9);
 		backend.insert(game);
 		if (ADD_MOVES) {
 			createMoves(game);
 		}
-		log.info("Created game: {}", backend.get(Game.class, game.getId()));
+		log.info("Created game: {}", backend.get(GameData.class, game.getId()));
 	}
 	
-	private void createMoves(Game game) {
+	private void createMoves(GameData game) {
 		int moves = 0;
 		for (int x = 0; x < SIZE.getSize(); x += 2) {
 			for (int y = 1; y < SIZE.getSize(); y += 2) {

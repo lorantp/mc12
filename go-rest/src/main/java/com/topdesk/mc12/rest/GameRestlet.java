@@ -11,13 +11,16 @@ import javax.ws.rs.core.MediaType;
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.inject.Inject;
-import com.topdesk.mc12.common.BoardSize;
-import com.topdesk.mc12.common.Game;
-import com.topdesk.mc12.common.Move;
-import com.topdesk.mc12.common.Player;
 import com.topdesk.mc12.persistence.Backend;
+import com.topdesk.mc12.persistence.entities.BoardSize;
+import com.topdesk.mc12.persistence.entities.GameData;
+import com.topdesk.mc12.persistence.entities.Move;
+import com.topdesk.mc12.persistence.entities.Player;
 import com.topdesk.mc12.rest.entities.RestMove;
 import com.topdesk.mc12.rest.entities.RestPass;
+import com.topdesk.mc12.rules.RuleEngine;
+import com.topdesk.mc12.rules.entities.Game;
+
 
 @Slf4j
 @Path("game")
@@ -25,16 +28,18 @@ import com.topdesk.mc12.rest.entities.RestPass;
 @Consumes(MediaType.APPLICATION_JSON)
 public class GameRestlet {
 	@Inject private Backend backend;
+	@Inject private RuleEngine ruleEngine;
 	
 	@GET
 	public Game get(@QueryParam("id") long id) {
-		return fixRecursion(backend.get(Game.class, id));
+		GameData game = backend.get(GameData.class, id);
+		return ruleEngine.turnMovesIntoBoard(game);
 	}
 	
 	@POST
 	@Path("/pass")
 	public void pass(RestPass pass) {
-		Game game = backend.get(Game.class, pass.getGameId());
+		GameData game = backend.get(GameData.class, pass.getGameId());
 		Player player = getPlayer(game, pass.getPlayerId());
 		checkTurn(game, player);
 		Move newMove = new Move(0, game, null, null, player);
@@ -44,44 +49,34 @@ public class GameRestlet {
 	
 	@POST
 	@Path("/move")
-	public void move(RestMove move) {
-		Game game = backend.get(Game.class, move.getGameId());
+	public void move(RestMove restMove) {
+		GameData game = backend.get(GameData.class, restMove.getGameId());
 		
-		checkBounds(game.getBoardSize(), move.getX());
-		checkBounds(game.getBoardSize(), move.getY());
+		ruleEngine.checkBounds(game.getBoardSize(), restMove.getX());
+		ruleEngine.checkBounds(game.getBoardSize(), restMove.getY());
 		
-		checkValidPosition(move, game);
-		
-		Player player = getPlayer(game, move.getPlayerId());
-		checkTurn(game, player);
-		log.info("Player {} made move {} in game {}", move.getPlayerId(), game);
-		backend.insert(new Move(0, game, move.getX(), move.getY(), player));
-	}
-	
-	private void checkValidPosition(RestMove move, Game game) {
-		// We'll need to reimplement this when we handle capture and such
-		for (Move m : game.getMoves()) {
-			if (m.isPass()) {
-				continue;
-			}
-			if (m.getX() == move.getX() && m.getY() == move.getY()) {
-				throw new IllegalStateException("There's already a stone at " + m.getX() + ", " + m.getY());
-			}
+//		checkValidPosition(move, game);
+		Player player = getPlayer(game, restMove.getPlayerId());
+		Move move = new Move(0, game, restMove.getX(), restMove.getY(), player);
+		if (!ruleEngine.validPosition(move, game) || !ruleEngine.checkTurn(game, player)) {
+			log.info("Player {} made move {} in game {}", restMove.getPlayerId(), game);
+			backend.insert(new Move(0, game, restMove.getX(), restMove.getY(), player));
 		}
 	}
 	
-	private void checkTurn(Game game, Player player) {
-		if (game.getMoves().size() % 2 == 0) {
-			if (!player.equals(game.getBlack())) {
-				throw new IllegalStateException("It's not " + player.getNickname() + "'s turn");
-			}
-		}
-		else if (!player.equals(game.getWhite())) {
-			throw new IllegalStateException("It's not " + player.getNickname() + "'s turn");
-		}
-	}
+//	private void checkValidPosition(RestMove move, Game game) {
+//		// We'll need to reimplement this when we handle capture and such
+//		for (Move m : game.getMoves()) {
+//			if (m.isPass()) {
+//				continue;
+//			}
+//			if (m.getX() == move.getX() && m.getY() == move.getY()) {
+//				throw new IllegalStateException("There's already a stone at " + m.getX() + ", " + m.getY());
+//			}
+//		}
+//	}
 	
-	private Player getPlayer(Game game, long playerId) {
+	private Player getPlayer(GameData game, long playerId) {
 		if (game.getBlack().getId() == playerId) {
 			return game.getBlack();
 		}
@@ -91,13 +86,17 @@ public class GameRestlet {
 		throw new IllegalStateException("Player " + playerId + " does not participate in game " + game.getId());
 	}
 	
-	private Game fixRecursion(Game game) {
-//		for (Move move : game.getMoves()) {
-//			move.setGame(null);
-//		}
-		return game;
+	private void checkTurn(GameData game, Player player) {
+		if (game.getMoves().size() % 2 == 0) {
+			if (!player.equals(game.getBlack())) {
+				throw new IllegalStateException("It's not " + player.getNickname() + "'s turn");
+			}
+		}
+		else if (!player.equals(game.getWhite())) {
+			throw new IllegalStateException("It's not " + player.getNickname() + "'s turn");
+		}
 	}
-	
+
 	private void checkBounds(BoardSize size, Integer coordinate) {
 		if (coordinate == null) {
 			throw new IllegalStateException("Got move without coordinate");
@@ -105,5 +104,12 @@ public class GameRestlet {
 		if (coordinate < 0 || coordinate >= size.getSize()) {
 			throw new IllegalStateException("Move does not fit on board");
 		}
+	}
+	
+	private GameData fixRecursion(GameData game) {
+//		for (Move move : game.getMoves()) {
+//			move.setGame(null);
+//		}
+		return game;
 	}
 }

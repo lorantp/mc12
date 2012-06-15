@@ -6,12 +6,12 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistryBuilder;
 
 import com.google.inject.Inject;
-import com.topdesk.mc12.common.Game;
-import com.topdesk.mc12.common.Move;
-import com.topdesk.mc12.common.Player;
+import com.topdesk.mc12.persistence.entities.GameData;
+import com.topdesk.mc12.persistence.entities.Move;
+import com.topdesk.mc12.persistence.entities.Player;
 
 public class HibernateH2Backend implements Backend {
-	private static final Class<?>[] ENTITIES = {Player.class, Move.class, Game.class};
+	private static final Class<?>[] ENTITIES = {Player.class, Move.class, GameData.class};
 	private final SessionFactory factory;
 	
 	@Inject
