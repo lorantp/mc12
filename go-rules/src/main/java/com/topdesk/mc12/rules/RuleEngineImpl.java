@@ -46,7 +46,6 @@ public class RuleEngineImpl implements RuleEngine {
 				gameData.getStart());
 		
 		for(Move move: gameData.getMoves()) {
-			System.err.println(move);
 			if (move.isPass()) {
 				game.applyPass();
 			}

@@ -23,13 +23,13 @@ public class Game {
 	private Color nextTurn = Color.BLACK;
 	private long start;
 	
-	public Game(long id, Player black, Player white, int size, int totalMoves, long startTime) {
+	public Game(long id, Player black, Player white, int size, int totalMoves, long start) {
 		this.id = id;
 		this.black = black;
 		this.white = white;
 		this.size = size;
 		this.totalMoves = totalMoves;
-		this.start = startTime;
+		this.start = start;
 	}
 	
 	public void applyMove(Integer x, Integer y, Color color) {
