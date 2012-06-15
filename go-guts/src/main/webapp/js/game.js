@@ -22,12 +22,10 @@ var GAME = function(gameRest) {
 					game.white.id;
 			var board = BOARD(
 					$("#board"),
-					gameRest,
-					gameId,
-					playerId,
 					game.size,
 					game.moves,
-					that.colorOfTurn(game.moves.length));
+					that.colorOfTurn(game.moves.length),
+					that.updateNextStone);
 			
 			board.draw();
 			that.activateButtons(board);
@@ -43,6 +41,27 @@ var GAME = function(gameRest) {
 		$("#confirm").click(board.confirmMove);
 		$("#pass").click(board.pass);
 	}
+	
+	that.updateNextStone = function(x, y) {
+		nextStone.x = x;
+		nextStone.y = y;
+	};
+	
+	that.confirmMove = function() {
+		if (nextStone && (nextStone.x || nextStone.x == 0) && (nextStone.y || nextStone.y == 0)) {
+			gameRest.doMove(gameId, playerId, nextStone.x, nextStone.y);
+			$("[target=true]").attr({target: "false", stone: nextStone.color});
+		}
+	};
+	
+	that.pass = function() {
+		gameRest.doPass(gameId, playerId);
+	};
+	
+	that.clearMove = function() {
+		delete nextStone.x;
+		delete nextStone.y;
+	};
 	
 	return that;
 }

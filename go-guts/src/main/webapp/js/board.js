@@ -1,8 +1,7 @@
-var BOARD = function($parent, gameRest, gameId, playerId, size, stones, turnColor) {
+var BOARD = function($parent, size, stones, turnColor, updateNextStone) {
 	var that = {};
 	
 	var cellSize = 48;
-	var nextStone = {color: turnColor};
 	
 	that.draw = function() {
 		for (var y = 0; y < size; y++) {
@@ -31,27 +30,9 @@ var BOARD = function($parent, gameRest, gameId, playerId, size, stones, turnColo
 	};
 	
 	that.placeMove = function(x, y) {
-		nextStone.x = x;
-		nextStone.y = y;
+		updateNextStone(x, y);
 		$parent.find("[target=" + turnColor + "]").attr("target", "false");		
 		$parent.find("#x" + x + "y" + y).attr("target", turnColor);
-		return {x: x, y: y};
-	};
-	
-	that.confirmMove = function() {
-		if (nextStone && (nextStone.x || nextStone.x == 0) && (nextStone.y || nextStone.y == 0)) {
-			gameRest.doMove(gameId, playerId, nextStone.x, nextStone.y);
-			$("[target=true]").attr({target: "false", stone: nextStone.color});
-		}
-	};
-	
-	that.pass = function() {
-		gameRest.doPass(gameId, playerId);
-	};
-	
-	that.clearMove = function() {
-		delete nextStone.x;
-		delete nextStone.y;
 	};
 	
 	return that;
