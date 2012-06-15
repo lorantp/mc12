@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Data;
 
 import com.google.common.collect.Lists;
-import com.topdesk.mc12.persistence.entities.Color;
+import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.persistence.entities.Player;
 
 @Data
@@ -43,6 +43,17 @@ public class Game {
 	
 	public void applyPass() {
 		nextTurn();
+	}
+	
+	public void capture(int amount, Color color) {
+		switch (color) {
+		case BLACK:
+			whiteCaptured += amount;
+			break;
+		case WHITE:
+			blackCaptured += amount;
+			break;
+		}
 	}
 	
 	private void nextTurn() {

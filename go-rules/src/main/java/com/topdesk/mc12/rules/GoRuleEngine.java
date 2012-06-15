@@ -1,7 +1,7 @@
 package com.topdesk.mc12.rules;
 
+import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.common.GoException;
-import com.topdesk.mc12.persistence.entities.Color;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
 import com.topdesk.mc12.rules.entities.Game;

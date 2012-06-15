@@ -11,9 +11,9 @@ import javax.ws.rs.core.MediaType;
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.inject.Inject;
+import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.persistence.Backend;
-import com.topdesk.mc12.persistence.entities.Color;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
 import com.topdesk.mc12.rest.entities.RestMove;

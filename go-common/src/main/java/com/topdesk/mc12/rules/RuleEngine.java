@@ -1,11 +1,14 @@
 package com.topdesk.mc12.rules;
 
+import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.common.GoException;
-import com.topdesk.mc12.persistence.entities.Color;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.rules.entities.Game;
 
-
+/**
+ * Implementations of this interface contain all the business rules for a game of Go.
+ * It
+ */
 public interface RuleEngine {
 	/**
 	 * Calculates the state of the board from the {@link GameData}.

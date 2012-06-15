@@ -6,16 +6,16 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import com.google.inject.Inject;
+import com.topdesk.mc12.common.BoardSize;
+import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.persistence.Backend;
-import com.topdesk.mc12.persistence.entities.BoardSize;
-import com.topdesk.mc12.persistence.entities.Color;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
 import com.topdesk.mc12.persistence.entities.Player;
 
 @Slf4j
 public class TestData {
-	private static final boolean ADD_MOVES = false;
+	private static final boolean ADD_MOVES = true;
 	private static final BoardSize SIZE = BoardSize.NINETEEN;
 	
 	@Inject private Backend backend;
@@ -48,7 +48,13 @@ public class TestData {
 		int moves = 0;
 		for (int x = 0; x < SIZE.getSize(); x += 2) {
 			for (int y = 1; y < SIZE.getSize(); y += 2) {
-				backend.insert(new Move(0, game, x, y, moves++ % 2 == 0 ? Color.BLACK : Color.WHITE));
+				Color color = moves++ % 2 == 0 ? Color.BLACK : Color.WHITE;
+				if (Math.random() < 0.1) {
+					backend.insert(new Move(0, game, null, null, color));
+				}
+				else {
+					backend.insert(new Move(0, game, x, y, color));
+				}
 			}
 		}
 	}

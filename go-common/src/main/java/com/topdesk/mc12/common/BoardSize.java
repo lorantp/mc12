@@ -1,4 +1,4 @@
-package com.topdesk.mc12.persistence.entities;
+package com.topdesk.mc12.common;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
