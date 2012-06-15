@@ -7,7 +7,6 @@ import com.topdesk.mc12.rules.entities.Game;
 
 /**
  * Implementations of this interface contain all the business rules for a game of Go.
- * It
  */
 public interface GoRuleEngine {
 	/**
@@ -33,6 +32,5 @@ public interface GoRuleEngine {
 	 * @param move
 	 * @throws GoException if the rules don't allow this
 	 */
-	void applyPass(Game game, Color color);
-	
+	void applyPass(Game game, Color color);	
 }
