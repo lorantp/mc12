@@ -17,7 +17,7 @@ import com.topdesk.mc12.persistence.entities.Move;
 import com.topdesk.mc12.persistence.entities.Player;
 import com.topdesk.mc12.rest.entities.RestMove;
 import com.topdesk.mc12.rest.entities.RestPass;
-import com.topdesk.mc12.rules.RuleEngine;
+import com.topdesk.mc12.rules.GoRuleEngine;
 import com.topdesk.mc12.rules.entities.Game;
 
 @Slf4j
@@ -26,7 +26,7 @@ import com.topdesk.mc12.rules.entities.Game;
 @Consumes(MediaType.APPLICATION_JSON)
 public class GameRestlet {
 	@Inject private Backend backend;
-	@Inject private RuleEngine ruleEngine;
+	@Inject private GoRuleEngine ruleEngine;
 	
 	@GET
 	public Game get(@QueryParam("id") long id) {

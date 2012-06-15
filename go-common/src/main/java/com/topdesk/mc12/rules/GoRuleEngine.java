@@ -7,7 +7,7 @@ import com.topdesk.mc12.persistence.entities.Player;
 import com.topdesk.mc12.rules.entities.Game;
 
 
-public interface RuleEngine {
+public interface GoRuleEngine {
 
 	/**
 	 * Checks if it's the players turn.
