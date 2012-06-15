@@ -36,7 +36,8 @@ public class RuleEngineImpl implements RuleEngine {
 	@Override
 	public Game turnMovesIntoBoard(GameData gameData) {
 		Game game = new Game(
-				gameData.getBlack(), 
+				gameData.getId(),
+				gameData.getBlack(),
 				gameData.getWhite(), 
 				gameData.getSize(), 
 				gameData.getMoves().size());

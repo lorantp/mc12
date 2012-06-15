@@ -20,7 +20,6 @@ import com.topdesk.mc12.rest.entities.RestPass;
 import com.topdesk.mc12.rules.RuleEngine;
 import com.topdesk.mc12.rules.entities.Game;
 
-
 @Slf4j
 @Path("game")
 @Produces(MediaType.APPLICATION_JSON)
@@ -63,18 +62,6 @@ public class GameRestlet {
 		backend.insert(new Move(0, gameData, restMove.getX(), restMove.getY(), player));
 	}
 	
-//	private void checkValidPosition(RestMove move, Game game) {
-//		// We'll need to reimplement this when we handle capture and such
-//		for (Move m : game.getMoves()) {
-//			if (m.isPass()) {
-//				continue;
-//			}
-//			if (m.getX() == move.getX() && m.getY() == move.getY()) {
-//				throw new IllegalStateException("There's already a stone at " + m.getX() + ", " + m.getY());
-//			}
-//		}
-//	}
-	
 	private Player getPlayer(GameData game, long playerId) {
 		if (game.getBlack().getId() == playerId) {
 			return game.getBlack();
@@ -94,12 +81,5 @@ public class GameRestlet {
 		else if (!player.equals(game.getWhite())) {
 			throw new IllegalStateException("It's not " + player.getNickname() + "'s turn");
 		}
-	}
-
-	private GameData fixRecursion(GameData game) {
-//		for (Move move : game.getMoves()) {
-//			move.setGame(null);
-//		}
-		return game;
 	}
 }

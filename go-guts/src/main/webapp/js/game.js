@@ -23,7 +23,7 @@ var GAME = function(gameRest) {
 			var board = BOARD(
 					$("#board"),
 					game.size,
-					game.moves,
+					game.stones,
 					that.colorOfTurn(game.totalMoves),
 					that.updateNextStone);
 			
