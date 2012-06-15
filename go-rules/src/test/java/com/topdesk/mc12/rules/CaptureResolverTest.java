@@ -14,6 +14,9 @@ import com.google.common.collect.ImmutableSet.Builder;
 import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.rules.entities.Stone;
 
+/**
+ *  
+ */
 public class CaptureResolverTest {
 	private final CaptureResolver resolver = new RecursiveCaptureResolver();
 
@@ -29,6 +32,30 @@ public class CaptureResolverTest {
 				"-w-",
 				"w-W",
 				"-w-",
+		};
+		assertCapture(initialBoard, expectedBoard);
+	}
+	
+	@Ignore
+	@Test
+	public void captureBeforeSuicide() {
+		String[] initialBoard = new String[]{
+				"-------",
+				"-bbbbb-",
+				"-bwwwb-",
+				"-bw-wb-",
+				"-bwwwb-",
+				"-bbbbb-",
+				"-------",
+		};
+		String[] expectedBoard = new String[]{
+				"-------",
+				"-bbbbb-",
+				"-b---b-",
+				"-b-B-b-",
+				"-b---b-",
+				"-bbbbb-",
+				"-------",
 		};
 		assertCapture(initialBoard, expectedBoard);
 	}
