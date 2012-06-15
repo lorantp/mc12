@@ -1,16 +1,17 @@
-package com.topdesk.mc12.rest;
+package com.topdesk.mc12.rest.restlets;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.inject.Inject;
+import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.persistence.Backend;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
@@ -29,7 +30,8 @@ public class GameRestlet {
 	@Inject private RuleEngine ruleEngine;
 	
 	@GET
-	public Game get(@QueryParam("id") long id) {
+	@Path("/{id}")
+	public Game get(@PathParam("id") long id) {
 		GameData game = backend.get(GameData.class, id);
 		return ruleEngine.turnMovesIntoBoard(game);
 	}
@@ -69,17 +71,17 @@ public class GameRestlet {
 		else if (game.getWhite().getId() == playerId) {
 			return game.getWhite();
 		}
-		throw new IllegalStateException("Player " + playerId + " does not participate in game " + game.getId());
+		throw GoException.createNotAcceptable("Player " + playerId + " does not participate in game " + game.getId());
 	}
 	
 	private void checkTurn(GameData game, Player player) {
 		if (game.getMoves().size() % 2 == 0) {
 			if (!player.equals(game.getBlack())) {
-				throw new IllegalStateException("It's not " + player.getNickname() + "'s turn");
+				throw GoException.createNotAcceptable("It's not " + player.getNickname() + "'s turn");
 			}
 		}
 		else if (!player.equals(game.getWhite())) {
-			throw new IllegalStateException("It's not " + player.getNickname() + "'s turn");
+			throw GoException.createNotAcceptable("It's not " + player.getNickname() + "'s turn");
 		}
 	}
 }

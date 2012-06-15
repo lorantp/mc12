@@ -18,7 +18,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Data @NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode(exclude="game")
 @Entity
-public final class Move {
+public final class Move implements DatabaseEntity {
 	@Id @GeneratedValue private long id;
 	@JsonIgnore @Getter(AccessLevel.PRIVATE) @ManyToOne(optional=false) private GameData game;
 	private Integer x;

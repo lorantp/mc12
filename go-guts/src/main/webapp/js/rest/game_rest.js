@@ -2,7 +2,7 @@ var GAME_REST = function(rest) {
 	var that = {};
 	
 	that.getGame = function(id, success) {
-		rest.getData('/game?id=' + id, {}, success);
+		rest.getData('/game/' + id, {}, success);
 	};
 	
 	that.doMove = function(gameId, playerId, x, y) {

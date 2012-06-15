@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
@@ -19,11 +20,11 @@ import org.joda.time.DateTime;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 @Entity
-public final class GameData {
+public final class GameData implements DatabaseEntity {
 	@Id @GeneratedValue private long id;
 	@ManyToOne(fetch=FetchType.EAGER) private Player black;
 	@ManyToOne(fetch=FetchType.EAGER) private Player white;
-	@OneToMany(fetch=FetchType.EAGER, mappedBy="game") private List<Move> moves;
+	@OrderBy("id") @OneToMany(fetch=FetchType.EAGER, mappedBy="game") private List<Move> moves;
 	private long start;
 	@JsonIgnore private BoardSize boardSize;
 	
