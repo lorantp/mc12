@@ -54,7 +54,7 @@ public class GameRestlet {
 		GameData gameData = backend.get(GameData.class, restMove.getGameId());
 		Game game = ruleEngine.applyMoves(gameData);
 		Color color = getPlayerColor(gameData, restMove.getPlayerId());
-		game.addStone(restMove.getX(), restMove.getY(), color);
+		ruleEngine.applyMove(game, color, restMove.getX(), restMove.getY());
 		
 		log.info("Player {} made move {} in game {}", restMove.getPlayerId(), gameData);
 		backend.insert(new Move(0, gameData, restMove.getX(), restMove.getY(), color));
