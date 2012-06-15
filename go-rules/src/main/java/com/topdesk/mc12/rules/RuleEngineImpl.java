@@ -40,12 +40,12 @@ public class RuleEngineImpl implements RuleEngine {
 	
 	@Override
 	public Boolean validPosition(Move move, GameData game) {
-		return null;
+		return true;
 	}
 	
 	@Override
 	public Game turnMovesIntoBoard(GameData game) {
-		Game board = new Game(game.getBlack(), game.getWhite(), game.getSize(), game.getMoves().size());
+		Game board = new Game(game.getId(), game.getBlack(), game.getWhite(), game.getSize(), game.getMoves().size());
 		
 		for(Move move: game.getMoves()) {
 			if (!move.isPass()) {
