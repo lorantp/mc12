@@ -3,34 +3,15 @@ package com.topdesk.mc12.rules;
 import java.util.Map;
 import java.util.Set;
 
-import lombok.Data;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.rules.entities.Stone;
 
-public class RecursiveCaptureResolver implements CaptureResolver {
-	private @Data class Position {
-		private final int x;
-		private final int y;
-	}
-	
+public class RecursiveCaptureResolver extends AbstractPositionBasedCaptureResolver {
 	@Override
-	public Set<Stone> calculateCapturedStones(Stone move, Set<Stone> currentStones, int boardSize) {
-		Map<Position, Stone> stoneMap = createPositionMap(currentStones);
+	public Set<Stone> calculateFromPositions(Stone move, Map<Position, Stone> stoneMap, int boardSize) {
 		Set<Position> neighbourPositions = findNeighbourPositions(move.getX(), move.getY(), boardSize);
 		return checkNeighbours(move, neighbourPositions, stoneMap, move.getColor(), boardSize);
-	}
-
-	private Map<Position, Stone> createPositionMap(Set<Stone> currentStones) {
-		return Maps.uniqueIndex(currentStones, new Function<Stone, Position>() {
-			@Override
-			public Position apply(Stone stone) {
-				return new Position(stone.getX(), stone.getY());
-			}
-		});
 	}
 
 	private Set<Stone> checkNeighbours(Stone move, Set<Position> neighbourPositions, Map<Position, Stone> stoneMap, Color color, int boardSize) {
@@ -66,23 +47,6 @@ public class RecursiveCaptureResolver implements CaptureResolver {
 		// At this point, the stone at this position is dead.
 		result.add(stone);
 		return result;
-	}
-
-	private Set<Position> findNeighbourPositions(int x, int y, int boardSize) {
-		Set<Position> result = Sets.newHashSet();
-		if (x > 0) {
-			result.add(new Position(x - 1, y));
-		}
-		if (x < boardSize - 1) {
-			result.add(new Position(x + 1, y));
-		}
-		if (y > 0) {
-			result.add(new Position(x, y - 1));
-		}
-		if (y < boardSize - 1) {
-			result.add(new Position(x, y + 1));
-		}
-		return null;
 	}
 
 	private boolean isFoe(Color color, Stone stone) {

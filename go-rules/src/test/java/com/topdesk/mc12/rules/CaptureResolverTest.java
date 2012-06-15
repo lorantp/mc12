@@ -6,7 +6,6 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableSet;
@@ -15,11 +14,10 @@ import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.rules.entities.Stone;
 
 public class CaptureResolverTest {
-	private final CaptureResolver resolver = new RecursiveCaptureResolver();
+	private final CaptureResolver resolver = new LiveCollectionCaptureResolver();
 
-	@Ignore
 	@Test
-	public void singleSorrundedStoneIsCaptured() {
+	public void singleSurroundedStoneIsCaptured() {
 		String[] initialBoard = new String[]{
 				"-w-",
 				"wb-",

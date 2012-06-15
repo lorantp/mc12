@@ -3,22 +3,18 @@ package com.topdesk.mc12.rules;
 import java.util.Map;
 import java.util.Set;
 
-import lombok.Data;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.topdesk.mc12.rules.entities.Stone;
 
-public class LiveCollectionCaptureResolver implements CaptureResolver {
-	private @Data class Position {
-		private final int x;
-		private final int y;
-	}
-	
+/**
+ * Solves the capturing problem by first separating all stones on the board on whether they
+ * have any liberties (alive) or do not have any liberties (dead). It then iterates over the dead stones
+ * and moves those that border a friendly alive stone to the live collection. It repeates this process
+ * until no new living stones are found.
+ */
+public class LiveCollectionCaptureResolver extends AbstractPositionBasedCaptureResolver {
 	@Override
-	public Set<Stone> calculateCapturedStones(Stone move, Set<Stone> currentStones, int boardSize) {
-		Map<Position, Stone> stoneMap = createPositionMap(currentStones);
+	protected Set<Stone> calculateFromPositions(Stone move, Map<Position, Stone> stoneMap, int boardSize) {
 		stoneMap.put(new Position(move.getX(), move.getY()), move);
 		return findDeadStones(stoneMap, boardSize);
 	}
@@ -35,13 +31,30 @@ public class LiveCollectionCaptureResolver implements CaptureResolver {
 			}
 		}
 
-		Set<Stone> newlyFoundDeadStones = Sets.newHashSet();
+		Set<Stone> newlyFoundLiveStones = Sets.newHashSet();
 		do {
+			newlyFoundLiveStones.clear();
+			for (Stone stone : deadStones) {
+				if (nextToFriendlyLiveStone(stone, liveStones, stoneMap, boardSize)) {
+					newlyFoundLiveStones.add(stone);
+				}
+			}
+			deadStones.removeAll(newlyFoundLiveStones);
+			liveStones.addAll(newlyFoundLiveStones);
 			
-			
-		} while(!deepEquals(deadStones, newlyFoundDeadStones));
+		} while(!newlyFoundLiveStones.isEmpty());
 		
 		return deadStones;
+	}
+
+	private boolean nextToFriendlyLiveStone(Stone stone, Set<Stone> liveStones, Map<Position, Stone> stoneMap, int boardSize) {
+		for(Position position : findNeighbourPositions(stone.getX(), stone.getY(), boardSize)) {
+			Stone neighbour = stoneMap.get(position);
+			if (neighbour != null && neighbour.getColor() == stone.getColor() && liveStones.contains(neighbour)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private boolean lives(Stone stone, Map<Position, Stone> stoneMap, int boardSize) {
@@ -51,40 +64,5 @@ public class LiveCollectionCaptureResolver implements CaptureResolver {
 			}
 		}
 		return false;
-	}
-
-	private boolean deepEquals(Set<Stone> deadStones, Set<Stone> newlyFoundDeadStones) {
-		for (Stone stone : deadStones) {
-			if (!newlyFoundDeadStones.contains(stone)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private Map<Position, Stone> createPositionMap(Set<Stone> currentStones) {
-		return Maps.uniqueIndex(currentStones, new Function<Stone, Position>() {
-			@Override
-			public Position apply(Stone stone) {
-				return new Position(stone.getX(), stone.getY());
-			}
-		});
-	}
-
-	private Set<Position> findNeighbourPositions(int x, int y, int boardSize) {
-		Set<Position> result = Sets.newHashSet();
-		if (x > 0) {
-			result.add(new Position(x - 1, y));
-		}
-		if (x < boardSize - 1) {
-			result.add(new Position(x + 1, y));
-		}
-		if (y > 0) {
-			result.add(new Position(x, y - 1));
-		}
-		if (y < boardSize - 1) {
-			result.add(new Position(x, y + 1));
-		}
-		return null;
 	}
 }
