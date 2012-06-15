@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.google.inject.Inject;
 import com.topdesk.mc12.persistence.Backend;
-import com.topdesk.mc12.persistence.entities.BoardSize;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
 import com.topdesk.mc12.persistence.entities.Player;
@@ -20,7 +19,6 @@ import com.topdesk.mc12.rest.entities.RestMove;
 import com.topdesk.mc12.rest.entities.RestPass;
 import com.topdesk.mc12.rules.RuleEngine;
 import com.topdesk.mc12.rules.entities.Game;
-
 
 @Slf4j
 @Path("game")
@@ -50,31 +48,19 @@ public class GameRestlet {
 	@POST
 	@Path("/move")
 	public void move(RestMove restMove) {
-		GameData game = backend.get(GameData.class, restMove.getGameId());
+		GameData gameData = backend.get(GameData.class, restMove.getGameId());
 		
-		ruleEngine.checkBounds(game.getBoardSize(), restMove.getX());
-		ruleEngine.checkBounds(game.getBoardSize(), restMove.getY());
+		ruleEngine.checkBounds(gameData.getBoardSize(), restMove.getX());
+		ruleEngine.checkBounds(gameData.getBoardSize(), restMove.getY());
 		
-//		checkValidPosition(move, game);
-		Player player = getPlayer(game, restMove.getPlayerId());
-		Move move = new Move(0, game, restMove.getX(), restMove.getY(), player);
-		if (!ruleEngine.validPosition(move, game) || !ruleEngine.checkTurn(game, player)) {
-			log.info("Player {} made move {} in game {}", restMove.getPlayerId(), game);
-			backend.insert(new Move(0, game, restMove.getX(), restMove.getY(), player));
-		}
+		Player player = getPlayer(gameData, restMove.getPlayerId());
+		Move move = new Move(0, gameData, restMove.getX(), restMove.getY(), player);
+		ruleEngine.checkValidPosition(move, gameData);
+		ruleEngine.checkTurn(gameData, player);
+		
+		log.info("Player {} made move {} in game {}", restMove.getPlayerId(), gameData);
+		backend.insert(new Move(0, gameData, restMove.getX(), restMove.getY(), player));
 	}
-	
-//	private void checkValidPosition(RestMove move, Game game) {
-//		// We'll need to reimplement this when we handle capture and such
-//		for (Move m : game.getMoves()) {
-//			if (m.isPass()) {
-//				continue;
-//			}
-//			if (m.getX() == move.getX() && m.getY() == move.getY()) {
-//				throw new IllegalStateException("There's already a stone at " + m.getX() + ", " + m.getY());
-//			}
-//		}
-//	}
 	
 	private Player getPlayer(GameData game, long playerId) {
 		if (game.getBlack().getId() == playerId) {
@@ -95,21 +81,5 @@ public class GameRestlet {
 		else if (!player.equals(game.getWhite())) {
 			throw new IllegalStateException("It's not " + player.getNickname() + "'s turn");
 		}
-	}
-
-	private void checkBounds(BoardSize size, Integer coordinate) {
-		if (coordinate == null) {
-			throw new IllegalStateException("Got move without coordinate");
-		}
-		if (coordinate < 0 || coordinate >= size.getSize()) {
-			throw new IllegalStateException("Move does not fit on board");
-		}
-	}
-	
-	private GameData fixRecursion(GameData game) {
-//		for (Move move : game.getMoves()) {
-//			move.setGame(null);
-//		}
-		return game;
 	}
 }
