@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
 import com.topdesk.mc12.common.Color;
+import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.rules.entities.Stone;
 
 /**
@@ -46,6 +47,23 @@ public class CaptureResolverTest {
 		String[] expectedBoard = new String[]{
 				"----",
 				"-ww-",
+				"w--W",
+				"-ww-",
+		};
+		assertCapture(initialBoard, expectedBoard);
+	}
+	
+	@Test
+	public void squareSurroundedStoneIsCaptured() {
+		String[] initialBoard = new String[]{
+				"-ww-",
+				"wbbw",
+				"wbb-",
+				"-ww-",
+		};
+		String[] expectedBoard = new String[]{
+				"-ww-",
+				"w--w",
 				"w--W",
 				"-ww-",
 		};
@@ -103,12 +121,33 @@ public class CaptureResolverTest {
 		assertCapture(initialBoard, expectedBoard);
 	}
 
+	@Test(expected=GoException.class)
+	public void suicideException() {
+		String[] initialBoard = new String[]{
+				"-w-",
+				"w-w",
+				"-w-",
+		};
+		String[] expectedBoard = new String[]{
+				"-w-",
+				"wBw",
+				"-w-",
+		};
+		resolveCapture(initialBoard, expectedBoard);
+	}
+	
 	private void assertCapture(String[] initialBoard, String[] expectedBoard) {
+		Set<Stone> capturedStones = resolveCapture(initialBoard, expectedBoard);
+		Set<Stone> expectedStones = getDifferenceOf(expectedBoard, initialBoard);
+		Assert.assertEquals(expectedStones, capturedStones);
+	}
+
+
+	private Set<Stone> resolveCapture(String[] initialBoard, String[] expectedBoard) {
 		Set<Stone> initialStones = toStones(initialBoard);
 		Stone placedStone = getPlacedStone(expectedBoard);
-		Set<Stone> expectedStones = getDifferenceOf(expectedBoard, initialBoard);
 		Set<Stone> capturedStones = resolver.calculateCapturedStones(placedStone, initialStones, initialBoard.length);
-		Assert.assertEquals(expectedStones, capturedStones);
+		return capturedStones;
 	}
 	
 	private Set<Stone> getDifferenceOf(String[] expectedBoard, String[] initialBoard) {

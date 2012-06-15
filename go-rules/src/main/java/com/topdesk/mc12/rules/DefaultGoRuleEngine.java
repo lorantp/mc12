@@ -1,5 +1,9 @@
 package com.topdesk.mc12.rules;
 
+import java.util.Set;
+
+import javax.inject.Inject;
+
 import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.persistence.entities.GameData;
@@ -8,6 +12,13 @@ import com.topdesk.mc12.rules.entities.Game;
 import com.topdesk.mc12.rules.entities.Stone;
 
 public class DefaultGoRuleEngine implements GoRuleEngine {
+	private final CaptureResolver captureResolver;
+	
+	@Inject
+	public DefaultGoRuleEngine(CaptureResolver captureResolver) {
+		this.captureResolver = captureResolver;
+	}
+	
 	@Override
 	public Game applyMoves(GameData gameData) {
 		Game game = new Game(
@@ -43,12 +54,14 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 		checkTurn(game, color);
 		checkValidPosition(game, x, y);
 		
+		applyCapture(new Stone(x, y, color), game);
 		game.addStone(x, y, color);
-		applyCapture(game);
 	}
 	
-	private void applyCapture(Game game) {
-		// NYI
+	private void applyCapture(Stone move, Game game) {
+		Set<Stone> capturedStones = captureResolver.calculateCapturedStones(move, game.getStones(), game.getSize());
+		game.removeStones(capturedStones);
+		move.getColor().addCapture(game, capturedStones.size());
 	}
 	
 	/**

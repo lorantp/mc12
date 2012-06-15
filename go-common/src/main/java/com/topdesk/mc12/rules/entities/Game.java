@@ -1,11 +1,11 @@
 package com.topdesk.mc12.rules.entities;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 import lombok.Data;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.persistence.entities.Player;
 
@@ -18,7 +18,7 @@ public class Game {
 	private final int totalMoves;
 	private final long start;
 	
-	private final List<Stone> stones = Lists.newArrayList();
+	private final Set<Stone> stones = Sets.newHashSet();
 	private int blackCaptured = 0;
 	private int whiteCaptured = 0;
 	private Color nextTurn = Color.BLACK;

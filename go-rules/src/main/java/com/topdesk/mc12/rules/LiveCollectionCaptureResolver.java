@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.rules.entities.Stone;
 
 /**
@@ -21,6 +22,8 @@ public class LiveCollectionCaptureResolver extends AbstractPositionBasedCaptureR
 			Set<Stone> otherStones = findDeadStones(move, stoneMap, boardSize, true);
 			if (!otherStones.isEmpty()) {
 				return otherStones;
+			} else {
+				throw GoException.createNotAcceptable("You're not allowed to commit suicide");
 			}
 		}
 		return stones;

@@ -15,7 +15,7 @@ import com.topdesk.mc12.persistence.entities.Player;
 
 @Slf4j
 public class TestData {
-	private static final boolean ADD_MOVES = true;
+	private static final boolean ADD_MOVES = false;
 	private static final BoardSize SIZE = BoardSize.NINETEEN;
 	
 	@Inject private Backend backend;
