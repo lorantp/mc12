@@ -12,12 +12,6 @@ describe("confirm move", function() {
 		expect(restMock.doMove).toHaveBeenCalledWith(undefined, undefined, 0, 0);
 	});
 	
-	it("should set targeted position to no longer be targeted", function() {
-		game.updateNextStone(0, 0);
-		expect$methodToBeCalledWith("attr", [{target: "false", stone: "BLACK"}]);
-		game.confirmMove();
-	});
-	
 	it("should do nothing without a move having been placed", function() {
 		spyOn(restMock, "doMove");
 		game.confirmMove();
