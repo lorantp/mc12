@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.google.inject.Inject;
 import com.topdesk.mc12.common.Color;
+import com.topdesk.mc12.common.GameState;
 import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.persistence.Backend;
 import com.topdesk.mc12.persistence.entities.GameData;
@@ -43,6 +44,11 @@ public class GameRestlet {
 		Game game = ruleEngine.applyMoves(gameData);
 		Color color = getPlayerColor(gameData, pass.getPlayerId());
 		ruleEngine.applyPass(game, color);
+		
+		if (game.isFinished()) {
+			gameData.setState(GameState.FINISHED);
+			backend.update(gameData);
+		}
 		
 		log.info("Player {} passed in game {}", pass.getPlayerId(), game);
 		backend.insert(new Move(0, gameData, null, null, color));

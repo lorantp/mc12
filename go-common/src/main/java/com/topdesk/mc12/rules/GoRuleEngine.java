@@ -19,18 +19,13 @@ public interface GoRuleEngine {
 	
 	/**
 	 * Apply rules for making a move on an existing game
-	 * @param gameData
-	 * @param game
-	 * @param move
 	 * @throws GoException if the rules don't allow this
 	 */
 	void applyMove(Game game, Color color, int x, int y);
 	
 	/**
 	 * Apply rules for making a pass on an existing game
-	 * @param game
-	 * @param move
 	 * @throws GoException if the rules don't allow this
 	 */
-	void applyPass(Game game, Color color);	
+	void applyPass(Game game, Color color);
 }

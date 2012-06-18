@@ -26,7 +26,6 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 				gameData.getBlack(),
 				gameData.getWhite(),
 				gameData.getSize(),
-				gameData.getMoves().size(),
 				gameData.getStart());
 		
 		for (Move move: gameData.getMoves()) {
@@ -60,8 +59,7 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 	
 	private void applyCapture(Stone move, Game game) {
 		Set<Stone> capturedStones = captureResolver.calculateCapturedStones(move, game.getStones(), game.getSize());
-		game.removeStones(capturedStones);
-		move.getColor().addCapture(game, capturedStones.size());
+		game.capture(capturedStones, move.getColor());
 	}
 	
 	/**
