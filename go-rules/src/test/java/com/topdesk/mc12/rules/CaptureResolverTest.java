@@ -145,6 +145,23 @@ public class CaptureResolverTest {
 		resolveCapture(initialBoard, expectedBoard);
 	}
 	
+	@Test(expected=GoException.class)
+	public void multiSuicideException() {
+		String[] initialBoard = new String[]{
+				"-ww-",
+				"wb-w",
+				"-ww-",
+				"----",
+		};
+		String[] expectedBoard = new String[]{
+				"-ww-",
+				"wbBw",
+				"-ww-",
+				"----",
+		};
+		resolveCapture(initialBoard, expectedBoard);
+	}
+	
 	private void assertCapture(String[] initialBoard, String[] expectedBoard) {
 		Set<Stone> capturedStones = resolveCapture(initialBoard, expectedBoard);
 		Set<Stone> expectedStones = getDifferenceOf(expectedBoard, initialBoard);
