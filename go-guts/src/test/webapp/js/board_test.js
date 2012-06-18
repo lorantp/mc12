@@ -47,7 +47,17 @@ describe("place move on board", function() {
 		board.placeMove(0, 0);
 		board.placeMove(0, 0);
 		expect(actionsMock.confirmMove).toHaveBeenCalled();
-	});	
+	});
+	
+	it("shouldn't do anything if the board is disabled", function() {
+		board.setEnabled(false);
+		spyOn(actionsMock, "confirmMove");
+		spyOn(actionsMock, "updateNextStone");
+		board.placeMove(0, 0);
+		board.placeMove(0, 0);
+		expect(actionsMock.confirmMove).wasNotCalled();
+		expect(actionsMock.updateNextStone).wasNotCalled();
+	});
 });
 
 describe("position square attributes", function() {
