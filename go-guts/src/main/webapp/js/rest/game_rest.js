@@ -1,5 +1,5 @@
 var GAME_REST = function(rest) {
-	var prefix = '/game/';
+	var prefix = 'game/';
 	var that = {};
 	
 	that.getGame = function(id, success) {
@@ -14,8 +14,8 @@ var GAME_REST = function(rest) {
 		rest.postData(prefix + gameId + '/pass', {playerId: playerId});
 	};
 	
-	that.newGame = function(playerId, boardSize, success) {
-		rest.postData(prefix + '/new', {playerId: playerId, boardSize: boardSize}, success);
+	that.newGame = function(playerId, boardSize, color, success) {
+		rest.postData(prefix + 'new', {playerId: playerId, boardSize: boardSize, color: color}, success);
 	}
 	
 	that.startGame = function(gameId, playerId) {

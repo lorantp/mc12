@@ -76,7 +76,7 @@
 				rest.doPass(1, $('#color').val());
 			}
 			hax.newGame = function() {
-				rest.newGame(2, 9, function(newId) {
+				rest.newGame(2, 9, 'WHITE', function(newId) {
 					alert('forwarding to game.html?id=' + newId);
 				});
 			} 
