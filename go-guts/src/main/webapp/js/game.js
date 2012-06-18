@@ -52,7 +52,6 @@ var GAME = function(gameRest) {
 	}
 	
 	that.activateButtons = function(board) {
-		$("#confirm").click(that.actions.confirmMove);
 		$("#pass").click(that.pass);
 	}
 	
