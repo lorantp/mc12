@@ -14,26 +14,7 @@ var GAME = function(gameRest) {
 	var gameId;
 	var playerId;
 	
-	that.draw = function(id) {
-		gameRest.getGame(id, function(game) {
-			gameId = game.id;
-			playerId = game.totalMoves % 2 == 0 ? 
-					game.black.id :
-					game.white.id;
-			var board = BOARD(
-					$("#board"),
-					game.size,
-					game.stones,
-					that.colorOfTurn(game.totalMoves),
-					that.actions);
-			
-			board.draw();
-			that.activateButtons(board);
-			METADATA($("#content")).showData(game);
-		});
-	}
-	
-	that.actions = {
+	var actions = {
 			updateNextStone: function(x, y) {
 				nextStone.x = x;
 				nextStone.y = y;
@@ -47,12 +28,30 @@ var GAME = function(gameRest) {
 			}	
 	};
 	
+	that.draw = function(id) {
+		gameRest.getGame(id, function(game) {
+			gameId = game.id;
+			playerId = game.totalMoves % 2 == 0 ? 
+					game.black.id :
+					game.white.id;
+			var board = BOARD(
+					$("#board"),
+					game.size,
+					game.stones,
+					that.colorOfTurn(game.totalMoves),
+					actions);
+			
+			board.draw();
+			that.activateButtons(board);
+			METADATA($("#content")).showData(game);
+		});
+	}
+	
 	that.colorOfTurn = function(turn) {
 		return turn % 2 === 0 ? "BLACK" : "WHITE";
 	}
 	
 	that.activateButtons = function(board) {
-		$("#confirm").click(that.actions.confirmMove);
 		$("#pass").click(that.pass);
 	}
 	
