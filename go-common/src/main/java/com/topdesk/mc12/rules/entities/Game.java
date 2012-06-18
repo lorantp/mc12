@@ -24,8 +24,8 @@ public class Game {
 	@Setter(AccessLevel.NONE) private int totalMoves = 0;
 	
 	private final Set<Stone> stones = Sets.newHashSet();
-	@Setter(AccessLevel.NONE) private int blackCaptured = 0;
-	@Setter(AccessLevel.NONE) private int whiteCaptured = 0;
+	@Setter(AccessLevel.NONE) private int blackStonesCaptured = 0;
+	@Setter(AccessLevel.NONE) private int whiteStonesCaptured = 0;
 	private Color nextTurn = Color.BLACK;
 	@Setter(AccessLevel.NONE) private boolean lastMovePass = false;
 	private boolean finished = false;
@@ -55,10 +55,10 @@ public class Game {
 		
 		switch (color) {
 		case BLACK:
-			whiteCaptured += captured.size();
+			whiteStonesCaptured += captured.size();
 			break;
 		case WHITE:
-			blackCaptured += captured.size();
+			blackStonesCaptured += captured.size();
 			break;
 		}
 	}

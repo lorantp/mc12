@@ -25,34 +25,50 @@ var GAME = function(gameRest) {
 					game.size,
 					game.stones,
 					that.colorOfTurn(game.totalMoves),
-					that.updateNextStone);
+					that.actions);
 			
 			board.draw();
-			that.activateButtons(board);
+			that.updateGameState(board, game.finished);
 			METADATA($("#content")).showData(game);
 		});
 	}
+	
+	that.actions = {
+			updateNextStone: function(x, y) {
+				nextStone.x = x;
+				nextStone.y = y;
+			},
+			
+			confirmMove: function() {
+				if (nextStone && (nextStone.x || nextStone.x == 0) && (nextStone.y || nextStone.y == 0)) {
+					gameRest.doMove(gameId, playerId, nextStone.x, nextStone.y);
+					$("[target=true]").attr({target: "false", stone: nextStone.color});
+				}
+			}	
+	};
 	
 	that.colorOfTurn = function(turn) {
 		return turn % 2 === 0 ? "BLACK" : "WHITE";
 	}
 	
+	that.updateGameState = function(board, finished) {
+		if (!finished) {				
+			that.activateButtons(board);
+		}
+		else {
+			that.disableButtons();
+			board.setEnabled(false);
+		}
+	};
+	
 	that.activateButtons = function(board) {
-		$("#confirm").click(that.confirmMove);
 		$("#pass").click(that.pass);
 	}
 	
-	that.updateNextStone = function(x, y) {
-		nextStone.x = x;
-		nextStone.y = y;
-	};
-	
-	that.confirmMove = function() {
-		if (nextStone && (nextStone.x || nextStone.x == 0) && (nextStone.y || nextStone.y == 0)) {
-			gameRest.doMove(gameId, playerId, nextStone.x, nextStone.y);
-			$("[target=true]").attr({target: "false", stone: nextStone.color});
-		}
-	};
+	that.disableButtons = function() {		
+		$("#buttons").css({visibility: "hidden"});
+		$("#pass").click(null);
+	}
 	
 	that.pass = function() {
 		gameRest.doPass(gameId, playerId);

@@ -12,7 +12,14 @@ var boardMock = {
 		moves: [
 		        new MockMove(0, 0, "BLACK"),
 		        new MockMove(1, 2, "WHITE")
-]};
+		],
+		setEnabled: function() {}
+};
+
+var actionsMock = {
+		updateNextStone: function() {},
+		confirmMove: function() {}
+};
 
 var nextStone = {color: "BLACK"};
 
