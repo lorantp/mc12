@@ -108,6 +108,23 @@ public class CaptureResolverTest {
 	}
 	
 	@Test
+	public void multiCapture() {
+		String[] initialBoard = new String[]{
+				"w ww",
+				"b bb",
+				"wbww",
+				"    ",
+		};
+		String[] expectedBoard = new String[]{
+				"w ww",
+				" W  ",
+				"wbww",
+				"    ",
+		};
+		assertCapture(initialBoard, expectedBoard);
+	}
+	
+	@Test
 	public void captureBeforeSuicide() {
 		String[] initialBoard = new String[]{
 				"       ",
