@@ -28,7 +28,7 @@ var GAME = function(gameRest) {
 					that.actions);
 			
 			board.draw();
-			that.activateButtons(board);
+			that.updateGameState(board, game.finished);
 			METADATA($("#content")).showData(game);
 		});
 	}
@@ -51,8 +51,23 @@ var GAME = function(gameRest) {
 		return turn % 2 === 0 ? "BLACK" : "WHITE";
 	}
 	
+	that.updateGameState = function(board, finished) {
+		if (!finished) {				
+			that.activateButtons(board);
+		}
+		else {
+			that.disableButtons();
+			board.setEnabled(false);
+		}
+	};
+	
 	that.activateButtons = function(board) {
 		$("#pass").click(that.pass);
+	}
+	
+	that.disableButtons = function() {		
+		$("#buttons").css({visibility: "hidden"});
+		$("#pass").click(null);
 	}
 	
 	that.pass = function() {
