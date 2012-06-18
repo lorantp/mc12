@@ -6,7 +6,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<description>Game of Go</description>
 	<packaging>pom</packaging>
-	
+
 	<modules>
 		<module>go-common</module>
 		<module>go-guts</module>
@@ -14,14 +14,14 @@
 		<module>go-rules</module>
 		<module>go-rest</module>
 	</modules>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<guice.version>3.0</guice.version>
 		<hibernate.version>4.1.4.Final</hibernate.version>
 		<jersey.version>1.12</jersey.version>
 	</properties>
-	
+
 	<build>
 		<plugins>
 			<!-- Set compiler version -->
@@ -37,7 +37,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -76,6 +76,11 @@
 				<version>${hibernate.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.hibernate.javax.persistence</groupId>
+				<artifactId>hibernate-jpa-2.0-api</artifactId>
+				<version>1.0.1.Final</version>
+			</dependency>
+			<dependency>
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-classic</artifactId>
 				<version>1.0.5</version>
@@ -104,15 +109,15 @@
 				<groupId>joda-time</groupId>
 				<artifactId>joda-time</artifactId>
 				<version>2.1</version>
-			</dependency> 
+			</dependency>
 			<dependency>
-			    <groupId>javax.servlet</groupId>
-			    <artifactId>javax.servlet-api</artifactId>
-			    <version>3.0.1</version>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>3.0.1</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
