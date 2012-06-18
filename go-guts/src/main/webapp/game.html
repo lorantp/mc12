@@ -32,38 +32,51 @@
 		Create your own custom Modernizr build: www.modernizr.com/download/ -->
 		<script src="js/libs/modernizr-2.5.3.min.js"></script>
 	</head>
-	<body onload="initNewGame();">
+	<body onload="initGame();">
 		<!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
 		chromium.org/developers/how-tos/chrome-frame-getting-started -->
 		<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
 		<header>
 
 		</header>
-		<div id="content" class="shadowed infobox">
-			<div id="games" class="bordered">
-				list of games
-				<li><a href="game.html#1" target="_blank">Test game</a></li>
+		<div id="content">
+			<div id="metadata" class="shadowed bordered infobox">
+				<div id="playerdata">
+					<div id="playerone" class="left"></div>
+					VS
+					<div id="playertwo" class="right"></div>
+				</div>
+				<div id="gamedata">
+					<div class="left">
+						<div id="blackcaptured" class="bordered capture cell"></div>
+					</div>
+					TURN: 
+					<div class="right">
+						<div id="whitecaptured" class="bordered capture cell"></div>
+					</div>
+				</div>
 			</div>
-			<div id="launch_game" class="bordered">
-				Size of board:
-				<select id="board_size">
-					<option value="19" selected>Large (19x19)</option>
-					<option value="13">Medium (13x13)</option>
-					<option value="9">Small (9x9)</option>
-				</select>
-				Play as:
-				<select id="player_color">
-					<option value="BLACK" selected>Black</option>
-					<option value="WHITE">White</option>
-				</select>
-				<button id="initiate">Initiate game</button>
+			<div id="battlebox" class="shadowed bordered infobox">
+				battle started on:
+				<div id="buttons" class="right">
+					<button id="pass">Pass</button>
+				</div>
+			</div>
+	
+			<div id="box" class="shadowed bordered">
+				<div id="board"></div>
 			</div>
 		</div>
 		<!-- JavaScript at the bottom for fast page loading -->
 		<!-- scripts concatenated and minified via build script -->
 		<script src="js/libs/jquery-1.7.1.js"></script>
+		<script src="js/rest/rest.js"></script>
+		<script src="js/rest/game_rest.js"></script>
 		<script src="js/plugins.js"></script>
-		<script src="js/initiate.js"></script>
+		<script src="js/debug.js"></script>
+		<script src="js/board.js"></script>
+		<script src="js/metadata.js"></script>
+		<script src="js/game.js"></script>
 		<!-- end scripts -->
 	</body>
 </html>

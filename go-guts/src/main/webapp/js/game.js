@@ -3,7 +3,8 @@ var initGame = function() {
 	var gameRest = GAME_REST(rest);
 	
 	var game = GAME(gameRest);
-	game.draw(1);
+	var id = location.hash.split('#')[1];
+	game.draw(id);
 };
 
 var GAME = function(gameRest) {
