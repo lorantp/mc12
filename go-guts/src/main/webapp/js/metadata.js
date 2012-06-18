@@ -3,8 +3,8 @@ var METADATA = function($parent) {
 	
 	that.showData = function(game) {
 		var blackTurn = game.totalMoves % 2 === 0;
-		that.showPlayer(game.black, "#playerone", game.blackCaptured, "black");
-		that.showPlayer(game.white, "#playertwo", game.whiteCaptured, "white");
+		that.showPlayer(game.black, "#playerone", game.whiteStonesCaptured, "black");
+		that.showPlayer(game.white, "#playertwo", game.blackStonesCaptured, "white");
 		
 		that.showStartTime(new Date(game.start));
 		that.showTurn(game.totalMoves + 1, blackTurn ? "BLACK" : "WHITE");
