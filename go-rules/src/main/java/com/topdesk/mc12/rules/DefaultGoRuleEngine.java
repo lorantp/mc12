@@ -1,16 +1,22 @@
 package com.topdesk.mc12.rules;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.util.Set;
 
 import javax.inject.Inject;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.topdesk.mc12.common.Color;
+import com.topdesk.mc12.common.GameState;
 import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
 import com.topdesk.mc12.rules.entities.Game;
 import com.topdesk.mc12.rules.entities.Stone;
 
+@Slf4j
 public class DefaultGoRuleEngine implements GoRuleEngine {
 	private final CaptureResolver captureResolver;
 	
@@ -21,6 +27,9 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 	
 	@Override
 	public Game applyMoves(GameData gameData) {
+		if (gameData.getState() != GameState.STARTED) {
+			log.warn("Creating Game object for already finished game - this may or may not be correct");
+		}
 		Game game = new Game(
 				gameData.getId(),
 				gameData.getBlack(),
@@ -37,13 +46,19 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 			}
 		}
 		
+		checkState(game.isFinished() == (gameData.getState() == GameState.FINISHED), "Inconsistent game state");
+		
 		return game;
 	}
 	
 	@Override
 	public void applyPass(Game game, Color color) {
 		checkTurn(game, color);
+		boolean lastMovePass = game.isLastMovePass();
 		game.applyPass();
+		if (lastMovePass) {
+			game.setFinished(true);
+		}
 	}
 	
 	@Override
@@ -88,6 +103,9 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 	 * @throws GoException if the colors don't match
 	 */
 	private void checkTurn(Game game, Color color) {
+		if (game.isFinished()) {
+			throw GoException.createNotAcceptable("This game is already finished");
+		}
 		if (game.getNextTurn() != color) {
 			String nickname = (color == Color.BLACK ? game.getBlack() : game.getWhite()).getNickname();
 			throw GoException.createNotAcceptable("It is not " + nickname + "'s turn");

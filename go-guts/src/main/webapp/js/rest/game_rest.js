@@ -13,5 +13,9 @@ var GAME_REST = function(rest) {
 		rest.postData('/game/pass', {gameId: gameId, playerId: playerId});
 	};
 	
+	that.newGame = function(playerId, boardSize, success) {
+		rest.postData('/game/new', {initiatedPlayerId: playerId, boardSize: boardSize}, success);
+	}
+	
 	return that;
 }

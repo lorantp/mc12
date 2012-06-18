@@ -10,15 +10,21 @@ import javax.ws.rs.core.MediaType;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.joda.time.DateTime;
+
 import com.google.inject.Inject;
+import com.topdesk.mc12.common.BoardSize;
 import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.common.GameState;
 import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.persistence.Backend;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
+import com.topdesk.mc12.persistence.entities.Player;
+import com.topdesk.mc12.rest.entities.NewGame;
 import com.topdesk.mc12.rest.entities.RestMove;
 import com.topdesk.mc12.rest.entities.RestPass;
+import com.topdesk.mc12.rest.entities.StartGame;
 import com.topdesk.mc12.rules.GoRuleEngine;
 import com.topdesk.mc12.rules.entities.Game;
 
@@ -32,8 +38,8 @@ public class GameRestlet {
 	
 	@GET
 	@Path("/{id}")
-	public Game get(@PathParam("id") long id) {
-		GameData gameData = backend.get(GameData.class, id);
+	public Game get(@PathParam("id") long gameId) {
+		GameData gameData = backend.get(GameData.class, gameId);
 		return ruleEngine.applyMoves(gameData);
 	}
 	
@@ -64,6 +70,51 @@ public class GameRestlet {
 		
 		log.info("Player {} made move {} in game {}", restMove.getPlayerId(), gameData);
 		backend.insert(new Move(0, gameData, restMove.getX(), restMove.getY(), color));
+	}
+	
+	@POST
+	@Path("/new")
+	public long newGame(NewGame newGame) {
+		Player player = backend.get(Player.class, newGame.getInitiatedPlayerId());
+		GameData game = new GameData(0, null, null, null, new DateTime().getMillis(), BoardSize.get(newGame.getBoardSize()), GameState.INITIATED);
+		if (newGame.getColor() == Color.BLACK) {
+			game.setBlack(player);
+		}
+		else {
+			game.setWhite(player);
+		}
+		backend.insert(game);
+		return game.getId();
+	}
+	
+	@POST
+	@Path("/start/{id}")
+	public void startGame(StartGame startGame, @PathParam("id") long gameId) {
+		GameData gameData = backend.get(GameData.class, gameId);
+		checkInitiated(gameData);
+		
+		Player initiated = gameData.getBlack() == null ? gameData.getWhite() : gameData.getBlack();
+		if (startGame.getOtherPlayerId() == initiated.getId()) {
+			throw GoException.createNotAcceptable("Can't play against yourself");
+		}
+		
+//		if (gam)
+		gameData.setState(GameState.CANCELLED);
+	}
+	
+	@POST
+	@Path("/cancel/{id}")
+	public void cancelGame(StartGame startGame, @PathParam("id") long gameId) {
+		GameData gameData = backend.get(GameData.class, gameId);
+		checkInitiated(gameData);
+		gameData.setState(GameState.CANCELLED);
+		backend.update(gameData);
+	}
+	
+	private void checkInitiated(GameData gameData) {
+		if (gameData.getState() != GameState.INITIATED) {
+			throw GoException.createNotAcceptable("Game is not in INITIATED state");
+		}
 	}
 	
 	private Color getPlayerColor(GameData game, long playerId) {
