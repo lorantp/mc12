@@ -1,9 +1,8 @@
+var container;
 var board;
 
 var initBoard = function() {
-	var container = $("<div id='test' />")
-			.append("<div id='x0y0' />")
-			.append("<div id='x1y2' />");
+	container = $("<div id='test' />");
 	
 	board = BOARD(
 			container,
@@ -11,6 +10,8 @@ var initBoard = function() {
 			boardMock.moves,
 			"BLACK",
 			actionsMock);
+	
+	board.draw();
 }
 
 describe("place move on board", function() {
@@ -24,37 +25,43 @@ describe("place move on board", function() {
 				["target"], 			// Check if target was already selected  
 				["target", "false"], 	// As it was not, try to clear previous one
 				["target", "BLACK"])	// Target current as BLACK
-		board.placeMove(0, 0);
+		board.placeMove(1, 1);
 		checkFunction();
 	});
 	
 	it("should update nextStone's coordinates", function() {
 		spyOn(actionsMock, "updateNextStone");
-		board.placeMove(0, 0);
-		expect(actionsMock.updateNextStone).toHaveBeenCalledWith(0, 0);
+		board.placeMove(1, 1);
+		expect(actionsMock.updateNextStone).toHaveBeenCalledWith(1, 1);
 	});
 	
 	it("should ignore placeMove calls on drawn stones", function() {
-		board.draw();
 		spyOn(actionsMock, "updateNextStone");
 		board.placeMove(0, 0);
-		expect(container.find("[target=true]").val()).toBeFalsy();
+		expect(container.find("[target=BLACK]").val()).toBeUndefined();
 		expect(actionsMock.updateNextStone).not.toHaveBeenCalled();
 	});
 
 	it("should confirm move when repeated", function() {
 		spyOn(actionsMock, "confirmMove");
-		board.placeMove(0, 0);
-		board.placeMove(0, 0);
+		board.placeMove(1, 1);
+		board.placeMove(1, 1);
 		expect(actionsMock.confirmMove).toHaveBeenCalled();
+	});
+	
+	it("should clear the move marker on disabled state", function() {
+		board.placeMove(1, 1);
+		expect(container.find("[target=BLACK]").val()).toEqual("");
+		board.setEnabled(false);
+		expect(container.find("[target=BLACK]").val()).toBeUndefined();
 	});
 	
 	it("shouldn't do anything if the board is disabled", function() {
 		board.setEnabled(false);
 		spyOn(actionsMock, "confirmMove");
 		spyOn(actionsMock, "updateNextStone");
-		board.placeMove(0, 0);
-		board.placeMove(0, 0);
+		board.placeMove(1, 1);
+		board.placeMove(1, 1);
 		expect(actionsMock.confirmMove).wasNotCalled();
 		expect(actionsMock.updateNextStone).wasNotCalled();
 	});
