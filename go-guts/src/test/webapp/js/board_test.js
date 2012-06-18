@@ -13,7 +13,7 @@ var board = BOARD(
 
 describe("place move on board", function() {
 	it("should set targeted divs to false and target to BLACK", function() {
-		var checkFunction = expect$methodToBeCalledWithXTimesFunction("attr", ["target", "false"], ["target", "BLACK"])
+		var checkFunction = expect$methodToBeCalledWithXTimesFunction("attr", ["stone"], ["target", "false"], ["target", "BLACK"])
 		board.placeMove(0, 0);
 		checkFunction();
 	});
@@ -22,6 +22,14 @@ describe("place move on board", function() {
 		spyOn(window, "nextStoneCheckFuction");
 		board.placeMove(0, 0);
 		expect(window.nextStoneCheckFuction).toHaveBeenCalledWith(0, 0);
+	});
+	
+	it("should ignore placeMove calls on drawn stones", function() {
+		board.draw();
+		spyOn(window, "nextStoneCheckFuction");
+		board.placeMove(0, 0);
+		expect(container.find("[target=true]").val()).toBeFalsy();
+		expect(window.nextStoneCheckFuction).not.toHaveBeenCalled();
 	});
 });
 
