@@ -57,8 +57,9 @@ public class DefaultGameRestlet implements GameRestlet {
 		Color color = getPlayerColor(gameData, restMove.getPlayerId());
 		ruleEngine.applyMove(game, color, restMove.getX(), restMove.getY());
 		
-		log.info("Player {} made move {} in game {}", restMove.getPlayerId(), gameData);
-		entityManager.get().persist(new Move(0, gameData, restMove.getX(), restMove.getY(), color));
+		Move move = new Move(0, gameData, restMove.getX(), restMove.getY(), color);
+		entityManager.get().persist(move);
+		log.info("Player {} made move {} in game {}", new Object[] { restMove.getPlayerId(), move, gameData });
 	}
 	
 	@Override

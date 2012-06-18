@@ -1,5 +1,5 @@
 var GAME_REST = function(rest) {
-	var prefix = 'game/';
+	var prefix = '/game/';
 	var that = {};
 	
 	that.getGame = function(id, success) {
@@ -15,11 +15,11 @@ var GAME_REST = function(rest) {
 	};
 	
 	that.newGame = function(playerId, boardSize, success) {
-		rest.postData(prefix + '/new', {initiatedPlayerId: playerId, boardSize: boardSize}, success);
+		rest.postData(prefix + '/new', {playerId: playerId, boardSize: boardSize}, success);
 	}
 	
-	that.startGame = function(gameId, playerId, boardSize) {
-		rest.postData(prefix + gameId + '/start', {playerId: playerId, boardSize: boardSize});
+	that.startGame = function(gameId, playerId) {
+		rest.postData(prefix + gameId + '/start', {playerId: playerId});
 	}
 	
 	that.cancelGame = function(gameId) {

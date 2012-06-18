@@ -6,8 +6,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import lombok.extern.slf4j.Slf4j;
-
 import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.common.GameState;
 import com.topdesk.mc12.common.GoException;
@@ -19,7 +17,6 @@ import com.topdesk.mc12.rules.entities.Game;
 import com.topdesk.mc12.rules.entities.Stone;
 import com.topdesk.mc12.rules.scoring.ScoreCalculator;
 
-@Slf4j
 public class DefaultGoRuleEngine implements GoRuleEngine {
 	private final CaptureResolver captureResolver;
 	private final ScoreCalculator scoreCalculator;
@@ -32,14 +29,11 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 	
 	@Override
 	public Game applyMoves(GameData gameData) {
-		if (gameData.getState() != GameState.STARTED) {
-			log.warn("Creating Game object for already finished game - this may or may not be correct");
-		}
 		Game game = new Game(
 				gameData.getId(),
 				gameData.getBlack(),
 				gameData.getWhite(),
-				gameData.getSize(),
+				gameData.getBoardSize().getSize(),
 				gameData.getStart());
 		
 		for (Move move: gameData.getMoves()) {
