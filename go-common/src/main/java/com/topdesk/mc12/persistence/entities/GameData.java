@@ -10,11 +10,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
-import com.topdesk.mc12.common.BoardSize;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import com.topdesk.mc12.common.BoardSize;
+import com.topdesk.mc12.common.GameState;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 @Entity
@@ -25,6 +26,7 @@ public final class GameData implements DatabaseEntity {
 	@OrderBy("id") @OneToMany(fetch=FetchType.EAGER, mappedBy="game") private List<Move> moves;
 	private long start;
 	private BoardSize boardSize;
+	private GameState state;
 	
 	public int getSize() {
 		return boardSize.getSize();

@@ -10,7 +10,7 @@ import com.topdesk.mc12.rules.entities.Stone;
 /**
  * Solves the capturing problem by first separating all stones on the board on whether they
  * have any liberties (alive) or do not have any liberties (dead). It then iterates over the dead stones
- * and moves those that border a friendly alive stone to the live collection. It repeates this process
+ * and moves those that border a friendly alive stone to the live collection. It repeats this process
  * until no new living stones are found.
  */
 public class LiveCollectionCaptureResolver extends AbstractPositionBasedCaptureResolver {

@@ -108,6 +108,23 @@ public class CaptureResolverTest {
 	}
 	
 	@Test
+	public void multiCapture() {
+		String[] initialBoard = new String[]{
+				"w ww",
+				"b bb",
+				"wbww",
+				"    ",
+		};
+		String[] expectedBoard = new String[]{
+				"w ww",
+				" W  ",
+				"wbww",
+				"    ",
+		};
+		assertCapture(initialBoard, expectedBoard);
+	}
+	
+	@Test
 	public void captureBeforeSuicide() {
 		String[] initialBoard = new String[]{
 				"       ",
@@ -141,6 +158,23 @@ public class CaptureResolverTest {
 				" w ",
 				"wBw",
 				" w ",
+		};
+		resolveCapture(initialBoard, expectedBoard);
+	}
+	
+	@Test(expected=GoException.class)
+	public void multiSuicideException() {
+		String[] initialBoard = new String[]{
+				" ww ",
+				"wb w",
+				" ww ",
+				"    ",
+		};
+		String[] expectedBoard = new String[]{
+				" ww ",
+				"wbBw",
+				" ww ",
+				"    ",
 		};
 		resolveCapture(initialBoard, expectedBoard);
 	}
