@@ -148,16 +148,16 @@ public class CaptureResolverTest {
 	@Test(expected=GoException.class)
 	public void multiSuicideException() {
 		String[] initialBoard = new String[]{
-				"-ww-",
-				"wb-w",
-				"-ww-",
-				"----",
+				" ww ",
+				"wb w",
+				" ww ",
+				"    ",
 		};
 		String[] expectedBoard = new String[]{
-				"-ww-",
+				" ww ",
 				"wbBw",
-				"-ww-",
-				"----",
+				" ww ",
+				"    ",
 		};
 		resolveCapture(initialBoard, expectedBoard);
 	}
