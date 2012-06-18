@@ -1,4 +1,4 @@
-var BOARD = function($parent, size, stones, turnColor, updateNextStone) {
+var BOARD = function($parent, size, stones, turnColor, actions) {
 	var that = {};
 	
 	var cellSize = 48;
@@ -38,10 +38,16 @@ var BOARD = function($parent, size, stones, turnColor, updateNextStone) {
 		if ($parent.find(idSelector).attr("stone")) {
 			return;
 		}
-		updateNextStone(x, y);
-		$parent.find("[target=" + turnColor + "]").attr("target", "false");		
-		$parent.find(idSelector).attr("target", turnColor);
+		var stoneToSelect = $parent.find(idSelector);
+		if (stoneToSelect.attr("target") != turnColor) {
+			actions.updateNextStone(x, y);
+			$parent.find("[target=" + turnColor + "]").attr("target", "false");		
+			stoneToSelect.attr("target", turnColor);
+		}
+		else {			
+			actions.confirmMove();
+		}
 	};
-	
+		
 	return that;
 };

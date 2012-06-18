@@ -25,7 +25,7 @@ var GAME = function(gameRest) {
 					game.size,
 					game.stones,
 					that.colorOfTurn(game.totalMoves),
-					that.updateNextStone);
+					that.actions);
 			
 			board.draw();
 			that.activateButtons(board);
@@ -33,26 +33,28 @@ var GAME = function(gameRest) {
 		});
 	}
 	
+	that.actions = {
+			updateNextStone: function(x, y) {
+				nextStone.x = x;
+				nextStone.y = y;
+			},
+			
+			confirmMove: function() {
+				if (nextStone && (nextStone.x || nextStone.x == 0) && (nextStone.y || nextStone.y == 0)) {
+					gameRest.doMove(gameId, playerId, nextStone.x, nextStone.y);
+					$("[target=true]").attr({target: "false", stone: nextStone.color});
+				}
+			}	
+	};
+	
 	that.colorOfTurn = function(turn) {
 		return turn % 2 === 0 ? "BLACK" : "WHITE";
 	}
 	
 	that.activateButtons = function(board) {
-		$("#confirm").click(that.confirmMove);
+		$("#confirm").click(that.actions.confirmMove);
 		$("#pass").click(that.pass);
 	}
-	
-	that.updateNextStone = function(x, y) {
-		nextStone.x = x;
-		nextStone.y = y;
-	};
-	
-	that.confirmMove = function() {
-		if (nextStone && (nextStone.x || nextStone.x == 0) && (nextStone.y || nextStone.y == 0)) {
-			gameRest.doMove(gameId, playerId, nextStone.x, nextStone.y);
-			$("[target=true]").attr({target: "false", stone: nextStone.color});
-		}
-	};
 	
 	that.pass = function() {
 		gameRest.doPass(gameId, playerId);

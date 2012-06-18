@@ -1,39 +1,60 @@
-var container = $("<div id='test' />")
-	.append("<div id='x0y0' />")
-	.append("<div id='x1y2' />");
+var board;
 
-var nextStoneCheckFuction = function() {};
-
-var board = BOARD(
-		container,
-		boardMock.size,
-		boardMock.moves,
-		"BLACK",
-		function(x, y) { nextStoneCheckFuction(x, y)});
+var initBoard = function() {
+	var container = $("<div id='test' />")
+			.append("<div id='x0y0' />")
+			.append("<div id='x1y2' />");
+	
+	board = BOARD(
+			container,
+			boardMock.size,
+			boardMock.moves,
+			"BLACK",
+			actionsMock);
+}
 
 describe("place move on board", function() {
+	beforeEach(function() {
+		initBoard();
+	});
+	
 	it("should set targeted divs to false and target to BLACK", function() {
-		var checkFunction = expect$methodToBeCalledWithXTimesFunction("attr", ["stone"], ["target", "false"], ["target", "BLACK"])
+		var checkFunction = expect$methodToBeCalledWithXTimesFunction("attr",
+				["stone"], 				// Check if there already is a stone on the spot.
+				["target"], 			// Check if target was already selected  
+				["target", "false"], 	// As it was not, try to clear previous one
+				["target", "BLACK"])	// Target current as BLACK
 		board.placeMove(0, 0);
 		checkFunction();
 	});
 	
-	it("update nextStone's coordinates", function() {
-		spyOn(window, "nextStoneCheckFuction");
+	it("should update nextStone's coordinates", function() {
+		spyOn(actionsMock, "updateNextStone");
 		board.placeMove(0, 0);
-		expect(window.nextStoneCheckFuction).toHaveBeenCalledWith(0, 0);
+		expect(actionsMock.updateNextStone).toHaveBeenCalledWith(0, 0);
 	});
 	
 	it("should ignore placeMove calls on drawn stones", function() {
 		board.draw();
-		spyOn(window, "nextStoneCheckFuction");
+		spyOn(actionsMock, "updateNextStone");
 		board.placeMove(0, 0);
 		expect(container.find("[target=true]").val()).toBeFalsy();
-		expect(window.nextStoneCheckFuction).not.toHaveBeenCalled();
+		expect(actionsMock.updateNextStone).not.toHaveBeenCalled();
 	});
+
+	it("should confirm move when repeated", function() {
+		spyOn(actionsMock, "confirmMove");
+		board.placeMove(0, 0);
+		board.placeMove(0, 0);
+		expect(actionsMock.confirmMove).toHaveBeenCalled();
+	});	
 });
 
 describe("position square attributes", function() {
+	beforeEach(function() {
+		initBoard();
+	});
+	
 	it("should have correct attributes", function() {
  		var div = board.buildCell(0, 0);
 		expect(div.attr("class")).toBe("abs cell");

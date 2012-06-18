@@ -14,6 +14,11 @@ var boardMock = {
 		        new MockMove(1, 2, "WHITE")
 ]};
 
+var actionsMock = {
+		updateNextStone: function() {},
+		confirmMove: function() {}
+};
+
 var nextStone = {color: "BLACK"};
 
 var mockPlayer = {

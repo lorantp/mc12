@@ -6,15 +6,15 @@ describe("confirm move", function() {
 	});
 	
 	it("should send a move to the placed location", function() {
-		game.updateNextStone(0, 0);
+		game.actions.updateNextStone(0, 0);
 		spyOn(restMock, "doMove");
-		game.confirmMove();
+		game.actions.confirmMove();
 		expect(restMock.doMove).toHaveBeenCalledWith(undefined, undefined, 0, 0);
 	});
 	
 	it("should do nothing without a move having been placed", function() {
 		spyOn(restMock, "doMove");
-		game.confirmMove();
+		game.actions.confirmMove();
 		expect(restMock.doMove).not.toHaveBeenCalled();
 	});
 });
