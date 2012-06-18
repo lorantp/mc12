@@ -49,8 +49,13 @@
 				<input type="button" value="Send move" onclick="hax.move();">
 				<input type="button" value="Send pass" onclick="hax.pass();">
 			</div>
-			<iframe src="index.html" height="480" width="320"></iframe>
 		</form>
+		<form>
+			<div>
+				<input type="button" value="New game" onclick="hax.newGame();"/>
+			</div>
+		</form>
+		<iframe src="index.html" height="480" width="320"></iframe>
 		<footer></footer>
 
 		<!-- JavaScript at the bottom for fast page loading -->
@@ -70,6 +75,11 @@
 			hax.pass = function() {
 				rest.doPass(1, $('#color').val());
 			}
+			hax.newGame = function() {
+				rest.newGame(2, 9, 'WHITE', function(newId) {
+					alert('forwarding to game.html?id=' + newId);
+				});
+			} 
 		</script>
 		<!-- end scripts -->
 	</body>

@@ -27,8 +27,4 @@ public final class GameData implements DatabaseEntity {
 	private long start;
 	private BoardSize boardSize;
 	private GameState state;
-	
-	public int getSize() {
-		return boardSize.getSize();
-	}
 }

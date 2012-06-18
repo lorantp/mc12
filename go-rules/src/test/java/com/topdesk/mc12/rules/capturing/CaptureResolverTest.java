@@ -1,4 +1,4 @@
-package com.topdesk.mc12.rules;
+package com.topdesk.mc12.rules.capturing;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -12,6 +12,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
 import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.common.GoException;
+import com.topdesk.mc12.rules.capturing.CaptureResolver;
+import com.topdesk.mc12.rules.capturing.LiveCollectionCaptureResolver;
 import com.topdesk.mc12.rules.entities.Stone;
 
 /**

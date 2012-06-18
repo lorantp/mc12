@@ -13,7 +13,7 @@
 		<dependency>
 			<groupId>com.topdesk.mc12</groupId>
 			<artifactId>go-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
