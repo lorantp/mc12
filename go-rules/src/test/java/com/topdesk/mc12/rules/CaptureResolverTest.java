@@ -15,7 +15,17 @@ import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.rules.entities.Stone;
 
 /**
- *  
+ * Unit tests use a simple pattern. A board state is composed of a String array,
+ * where each element corresponds a row on a board. An initial board uses the following
+ * markup:
+ * <li>' ' -  empty space</li>
+ * <li>'b' -  black stone</li>
+ * <li>'w' -  white stone</li>
+ * 
+ * The expected board is composed the same way as the initial one, with the addition of
+ * the following (the board has to have exactly one of these):
+ * <li>'B' -  black stone that has just been played</li>
+ * <li>'W' -  white stone that has just been played</li>
  */
 public class CaptureResolverTest {
 	private final CaptureResolver resolver = new LiveCollectionCaptureResolver();
@@ -23,32 +33,31 @@ public class CaptureResolverTest {
 	@Test
 	public void singleSurroundedStoneIsCaptured() {
 		String[] initialBoard = new String[]{
-				"-w-",
-				"wb-",
-				"-w-",
+				" w ",
+				"wb ",
+				" w ",
 		};
 		String[] expectedBoard = new String[]{
-				"-w-",
-				"w-W",
-				"-w-",
+				" w ",
+				"w W",
+				" w ",
 		};
 		assertCapture(initialBoard, expectedBoard);
 	}
-	
-	
+		
 	@Test
 	public void doubleSurroundedStoneIsCaptured() {
 		String[] initialBoard = new String[]{
-				"----",
-				"-ww-",
-				"wbb-",
-				"-ww-",
+				"    ",
+				" ww ",
+				"wbb ",
+				" ww ",
 		};
 		String[] expectedBoard = new String[]{
-				"----",
-				"-ww-",
-				"w--W",
-				"-ww-",
+				"    ",
+				" ww ",
+				"w  W",
+				" ww ",
 		};
 		assertCapture(initialBoard, expectedBoard);
 	}
@@ -56,16 +65,16 @@ public class CaptureResolverTest {
 	@Test
 	public void squareSurroundedStoneIsCaptured() {
 		String[] initialBoard = new String[]{
-				"-ww-",
+				" ww ",
 				"wbbw",
-				"wbb-",
-				"-ww-",
+				"wbb ",
+				" ww ",
 		};
 		String[] expectedBoard = new String[]{
-				"-ww-",
-				"w--w",
-				"w--W",
-				"-ww-",
+				" ww ",
+				"w  w",
+				"w  W",
+				" ww ",
 		};
 		assertCapture(initialBoard, expectedBoard);
 	}
@@ -73,14 +82,14 @@ public class CaptureResolverTest {
 	@Test
 	public void dontKillYourFriend() {
 		String[] initialBoard = new String[]{
-				"-w-",
-				"w-w",
-				"-w-",
+				" w ",
+				"w w",
+				" w ",
 		};
 		String[] expectedBoard = new String[]{
-				"-w-",
+				" w ",
 				"wWw",
-				"-w-",
+				" w ",
 		};
 		assertCapture(initialBoard, expectedBoard);
 	}
@@ -89,11 +98,11 @@ public class CaptureResolverTest {
 	public void cornerCapture() {
 		String[] initialBoard = new String[]{
 				"wb",
-				"--",
+				"  ",
 		};
 		String[] expectedBoard = new String[]{
-				"w-",
-				"-W",
+				"w ",
+				" W",
 		};
 		assertCapture(initialBoard, expectedBoard);
 	}
@@ -101,22 +110,22 @@ public class CaptureResolverTest {
 	@Test
 	public void captureBeforeSuicide() {
 		String[] initialBoard = new String[]{
-				"-------",
-				"-bbbbb-",
-				"-bwwwb-",
-				"-bw-wb-",
-				"-bwwwb-",
-				"-bbbbb-",
-				"-------",
+				"       ",
+				" bbbbb ",
+				" bwwwb ",
+				" bw wb ",
+				" bwwwb ",
+				" bbbbb ",
+				"       ",
 		};
 		String[] expectedBoard = new String[]{
-				"-------",
-				"-bbbbb-",
-				"-b---b-",
-				"-b-B-b-",
-				"-b---b-",
-				"-bbbbb-",
-				"-------",
+				"       ",
+				" bbbbb ",
+				" b   b ",
+				" b B b ",
+				" b   b ",
+				" bbbbb ",
+				"       ",
 		};
 		assertCapture(initialBoard, expectedBoard);
 	}
@@ -124,14 +133,14 @@ public class CaptureResolverTest {
 	@Test(expected=GoException.class)
 	public void suicideException() {
 		String[] initialBoard = new String[]{
-				"-w-",
-				"w-w",
-				"-w-",
+				" w ",
+				"w w",
+				" w ",
 		};
 		String[] expectedBoard = new String[]{
-				"-w-",
+				" w ",
 				"wBw",
-				"-w-",
+				" w ",
 		};
 		resolveCapture(initialBoard, expectedBoard);
 	}
@@ -162,7 +171,7 @@ public class CaptureResolverTest {
 			for (int column = 0; column < expectedRow.length(); column++) {
 				char initalCell = initialRow.charAt(column);
 				char expectedCell = expectedRow.charAt(column);
-				if (expectedCell == '-' && initalCell != '-') {
+				if (expectedCell == ' ' && initalCell != ' ') {
 					stones.add(toStone(initalCell, row, column));
 				}
 			}
