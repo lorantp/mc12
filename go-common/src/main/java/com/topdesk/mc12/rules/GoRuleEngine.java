@@ -2,6 +2,7 @@ package com.topdesk.mc12.rules;
 
 import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.common.GoException;
+import com.topdesk.mc12.common.Score;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.rules.entities.Game;
 
@@ -28,4 +29,10 @@ public interface GoRuleEngine {
 	 * @throws GoException if the rules don't allow this
 	 */
 	void applyPass(Game game, Color color);
+	
+	/**
+	 * @param game
+	 * @return
+	 */
+	Score calculateScore(Game game);
 }
