@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException> {
 	@Override
 	public Response toResponse(RuntimeException exception) {
-		log.debug("", exception);
+		log.error("Exception happened >_<", exception);
 		return Response.status(Status.INTERNAL_SERVER_ERROR)
 				.entity("Got " + exception.getClass().getSimpleName() + " saying " + exception.getMessage())
 				.type(MediaType.APPLICATION_JSON)

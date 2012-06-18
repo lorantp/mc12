@@ -14,7 +14,7 @@ import com.topdesk.mc12.common.GoException;
 public class GoExceptionMapper implements ExceptionMapper<GoException> {
 	@Override
 	public Response toResponse(GoException exception) {
-		log.debug("", exception);
+		log.trace("", exception);
 		return Response.status(exception.getStatus()).entity(exception.getMessage()).type(MediaType.APPLICATION_JSON).build();
 	}
 }
