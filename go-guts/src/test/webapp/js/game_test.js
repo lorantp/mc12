@@ -1,22 +1,34 @@
 var game = GAME(restMock);
 
 describe("updating game state", function() {	
+	it("should put the game in init mode", function() {
+		spyOn(game, "activateGameMode");
+		spyOn(game, "activateInitMode");
+		spyOn(game, "disableGameMode");
+		game.updateGameState(boardMock, true);
+		expect(game.activateInitMode).toHaveBeenCalled();
+		expect(game.activateGameMode).wasNotCalled();
+		expect(game.disableGameMode).wasNotCalled();
+	});
+	
 	it("should enable buttons when game", function() {		
-		spyOn(game, "activateButtons");
-		spyOn(game, "disableButtons");
-		game.updateGameState(boardMock, false);
-		expect(game.disableButtons).wasNotCalled();
-		expect(game.activateButtons).toHaveBeenCalled();
+		spyOn(game, "activateGameMode");
+		spyOn(game, "activateInitMode");
+		spyOn(game, "disableGameMode");
+		game.updateGameState(boardMock, false, false);
+		expect(game.activateInitMode).wasNotCalled();
+		expect(game.activateGameMode).toHaveBeenCalled();
+		expect(game.disableGameMode).wasNotCalled();
 	});
 	
 	it("should disable buttons and board when game is finished", function() {
-		spyOn(game, "activateButtons");
-		spyOn(game, "disableButtons");
-		spyOn(boardMock, "setEnabled");
-		game.updateGameState(boardMock, true);
-		expect(game.activateButtons).wasNotCalled();
-		expect(game.disableButtons).toHaveBeenCalled();
-		expect(boardMock.setEnabled).toHaveBeenCalledWith(false);
+		spyOn(game, "activateGameMode");
+		spyOn(game, "activateInitMode");
+		spyOn(game, "disableGameMode");
+		game.updateGameState(boardMock, false, true);
+		expect(game.activateInitMode).wasNotCalled();
+		expect(game.activateGameMode).wasNotCalled();
+		expect(game.disableGameMode).toHaveBeenCalled();
 	});
 });
 

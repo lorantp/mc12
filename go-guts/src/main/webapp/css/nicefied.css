@@ -16,7 +16,7 @@ body {
 }
 
 .infobox {
-	width: 912px;
+	width: 40em;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -35,16 +35,8 @@ body {
 	margin-right: 50px;
 }
 
-.turn {
-	padding-left: 50px;
-	padding-right: 50px;
-	background-repeat: no-repeat;
-}
-
 #content {
 	margin-top: 12px;
-	margin-left: auto;
-	margin-right: auto;
 }
 
 #metadata {
@@ -89,10 +81,10 @@ body {
 }
 
 #box {
+	display: inline-block;
 	background-color: #BE8640;
-	margin: 12px;
 	padding: 12px;
-	width: 912px;
+	margin-top: 12px;
 	margin-left: auto;
 	margin-right: auto;
 }

@@ -10,7 +10,7 @@ var METADATA = function($parent) {
 	}
 	
 	that.showPlayer = function(player, idSelector, captured, color) {
-		$(idSelector).append(player.nickname.toUpperCase());
+		$(idSelector).append(player ? player.nickname.toUpperCase() : "?");
 		$("#" + color + "captured").append(captured);
 	}
 	

@@ -81,12 +81,27 @@ public class DefaultGameRestlet implements GameRestlet {
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
 		checkInitiated(gameData);
 		
-		Player initiated = gameData.getBlack() == null ? gameData.getWhite() : gameData.getBlack();
-		if (playerId.getPlayerId() == initiated.getId()) {
+		long playerIdValue = playerId.getPlayerId();
+		Player joiningPlayer = entityManager.get().find(Player.class, playerIdValue);
+		if (joiningPlayer == null) {
+			throw GoException.createNotFound("Player with id of " + playerId + "is not recogized");
+		}		
+		
+		boolean whiteInitiated = gameData.getBlack() == null;
+		Player initiated = whiteInitiated ? gameData.getWhite() : gameData.getBlack();
+		if (playerIdValue == initiated.getId()) {
 			throw GoException.createNotAcceptable("Can't play against yourself");
 		}
 		
-		gameData.setState(GameState.CANCELLED);
+		if (whiteInitiated) {
+			gameData.setBlack(joiningPlayer);
+		}
+		else {
+			gameData.setWhite(joiningPlayer);			
+		}
+		entityManager.get().persist(gameData);
+		
+		gameData.setState(GameState.STARTED);
 	}
 	
 	@Override

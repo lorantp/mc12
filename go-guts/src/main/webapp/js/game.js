@@ -3,7 +3,7 @@ var initGame = function() {
 	var gameRest = GAME_REST(rest);
 	
 	var game = GAME(gameRest);
-	var id = location.hash.split('#')[1];
+	var id = location.hash.split("#")[1];
 	game.draw(id);
 };
 
@@ -18,9 +18,12 @@ var GAME = function(gameRest) {
 	that.draw = function(id) {
 		gameRest.getGame(id, function(game) {
 			gameId = game.id;
-			playerId = game.totalMoves % 2 == 0 ? 
-					game.black.id :
-					game.white.id;
+			
+			var initMode = game.black == null || game.white == null;
+			if (!initMode) {
+				playerId = game.totalMoves % 2 == 0 ? game.black.id : game.white.id;
+			}
+			
 			var board = BOARD(
 					$("#board"),
 					game.size,
@@ -29,7 +32,7 @@ var GAME = function(gameRest) {
 					that.actions);
 			
 			board.draw();
-			that.updateGameState(board, game.finished);
+			that.updateGameState(board, initMode, game.finished);
 			METADATA($("#content")).showData(game);
 		});
 	}
@@ -52,23 +55,42 @@ var GAME = function(gameRest) {
 		return turn % 2 === 0 ? "BLACK" : "WHITE";
 	}
 	
-	that.updateGameState = function(board, finished) {
-		if (!finished) {				
-			that.activateButtons(board);
+	that.updateGameState = function(board, initMode, finished) {
+		if (initMode) {				
+			that.activateInitMode(board);			
+		}
+		else if (finished) {				
+			that.disableGameMode(board);
 		}
 		else {
-			that.disableButtons();
-			board.setEnabled(false);
+			that.activateGameMode();
 		}
 	};
 	
-	that.activateButtons = function(board) {
-		$("#pass").click(that.pass);
+	that.activateInitMode = function(board) {
+		$("#cancel").click(function() {
+			that.cancel(board);
+		});
+		$("#pass").css({visibility: "hidden"});
+		board.setEnabled(false);
 	}
 	
-	that.disableButtons = function() {		
+	that.activateGameMode = function() {
+		$("#pass").click(that.pass);
+		$("#cancel").css({visibility: "hidden"});			
+	}
+	
+	that.disableGameMode = function(board) {		
 		$("#buttons").css({visibility: "hidden"});
 		$("#pass").click(null);
+		$("#cancel").click(null);
+		board.setEnabled(false);
+	}
+	
+	that.cancel = function(board) {
+		gameRest.cancelGame(gameId, function() {			
+			that.disableGameMode(board);
+		});
 	}
 	
 	that.pass = function() {

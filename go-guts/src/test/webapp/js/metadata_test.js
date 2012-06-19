@@ -12,6 +12,11 @@ describe("showing data format", function() {
 		md.showPlayer(mockPlayer, "", 17, "turqoise");
 	});
 	
+	it('should handle null player', function() {
+		var checkFunction = expect$methodToBeCalledWithXTimesFunction("append", ["?"]);
+		md.showPlayer(null, "", 17, "turqoise");
+	});
+	
 	it('should show epoch start time', function() {
 		expect$methodToBeCalledWith("append", ["Thu, 01 Jan 1970 00:00:00 GMT"]);
 		md.showStartTime(new Date(0));
