@@ -16,7 +16,10 @@ var METADATA = function($parent) {
 	
 	that.showStartTime = function(date) {
 		// prevent adding timezone info, just display in browser locale
-		$parent.find("#battlebox").append(date.toLocaleDateString()).append(" ").append(date.toLocaleTimeString()); 
+		var element = $parent.find("#battlebox");
+		element.append(date.toLocaleDateString());
+		element.append(" ");
+		element.append(date.toLocaleTimeString()); 
 	}
 	
 	that.showTurn = function(finished, turn, color) {
