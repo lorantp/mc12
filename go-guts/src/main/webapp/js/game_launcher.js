@@ -1,16 +1,16 @@
-var initNewGame = function() {
+var initGameLauncher = function() {
 	var rest = REST("rest");
 	var gameRest = GAME_REST(rest);
 	
-	var init = new INITIATE(
+	var gameLauncher = new GAME_LAUNCHER(
 			$("#launch_game"), 
 			$("#games"),
 			gameRest);
-	init.showGames();
-	init.activateButton();
+	gameLauncher.showGames();
+	gameLauncher.activateButton();
 };
 
-var INITIATE = function($controls, $games, gameRest) {
+var GAME_LAUNCHER = function($controls, $games, gameRest) {
 	that = {};
 	
 	var dummyPlayerId1 = 1;
