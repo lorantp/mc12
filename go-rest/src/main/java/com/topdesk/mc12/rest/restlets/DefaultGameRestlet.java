@@ -2,6 +2,8 @@ package com.topdesk.mc12.rest.restlets;
 
 import javax.inject.Provider;
 import javax.persistence.EntityManager;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,8 +30,11 @@ public class DefaultGameRestlet implements GameRestlet {
 	@Inject private Provider<EntityManager> entityManager;
 	@Inject private GoRuleEngine ruleEngine;
 	
+	@Context private SecurityContext context;
+	
 	@Override
 	public Game get(long gameId) {
+		log.error("Over here we actually have the elusive and magical {}", context);
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
 		return ruleEngine.applyMoves(gameData);
 	}
