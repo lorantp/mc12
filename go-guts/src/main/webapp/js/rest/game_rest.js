@@ -6,6 +6,10 @@ var GAME_REST = function(rest) {
 		rest.getData(prefix + id, {}, success);
 	};
 	
+	that.getGameList = function(success) {
+		rest.getData(prefix + 'all', {}, success);
+	}
+	
 	that.doMove = function(gameId, playerId, x, y) {
 		rest.postData(prefix + gameId + '/move', {playerId: playerId, x: x, y: y});
 	};	

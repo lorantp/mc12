@@ -1,5 +1,7 @@
 package com.topdesk.mc12.rest.restlets;
 
+import java.util.List;
+
 import javax.inject.Provider;
 import javax.persistence.EntityManager;
 
@@ -7,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.joda.time.DateTime;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.topdesk.mc12.common.BoardSize;
@@ -16,6 +20,7 @@ import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
 import com.topdesk.mc12.persistence.entities.Player;
+import com.topdesk.mc12.rest.entities.GameMetaData;
 import com.topdesk.mc12.rest.entities.NewGame;
 import com.topdesk.mc12.rest.entities.PlayerId;
 import com.topdesk.mc12.rest.entities.RestMove;
@@ -25,6 +30,19 @@ import com.topdesk.mc12.rules.entities.Game;
 @Slf4j
 @Transactional
 public class DefaultGameRestlet implements GameRestlet {
+	private static final String GAME_METADATA_QUERY = "select game.id, game.start, game.black.nickname, game.white.nickname from GameData game join game.black join game.white";
+	
+	private static final Function<Object[], GameMetaData> METADATA_FUNCTION = new Function<Object[], GameMetaData>() {
+		@Override
+		public GameMetaData apply(Object[] input) {
+			long id = (Long) input[0];
+			long start = (Long) input[1];
+			String black = (String) input[2];
+			String white = (String) input[3];
+			return new GameMetaData(id, start, black, white);
+		}
+	};
+	
 	@Inject private Provider<EntityManager> entityManager;
 	@Inject private GoRuleEngine ruleEngine;
 	
@@ -32,6 +50,13 @@ public class DefaultGameRestlet implements GameRestlet {
 	public Game get(long gameId) {
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
 		return ruleEngine.applyMoves(gameData);
+	}
+	
+	@Override
+	public List<GameMetaData> getAll() {
+		@SuppressWarnings("unchecked")
+		List<Object[]> games = entityManager.get().createQuery(GAME_METADATA_QUERY).getResultList();
+		return Lists.transform(games, METADATA_FUNCTION);
 	}
 	
 	@Override
@@ -65,7 +90,7 @@ public class DefaultGameRestlet implements GameRestlet {
 	@Override
 	public long newGame(NewGame newGame) {
 		Player player = entityManager.get().find(Player.class, newGame.getPlayerId());
-		GameData game = new GameData(0, null, null, null, new DateTime().getMillis(), BoardSize.get(newGame.getBoardSize()), GameState.INITIATED);
+		GameData game = new GameData(null, null, new DateTime().getMillis(), BoardSize.get(newGame.getBoardSize()), GameState.INITIATED);
 		if (newGame.getColor() == Color.BLACK) {
 			game.setBlack(player);
 		}

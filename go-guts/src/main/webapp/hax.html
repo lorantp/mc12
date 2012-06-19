@@ -53,6 +53,7 @@
 		<form>
 			<div>
 				<input type="button" value="New game" onclick="hax.newGame();"/>
+				<input type="button" value="Read all games" onclick="hax.allGames();"/>
 			</div>
 		</form>
 		<iframe src="index.html" height="480" width="320"></iframe>
@@ -80,6 +81,11 @@
 					alert('forwarding to game.html?id=' + newId);
 				});
 			} 
+			hax.allGames = function() {
+				rest.getGameList(function(data) {
+					DEBUG.toString(data)
+				});
+			}
 		</script>
 		<!-- end scripts -->
 	</body>

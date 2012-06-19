@@ -21,7 +21,7 @@ import com.topdesk.mc12.persistence.entities.Player;
 public class TestData {
 	private static final boolean ADD_MOVES = false;
 	private static final BoardSize SIZE = BoardSize.NINETEEN;
-
+	
 	@Inject private Provider<EntityManager> entityManager;
 	
 	private final Player jorn = new Player(0, "Jorn", "jornh@topdesk.com");
@@ -32,7 +32,12 @@ public class TestData {
 	@Transactional
 	public void create() {
 		createUsers();
-		createGame();
+		createGame(jorn, bernd);
+		createGame(jorn, bart);
+		createGame(jorn, krisz);
+		createGame(bart, bernd);
+		createGame(krisz, bernd);
+		createGame(krisz, bart);
 	}
 	
 	private void createUsers() {
@@ -42,9 +47,9 @@ public class TestData {
 		entityManager.get().persist(krisz);
 	}
 	
-	private void createGame() {
+	private void createGame(Player black, Player white) {
 		DateTime start = new DateTime(DateTimeZone.forID("Europe/Berlin")).withZoneRetainFields(DateTimeZone.UTC);
-		GameData game = new GameData(0, bart, bernd, null, start.getMillis(), SIZE, GameState.STARTED);
+		GameData game = new GameData(black, white, start.getMillis(), SIZE, GameState.STARTED);
 		entityManager.get().persist(game);
 		if (ADD_MOVES) {
 			createMoves(game);
