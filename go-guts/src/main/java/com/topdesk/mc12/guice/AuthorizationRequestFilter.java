@@ -55,7 +55,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
      */
     private Player authenticate() {
     	log.error("Authenticating now");
-        return new Player(0, "Bernd", "berndj@topdesk.com");
+        return Player.create("Bernd", "berndj@topdesk.com");
     }
  
     /**
