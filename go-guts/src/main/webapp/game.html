@@ -23,6 +23,7 @@
 
 		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="css/go.css">
+		<link rel="stylesheet" href="css/nicefied.css">
 
 		<!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
 
@@ -31,56 +32,51 @@
 		Create your own custom Modernizr build: www.modernizr.com/download/ -->
 		<script src="js/libs/modernizr-2.5.3.min.js"></script>
 	</head>
-	<body>
+	<body onload="initGame();">
 		<!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
 		chromium.org/developers/how-tos/chrome-frame-getting-started -->
 		<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
 		<header>
 
 		</header>
-		<form>
-			<div>
-				<select id="color">
-					<option value="3">Black</option>
-					<option value="2">White</option>
-				</select>
-				<input type="number" id="x">
-				<input type="number" id="y">
-				<input type="button" value="Send move" onclick="hax.move();">
-				<input type="button" value="Send pass" onclick="hax.pass();">
+		<div id="content">
+			<div id="metadata" class="shadowed bordered infobox">
+				<div id="playerdata">
+					<div id="playerone" class="left"></div>
+					VS
+					<div id="playertwo" class="right"></div>
+				</div>
+				<div id="gamedata">
+					<div class="left">
+						<div id="blackcaptured" class="bordered capture cell"></div>
+					</div>
+					TURN: 
+					<div class="right">
+						<div id="whitecaptured" class="bordered capture cell"></div>
+					</div>
+				</div>
 			</div>
-		</form>
-		<form>
-			<div>
-				<input type="button" value="New game" onclick="hax.newGame();"/>
+			<div id="battlebox" class="shadowed bordered infobox">
+				battle started on:
+				<div id="buttons" class="right">
+					<button id="pass">Pass</button>
+				</div>
 			</div>
-		</form>
-		<iframe src="index.html" height="480" width="320"></iframe>
-		<footer></footer>
-
+	
+			<div id="box" class="shadowed bordered">
+				<div id="board"></div>
+			</div>
+		</div>
 		<!-- JavaScript at the bottom for fast page loading -->
-
 		<!-- scripts concatenated and minified via build script -->
 		<script src="js/libs/jquery-1.7.1.js"></script>
-		<script src="js/plugins.js"></script>
-		<script src="js/debug.js"></script>
 		<script src="js/rest/rest.js"></script>
 		<script src="js/rest/game_rest.js"></script>
-		<script type="application/javascript">
-			var rest = GAME_REST(REST());
-			var hax = {};
-			hax.move = function() {
-				rest.doMove(1, $('#color').val(), $('#x').val(), $('#y').val());
-			}
-			hax.pass = function() {
-				rest.doPass(1, $('#color').val());
-			}
-			hax.newGame = function() {
-				rest.newGame(2, 9, 'WHITE', function(newId) {
-					alert('forwarding to game.html?id=' + newId);
-				});
-			} 
-		</script>
+		<script src="js/plugins.js"></script>
+		<script src="js/debug.js"></script>
+		<script src="js/board.js"></script>
+		<script src="js/metadata.js"></script>
+		<script src="js/game.js"></script>
 		<!-- end scripts -->
 	</body>
 </html>

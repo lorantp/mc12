@@ -13,6 +13,8 @@ var BOARD = function($parent, size, stones, turnColor, actions) {
 	};
 	
 	that.draw = function() {
+		$parent.attr("gosize", new String(size));
+		
 		for (var y = 0; y < size; y++) {
 			for (var x = 0; x < size; x++) {
 				$parent.append(that.buildCell(x, y));

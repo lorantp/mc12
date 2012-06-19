@@ -6,12 +6,12 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import com.topdesk.mc12.common.Color;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import com.topdesk.mc12.common.Color;
 
 @Data @NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode(exclude="game")
 @Entity
@@ -25,6 +25,7 @@ public final class Move implements DatabaseEntity {
 	@Override
 	public String toString() {
 		if (isPass()) {
+			return String.format("[%s: pass]", color, x, y);
 		}
 		return String.format("[%s: %d,%d]", color, x, y);
 	}

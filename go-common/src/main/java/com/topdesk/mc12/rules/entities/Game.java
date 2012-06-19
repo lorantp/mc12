@@ -7,7 +7,6 @@ import java.util.Set;
 
 import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
 import lombok.Setter;
 
 import com.google.common.collect.Sets;
@@ -23,13 +22,13 @@ public class Game {
 	private final long start;
 	
 	@Setter(AccessLevel.NONE) private int totalMoves = 0;
-	@Setter(AccessLevel.NONE) private boolean finished = false;
 	
 	private final Set<Stone> stones = Sets.newHashSet();
 	@Setter(AccessLevel.NONE) private int blackStonesCaptured = 0;
 	@Setter(AccessLevel.NONE) private int whiteStonesCaptured = 0;
 	private Color nextTurn = Color.BLACK;
-	@Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) private boolean lastMoveWasPass = false;
+	@Setter(AccessLevel.NONE) private boolean lastMovePass = false;
+	private boolean finished = false;
 	
 	public Game(long id, Player black, Player white, int size, long start) {
 		this.id = id;
@@ -42,19 +41,16 @@ public class Game {
 	public void addStone(int x, int y, Color color) {
 		stones.add(new Stone(x, y, color));
 		nextTurn();
-		lastMoveWasPass = false;
+		lastMovePass = false;
 	}
 	
 	public void applyPass() {
 		nextTurn();
-		if (lastMoveWasPass) {
-			finished = true;
-		}
-		lastMoveWasPass = true;
+		lastMovePass = true;
 	}
 	
 	public void capture(Collection<Stone> captured, Color color) {
-		checkArgument(stones.containsAll(captured));
+		checkArgument(stones.containsAll(captured), "Some captured stones are not on this board");
 		stones.removeAll(captured);
 		
 		switch (color) {

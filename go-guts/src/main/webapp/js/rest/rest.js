@@ -1,5 +1,5 @@
 var REST = function() {
-	var prefix = 'rest';
+	var prefix = 'rest/';
 	var that = {};
 	
 	that.postData = function(url, data, success, error) {
