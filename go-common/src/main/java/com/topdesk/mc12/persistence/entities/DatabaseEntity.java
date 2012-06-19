@@ -10,5 +10,5 @@ public interface DatabaseEntity {
 		}
 	};
 	
-	long getId();
+	Long getId();
 }

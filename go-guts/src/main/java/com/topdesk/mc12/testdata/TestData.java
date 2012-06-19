@@ -24,10 +24,10 @@ public class TestData {
 	
 	@Inject private Provider<EntityManager> entityManager;
 	
-	private final Player jorn = new Player(0, "Jorn", "jornh@topdesk.com");
-	private final Player bernd = new Player(0, "Bernd", "berndj@topdesk.com");
-	private final Player bart = new Player(0, "Bart", "barte@topdesk.com");
-	private final Player krisz = new Player(0, "Krisz", "krisztianh@topdesk.com");
+	private final Player jorn = Player.create("Jorn", "jornh@topdesk.com");
+	private final Player bernd = Player.create("Bernd", "berndj@topdesk.com");
+	private final Player bart = Player.create("Bart", "barte@topdesk.com");
+	private final Player krisz = Player.create("Krisz", "krisztianh@topdesk.com");
 	
 	@Transactional
 	public void create() {
@@ -64,10 +64,10 @@ public class TestData {
 			for (int y = 1; y < SIZE.getSize(); y += 2) {
 				Color color = moves++ % 2 == 0 ? Color.BLACK : Color.WHITE;
 				if (Math.random() < 0.1) {
-					entityManager.get().persist(new Move(0, game, null, null, color));
+					entityManager.get().persist(Move.createPass(game, color));
 				}
 				else {
-					entityManager.get().persist(new Move(0, game, x, y, color));
+					entityManager.get().persist(Move.create(game, color, x, y));
 				}
 			}
 		}

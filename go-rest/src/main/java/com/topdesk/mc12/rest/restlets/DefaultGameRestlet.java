@@ -72,7 +72,7 @@ public class DefaultGameRestlet implements GameRestlet {
 		}
 		
 		log.info("Player {} passed in game {}", playerId.getPlayerId(), game);
-		entityManager.get().persist(new Move(0, gameData, null, null, color));
+		entityManager.get().persist(Move.createPass(gameData, color));
 	}
 	
 	@Override
@@ -82,7 +82,7 @@ public class DefaultGameRestlet implements GameRestlet {
 		Color color = getPlayerColor(gameData, restMove.getPlayerId());
 		ruleEngine.applyMove(game, color, restMove.getX(), restMove.getY());
 		
-		Move move = new Move(0, gameData, restMove.getX(), restMove.getY(), color);
+		Move move = Move.create(gameData, color, restMove.getX(), restMove.getY());
 		entityManager.get().persist(move);
 		log.info("Player {} made move {} in game {}", new Object[] { restMove.getPlayerId(), move, gameData });
 	}

@@ -18,7 +18,7 @@ import com.topdesk.mc12.common.GameState;
 @Data @NoArgsConstructor
 @Entity
 public final class GameData implements DatabaseEntity {
-	@Id @GeneratedValue private long id;
+	@Id @GeneratedValue private Long id;
 	@ManyToOne() private Player black;
 	@ManyToOne() private Player white;
 	@OrderBy("id") @OneToMany(mappedBy="game") private List<Move> moves;
