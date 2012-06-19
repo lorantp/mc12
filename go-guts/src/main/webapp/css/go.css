@@ -1,12 +1,28 @@
 #board {
 	position: relative;
-	height: 912px;
-	width: 912px;
-	background-image: url("../img/grid19x19.svg");
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-color: #C9FAC9;
 }
+
+#board[gosize="19"] {
+	height: 912px;
+	width: 912px;
+	background-image: url("../img/grid19x19.svg");
+}
+
+#board[gosize="13"] {
+	height: 624px;
+	width: 624px;
+/* 	background-image: url("../img/grid13x13.svg");
+ */
+}
+
+#board[gosize="9"] {
+	height: 432px;
+	width: 432px;
+/* 	background-image: url("../img/grid9x9.svg");
+ */}
 
 div .abs {
 	position: absolute;
