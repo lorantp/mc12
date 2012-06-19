@@ -53,6 +53,8 @@
 		<form>
 			<div>
 				<input type="button" value="New game" onclick="hax.newGame();"/>
+				<input type="button" value="Read all games" onclick="hax.allGames();"/>
+				<input type="button" value="Read initiated (not started) games" onclick="hax.startedGames();"/>
 			</div>
 		</form>
 		<iframe src="index.html" height="480" width="320"></iframe>
@@ -80,6 +82,16 @@
 					alert('forwarding to game.html?id=' + newId);
 				});
 			} 
+			hax.allGames = function() {
+				rest.getGameList(function(data) {
+					DEBUG.toString(data)
+				});
+			}
+			hax.startedGames = function() {
+				rest.getGameListWithState("INITIATED", function(data) {
+					DEBUG.toString(data)
+				});
+			}
 		</script>
 		<!-- end scripts -->
 	</body>

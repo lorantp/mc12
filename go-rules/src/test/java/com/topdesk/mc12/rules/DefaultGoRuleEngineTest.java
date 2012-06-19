@@ -33,7 +33,7 @@ public class DefaultGoRuleEngineTest {
 	
 	@Before
 	public void setupGame() {
-		game = new Game(0, new Player(0, "Batman", "magicmissle@thedarkness.com"), new Player(1, "Pikachu", "lightningstrikes@thesameplacetwice.com"), 3, new DateTime().getMillis());
+		game = new Game(0, Player.create("Batman", "magicmissle@thedarkness.com"), Player.create("Pikachu", "lightningstrikes@thesameplacetwice.com"), 3, new DateTime().getMillis());
 	}
 
 	@Test

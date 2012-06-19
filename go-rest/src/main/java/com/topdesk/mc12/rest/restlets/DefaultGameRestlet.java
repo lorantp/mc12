@@ -1,7 +1,14 @@
 package com.topdesk.mc12.rest.restlets;
 
+import java.util.List;
+
 import javax.inject.Provider;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Root;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,6 +23,7 @@ import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
 import com.topdesk.mc12.persistence.entities.Player;
+import com.topdesk.mc12.rest.entities.GameMetaData;
 import com.topdesk.mc12.rest.entities.NewGame;
 import com.topdesk.mc12.rest.entities.PlayerId;
 import com.topdesk.mc12.rest.entities.RestMove;
@@ -28,10 +36,32 @@ public class DefaultGameRestlet implements GameRestlet {
 	@Inject private Provider<EntityManager> entityManager;
 	@Inject private GoRuleEngine ruleEngine;
 	
+	@Context private SecurityContext context;
+	
 	@Override
 	public Game get(long gameId) {
+		log.error("Over here we actually have the elusive and magical {}", context);
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
+		if (gameData == null) {
+			throw GoException.createNotFound("Game with id " + gameId + " not found");
+		}
 		return ruleEngine.applyMoves(gameData);
+	}
+	
+	@Override
+	public List<GameMetaData> getAll() {
+		return getAll(null);
+	}
+	
+	@Override
+	public List<GameMetaData> getAll(GameState state) {
+		CriteriaQuery<GameMetaData> query = entityManager.get().getCriteriaBuilder().createQuery(GameMetaData.class);
+		Root<GameData> game = query.from(GameData.class);
+		query.multiselect(game.get("id"), game.get("start"), game.get("state"), game.join("black", JoinType.LEFT).get("nickname"), game.join("white", JoinType.LEFT).get("nickname"));
+		if (state != null) {
+			query.where(game.get("state").in(state));
+		}
+		return entityManager.get().createQuery(query).getResultList();
 	}
 	
 	@Override
@@ -46,8 +76,9 @@ public class DefaultGameRestlet implements GameRestlet {
 			entityManager.get().merge(gameData);
 		}
 		
+		entityManager.get().persist(Move.createPass(gameData, color));
+		entityManager.get().flush();
 		log.info("Player {} passed in game {}", playerId.getPlayerId(), game);
-		entityManager.get().persist(new Move(0, gameData, null, null, color));
 	}
 	
 	@Override
@@ -57,15 +88,16 @@ public class DefaultGameRestlet implements GameRestlet {
 		Color color = getPlayerColor(gameData, restMove.getPlayerId());
 		ruleEngine.applyMove(game, color, restMove.getX(), restMove.getY());
 		
-		Move move = new Move(0, gameData, restMove.getX(), restMove.getY(), color);
+		Move move = Move.create(gameData, color, restMove.getX(), restMove.getY());
 		entityManager.get().persist(move);
+		entityManager.get().flush();
 		log.info("Player {} made move {} in game {}", new Object[] { restMove.getPlayerId(), move, gameData });
 	}
 	
 	@Override
 	public long newGame(NewGame newGame) {
 		Player player = entityManager.get().find(Player.class, newGame.getPlayerId());
-		GameData game = new GameData(0, null, null, null, new DateTime().getMillis(), BoardSize.get(newGame.getBoardSize()), GameState.INITIATED);
+		GameData game = new GameData(null, null, new DateTime().getMillis(), BoardSize.get(newGame.getBoardSize()), GameState.INITIATED);
 		if (newGame.getColor() == Color.BLACK) {
 			game.setBlack(player);
 		}
@@ -73,6 +105,8 @@ public class DefaultGameRestlet implements GameRestlet {
 			game.setWhite(player);
 		}
 		entityManager.get().persist(game);
+		entityManager.get().flush();
+		log.info("Player {} initiated game {}", player, game);
 		return game.getId();
 	}
 	
@@ -93,15 +127,20 @@ public class DefaultGameRestlet implements GameRestlet {
 			throw GoException.createNotAcceptable("Can't play against yourself");
 		}
 		
-		if (whiteInitiated) {
-			gameData.setBlack(joiningPlayer);
+		Player player = entityManager.get().find(Player.class, playerId.getPlayerId());
+		if (player == null) {
+			throw GoException.createNotFound("Player with id " + playerId.getPlayerId() + " not found");
+		}
+		
+		if (gameData.getBlack() == null) {
+			gameData.setBlack(player);
 		}
 		else {
-			gameData.setWhite(joiningPlayer);			
+			gameData.setWhite(player);
 		}
-		entityManager.get().persist(gameData);
-		
-		gameData.setState(GameState.STARTED);
+		entityManager.get().merge(gameData);
+		entityManager.get().flush();
+		log.info("Player {} joined and started game {}", player, gameData);
 	}
 	
 	@Override
@@ -110,6 +149,8 @@ public class DefaultGameRestlet implements GameRestlet {
 		checkInitiated(gameData);
 		gameData.setState(GameState.CANCELLED);
 		entityManager.get().persist(gameData);
+		entityManager.get().flush();
+		log.info("Someone cancelled game {}", gameData);
 	}
 	
 	private void checkInitiated(GameData gameData) {
