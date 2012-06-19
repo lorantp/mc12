@@ -48,7 +48,7 @@ public class TestData {
 	}
 	
 	private void createGame(Player black, Player white) {
-		DateTime start = new DateTime(DateTimeZone.forID("Europe/Berlin")).withZoneRetainFields(DateTimeZone.UTC);
+		DateTime start = new DateTime(DateTimeZone.forID("Europe/Berlin"));
 		GameData game = new GameData(black, white, start.getMillis(), SIZE, GameState.STARTED);
 		entityManager.get().persist(game);
 		if (ADD_MOVES) {
