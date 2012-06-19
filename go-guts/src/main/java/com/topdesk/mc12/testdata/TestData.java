@@ -35,9 +35,9 @@ public class TestData {
 		createGame(jorn, bernd);
 		createGame(jorn, bart);
 		createGame(jorn, krisz);
-		createGame(bart, bernd);
-		createGame(krisz, bernd);
-		createGame(krisz, bart);
+		createGame(bernd, bart);
+		createGame(bernd, krisz);
+		createGame(bart, krisz);
 	}
 	
 	private void createUsers() {
@@ -48,7 +48,7 @@ public class TestData {
 	}
 	
 	private void createGame(Player black, Player white) {
-		DateTime start = new DateTime(DateTimeZone.forID("Europe/Berlin")).withZoneRetainFields(DateTimeZone.UTC);
+		DateTime start = new DateTime(DateTimeZone.forID("Europe/Berlin"));
 		GameData game = new GameData(black, white, start.getMillis(), SIZE, GameState.STARTED);
 		entityManager.get().persist(game);
 		if (ADD_MOVES) {

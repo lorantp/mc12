@@ -33,10 +33,16 @@ import com.topdesk.mc12.rules.entities.Game;
 @Slf4j
 @Transactional
 public class DefaultGameRestlet implements GameRestlet {
-	@Inject private Provider<EntityManager> entityManager;
-	@Inject private GoRuleEngine ruleEngine;
+	private final Provider<EntityManager> entityManager;
+	private final GoRuleEngine ruleEngine;
 	
 	@Context private SecurityContext context;
+	
+	@Inject
+	public DefaultGameRestlet(Provider<EntityManager> entityManager, GoRuleEngine ruleEngine) {
+		this.entityManager = entityManager;
+		this.ruleEngine = ruleEngine;
+	}
 	
 	@Override
 	public Game get(long gameId) {
@@ -119,7 +125,7 @@ public class DefaultGameRestlet implements GameRestlet {
 		Player joiningPlayer = entityManager.get().find(Player.class, playerIdValue);
 		if (joiningPlayer == null) {
 			throw GoException.createNotFound("Player with id of " + playerId + "is not recogized");
-		}		
+		}
 		
 		boolean whiteInitiated = gameData.getBlack() == null;
 		Player initiated = whiteInitiated ? gameData.getWhite() : gameData.getBlack();
