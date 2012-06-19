@@ -138,6 +138,7 @@ public class DefaultGameRestlet implements GameRestlet {
 		else {
 			gameData.setWhite(player);
 		}
+		gameData.setState(GameState.STARTED);
 		entityManager.get().merge(gameData);
 		entityManager.get().flush();
 		log.info("Player {} joined and started game {}", player, gameData);

@@ -6,6 +6,7 @@ var initNewGame = function() {
 			$("#launch_game"), 
 			$("#games"),
 			gameRest);
+	init.showGames();
 	init.activateButton();
 };
 
@@ -19,6 +20,46 @@ var INITIATE = function($controls, $games, gameRest) {
 		return "join_" + gameId;
 	};
 	
+	that.showGames = function() {
+		gameRest.getGameListWithState("INITIATED", function(gamesMetaData) {
+			gamesMetaData.forEach(that.showGame);
+		});		
+		gameRest.getGameListWithState("STARTED", function(gamesMetaData) {
+			gamesMetaData.forEach(that.showGame);
+		});		
+		gameRest.getGameListWithState("FINISHED", function(gamesMetaData) {
+			gamesMetaData.forEach(that.showGame);
+		});		
+	};
+	
+	that.showGame = function(metaData) {
+		if (metaData.state == "CANCELLED") {
+			return;
+		}
+		
+		var gameGui;
+		if(metaData.state == "INITIATED") {
+			var joinText = metaData.blackPlayer == null ? metaData.whitePlayer + " as black" : metaData.blackPlayer + " as white";    
+			gameGui = $("<button>Play against " + joinText + "</button>")
+					.attr({id: toJoinId(metaData.id)})
+					.click(function() {
+						that.join(metaData.id);
+					});
+		}
+		else {
+			var startDate = $.format.date(new Date(metaData.start), "yyyy.MM.dd HH:mm");
+			var gameDescription = metaData.blackPlayer + " VS " + metaData.whitePlayer + ", " + startDate;
+			
+			var stateDescription = metaData.state == "FINISHED" ? "Finished: " : "Playing: ";
+			gameGui = $("<a>" + stateDescription + gameDescription + "</a>").attr({
+				href: "game.html#" + metaData.id,
+				target: "_blank"
+			});
+		}
+		
+		$games.append($("<li/>").append(gameGui));			
+	};
+	
 	that.activateButton = function() {
 		$controls.find("#initiate").click(that.initiate);
 	};
@@ -27,23 +68,12 @@ var INITIATE = function($controls, $games, gameRest) {
 		var boardSize = $controls.find("#board_size").val();
 		var color = $controls.find("#player_color").val();
 		gameRest.newGame(dummyPlayerId1, boardSize, color, function(gameId) {
-			var joinButton = $("<button>Join game " + gameId + "</button>")
-					.attr({id: toJoinId(gameId)})
-					.click(function() {
-						that.join(gameId);
-					});
-			$games.append($("<li/>").append(joinButton));
 			window.location = "game.html#" + gameId;		
 		});
 	};
 	
 	that.join = function(gameId) {
 		gameRest.startGame(gameId, dummyPlayerId2, function() {
-			var gameLink = $('<a>Game ' + gameId + '</a>').attr({
-				href: "game.html#" + gameId,
-				target: "_blank"
-			});
-			$games.find("#" + toJoinId(gameId)).replaceWith(gameLink);
 			window.location = "game.html#" + gameId;		
 		});
 	};
