@@ -7,6 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,8 +36,11 @@ public class DefaultGameRestlet implements GameRestlet {
 	@Inject private Provider<EntityManager> entityManager;
 	@Inject private GoRuleEngine ruleEngine;
 	
+	@Context private SecurityContext context;
+	
 	@Override
 	public Game get(long gameId) {
+		log.error("Over here we actually have the elusive and magical {}", context);
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
 		if (gameData == null) {
 			throw GoException.createNotFound("Game with id " + gameId + " not found");

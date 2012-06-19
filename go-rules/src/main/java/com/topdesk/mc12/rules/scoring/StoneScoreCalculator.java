@@ -6,6 +6,9 @@ import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.common.Score;
 import com.topdesk.mc12.rules.entities.Stone;
 
+/**
+ * Simple {@link ScoreCalculator} that simply counts the stones each color has.
+ */
 public class StoneScoreCalculator implements ScoreCalculator {
 	@Override
 	public Score calculate(Set<Stone> stones) {
