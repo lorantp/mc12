@@ -10,6 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.topdesk.mc12.common.GameState;
 import com.topdesk.mc12.rest.entities.GameMetaData;
 import com.topdesk.mc12.rest.entities.NewGame;
 import com.topdesk.mc12.rest.entities.PlayerId;
@@ -22,6 +23,7 @@ import com.topdesk.mc12.rules.entities.Game;
 public interface GameRestlet {
 	@GET @Path("/{id}") Game get(@PathParam("id") long gameId);
 	@GET @Path("/all") List<GameMetaData> getAll();
+	@GET @Path("/all/{state}") List<GameMetaData> getAll(@PathParam("state") GameState state);
 	
 	@POST @Path("/{id}/pass") void pass(@PathParam("id") long gameId, PlayerId playerId);
 	@POST @Path("/{id}/move") void move(@PathParam("id") long gameId, RestMove restMove);

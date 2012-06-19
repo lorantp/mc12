@@ -4,13 +4,14 @@ import java.util.List;
 
 import javax.inject.Provider;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Root;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.joda.time.DateTime;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.topdesk.mc12.common.BoardSize;
@@ -30,33 +31,32 @@ import com.topdesk.mc12.rules.entities.Game;
 @Slf4j
 @Transactional
 public class DefaultGameRestlet implements GameRestlet {
-	private static final String GAME_METADATA_QUERY = "select game.id, game.start, game.black.nickname, game.white.nickname from GameData game join game.black join game.white";
-	
-	private static final Function<Object[], GameMetaData> METADATA_FUNCTION = new Function<Object[], GameMetaData>() {
-		@Override
-		public GameMetaData apply(Object[] input) {
-			long id = (Long) input[0];
-			long start = (Long) input[1];
-			String black = (String) input[2];
-			String white = (String) input[3];
-			return new GameMetaData(id, start, black, white);
-		}
-	};
-	
 	@Inject private Provider<EntityManager> entityManager;
 	@Inject private GoRuleEngine ruleEngine;
 	
 	@Override
 	public Game get(long gameId) {
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
+		if (gameData == null) {
+			throw GoException.createNotFound("Game with id " + gameId + " not found");
+		}
 		return ruleEngine.applyMoves(gameData);
 	}
 	
 	@Override
 	public List<GameMetaData> getAll() {
-		@SuppressWarnings("unchecked")
-		List<Object[]> games = entityManager.get().createQuery(GAME_METADATA_QUERY).getResultList();
-		return Lists.transform(games, METADATA_FUNCTION);
+		return getAll(null);
+	}
+	
+	@Override
+	public List<GameMetaData> getAll(GameState state) {
+		CriteriaQuery<GameMetaData> query = entityManager.get().getCriteriaBuilder().createQuery(GameMetaData.class);
+		Root<GameData> game = query.from(GameData.class);
+		query.multiselect(game.get("id"), game.get("start"), game.get("state"), game.join("black", JoinType.LEFT).get("nickname"), game.join("white", JoinType.LEFT).get("nickname"));
+		if (state != null) {
+			query.where(game.get("state").in(state));
+		}
+		return entityManager.get().createQuery(query).getResultList();
 	}
 	
 	@Override
@@ -71,8 +71,9 @@ public class DefaultGameRestlet implements GameRestlet {
 			entityManager.get().merge(gameData);
 		}
 		
-		log.info("Player {} passed in game {}", playerId.getPlayerId(), game);
 		entityManager.get().persist(Move.createPass(gameData, color));
+		entityManager.get().flush();
+		log.info("Player {} passed in game {}", playerId.getPlayerId(), game);
 	}
 	
 	@Override
@@ -84,6 +85,7 @@ public class DefaultGameRestlet implements GameRestlet {
 		
 		Move move = Move.create(gameData, color, restMove.getX(), restMove.getY());
 		entityManager.get().persist(move);
+		entityManager.get().flush();
 		log.info("Player {} made move {} in game {}", new Object[] { restMove.getPlayerId(), move, gameData });
 	}
 	
@@ -98,6 +100,8 @@ public class DefaultGameRestlet implements GameRestlet {
 			game.setWhite(player);
 		}
 		entityManager.get().persist(game);
+		entityManager.get().flush();
+		log.info("Player {} initiated game {}", player, game);
 		return game.getId();
 	}
 	
@@ -111,7 +115,21 @@ public class DefaultGameRestlet implements GameRestlet {
 			throw GoException.createNotAcceptable("Can't play against yourself");
 		}
 		
+		Player player = entityManager.get().find(Player.class, playerId.getPlayerId());
+		if (player == null) {
+			throw GoException.createNotFound("Player with id " + playerId.getPlayerId() + " not found");
+		}
+		
+		if (gameData.getBlack() == null) {
+			gameData.setBlack(player);
+		}
+		else {
+			gameData.setWhite(player);
+		}
 		gameData.setState(GameState.CANCELLED);
+		entityManager.get().merge(gameData);
+		entityManager.get().flush();
+		log.info("Player {} joined and started game {}", player, gameData);
 	}
 	
 	@Override
@@ -120,6 +138,8 @@ public class DefaultGameRestlet implements GameRestlet {
 		checkInitiated(gameData);
 		gameData.setState(GameState.CANCELLED);
 		entityManager.get().persist(gameData);
+		entityManager.get().flush();
+		log.info("Someone cancelled game {}", gameData);
 	}
 	
 	private void checkInitiated(GameData gameData) {

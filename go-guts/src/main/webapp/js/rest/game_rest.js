@@ -10,6 +10,10 @@ var GAME_REST = function(rest) {
 		rest.getData(prefix + 'all', {}, success);
 	}
 	
+	that.getGameListWithState = function(state, success) {
+		rest.getData(prefix + 'all/' + state, {}, success);
+	}
+	
 	that.doMove = function(gameId, playerId, x, y) {
 		rest.postData(prefix + gameId + '/move', {playerId: playerId, x: x, y: y});
 	};	
