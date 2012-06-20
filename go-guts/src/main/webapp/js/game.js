@@ -1,7 +1,7 @@
 var initGame = function() {
 	var id = location.hash.split("#")[1];
 	if (id == undefined) {
-		window.location = "/";
+		window.location = "./";
 	}
 	
 	var rest = REST("rest");
