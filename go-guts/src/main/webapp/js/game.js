@@ -71,19 +71,17 @@ var GAME = function(gameRest) {
 		$("#cancel").click(function() {
 			that.cancel(board);
 		});
-		$("#pass").css({visibility: "hidden"});
+		$("#pass").remove();
 		board.setEnabled(false);
 	}
 	
 	that.activateGameMode = function() {
 		$("#pass").click(that.pass);
-		$("#cancel").css({visibility: "hidden"});			
+		$("#cancel").remove();			
 	}
 	
 	that.disableGameMode = function(board) {		
-		$("#buttons").css({visibility: "hidden"});
-		$("#pass").click(null);
-		$("#cancel").click(null);
+		$("#buttons").remove();
 		board.setEnabled(false);
 	}
 	

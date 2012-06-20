@@ -1,20 +1,25 @@
 package com.topdesk.mc12.authentication;
  
-import java.security.Principal;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.google.inject.persist.Transactional;
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
+import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.persistence.entities.Player;
+import com.topdesk.mc12.testdata.TestData;
  
 /**
  * A Jersey ContainerRequestFilter that provides a SecurityContext for all
@@ -28,10 +33,15 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     HttpServletRequest httpRequest;
 
     private final Provider<EntityManager> entities;
+    private final SessionMap sessions;
+
+	private final TestData data;
 
     @Inject
-    public AuthorizationRequestFilter(Provider<EntityManager> entities) {
+    public AuthorizationRequestFilter(Provider<EntityManager> entities, SessionMap sessions, TestData data) {
 		this.entities = entities;
+		this.sessions = sessions;
+		this.data = data;
 	}
  
     /**
@@ -42,54 +52,45 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
      * @return the decorated request
      */
     public ContainerRequest filter(ContainerRequest request) {
-    	log.error("WE'RE FILTERIN' HEY!");
-    	log.error("{}, {}", uriInfo, request);
-        Player player = authenticate();
-        request.setSecurityContext(new Authorizer(player));
+    	if (request.getAbsolutePath() != null) { // TODO Temp escape to prevent filtering right now. 
+    		request.setSecurityContext(PlayerContext.create(data.getJorn(), uriInfo));
+    		return request;
+    	}
+    	
+    	log.trace("Authorizing request: {}", request);
+    	if (request.getUserPrincipal() != null) {
+    		log.trace("Request already authenticated");
+    		return request;
+    	}
+    	
+    	if (httpRequest.getAttribute("sessionid") != null) {
+    		log.trace("Request belongs to already authorized player");
+    		request.setSecurityContext(sessions.retrieveFrom(httpRequest));
+    	}
+    	
+        PlayerContext securityContext = sessions.startNew(authenticatePlayer(), uriInfo);
+		request.setSecurityContext(securityContext);
         return request;
     }
  
-    /**
-     * Perform the required authentication checks, and return the User instance
-     * for the authenticated user.
-     */
-    private Player authenticate() {
-    	log.error("Authenticating now");
-        return Player.create("Bernd", "berndj@topdesk.com");
+    private Player authenticatePlayer() {
+    	String name = httpRequest.getParameter("name");
+    	log.trace("Authenticating request from {}", name);
+    	List<Player> list = selectByField("nickname", name, Player.class);
+    	if (list.size() != 1) {
+    		throw GoException.createBadRequest("No authorization");
+    	}
+        return list.get(0);
     }
- 
-    /**
-     * SecurityContext used to perform authorization checks.
-     */
-    public class Authorizer implements SecurityContext {
-        private Principal principal = null;
- 
-        public Authorizer(final Player player) {
-        	principal = player;
-        }
- 
-        public Principal getUserPrincipal() {
-            return principal;
-        }
- 
-        /**
-         * @param role Role to be checked
-         */
-        public boolean isUserInRole(String role) {
-            return true;
-        }
- 
-        public boolean isSecure() {
-            return "https".equals(uriInfo.getRequestUri().getScheme());
-        }
- 
-        public String getAuthenticationScheme() {
-            if (principal == null) {
-                return null;
-            }
-            return SecurityContext.FORM_AUTH;
-        }
- 
-    }
+
+    @Transactional
+	private <E> List<E> selectByField(String fieldName, String value, Class<E> entityClass) {
+		EntityManager em = entities.get();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<E> unconditionalQuery = cb.createQuery(entityClass);
+    	Root<E> entityStructure = unconditionalQuery.from(entityClass);
+		CriteriaQuery<E> finishedQuery = unconditionalQuery.select(entityStructure).where(cb.equal(entityStructure.get(fieldName), value));
+    	return em.createQuery(finishedQuery).getResultList();
+	}
 }
  

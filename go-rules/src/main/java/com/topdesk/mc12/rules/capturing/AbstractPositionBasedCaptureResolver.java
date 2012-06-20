@@ -12,6 +12,9 @@ import com.google.common.collect.Sets;
 import com.topdesk.mc12.rules.entities.Stone;
 
 public abstract class AbstractPositionBasedCaptureResolver implements CaptureResolver {
+	/**
+	 * class that represents a position on the board, irrelevant of whether or not there is a stone there.
+	 */
 	protected @Data class Position {
 		private final int x;
 		private final int y;
@@ -24,7 +27,9 @@ public abstract class AbstractPositionBasedCaptureResolver implements CaptureRes
 	
 	protected abstract Set<Stone> calculateFromPositions(Stone move, Map<Position, Stone> stoneMap, int boardSize);
 
-
+	/**
+	 * @return All {@link Position} that are valid and neighbour the coordinate given. 
+	 */
 	protected final Set<Position> findNeighbourPositions(int x, int y, int boardSize) {
 		Set<Position> result = Sets.newHashSet();
 		if (x > 0) {

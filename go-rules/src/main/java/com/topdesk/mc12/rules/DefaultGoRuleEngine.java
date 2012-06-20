@@ -56,7 +56,8 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 		boolean lastMovePass = game.isLastMovePass();
 		game.applyPass();
 		if (lastMovePass) {
-			game.setFinished(true);
+			Score score = scoreCalculator.calculate(game.getStones());
+			game.setWinner(score.getWhite() + 5 <= score.getBlack() ? game.getBlack() : game.getWhite());
 		}
 	}
 	
@@ -70,15 +71,19 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 		applyCapture(new Stone(x, y, color), game);
 		game.addStone(x, y, color);
 	}
-
-	@Override
-	public Score calculateScore(Game game) {
-		return scoreCalculator.calculate(game.getStones());
-	}
 	
 	private void applyCapture(Stone move, Game game) {
 		Set<Stone> capturedStones = captureResolver.calculateCapturedStones(move, game.getStones(), game.getSize());
 		game.capture(capturedStones, move.getColor());
+		
+		switch (move.getColor()) {
+		case BLACK:
+			game.setWhiteStonesCaptured(game.getWhiteStonesCaptured() + capturedStones.size());
+			break;
+		case WHITE:
+			game.setBlackStonesCaptured(game.getBlackStonesCaptured() + capturedStones.size());
+			break;
+		}
 	}
 	
 	/**

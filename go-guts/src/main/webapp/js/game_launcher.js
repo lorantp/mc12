@@ -2,12 +2,12 @@ var initGameLauncher = function() {
 	var rest = REST("rest");
 	var gameRest = GAME_REST(rest);
 	
-	var gameLauncher = new GAME_LAUNCHER(
+	var init = new GAME_LAUNCHER(
 			$("#launch_game"), 
 			$("#games"),
 			gameRest);
-	gameLauncher.showGames();
-	gameLauncher.activateButton();
+	init.showGames();
+	init.activateButton();
 };
 
 var GAME_LAUNCHER = function($controls, $games, gameRest) {
@@ -39,25 +39,44 @@ var GAME_LAUNCHER = function($controls, $games, gameRest) {
 		
 		var gameGui;
 		if(metaData.state == "INITIATED") {
-			var joinText = metaData.blackPlayer == null ? metaData.whitePlayer + " as black" : metaData.blackPlayer + " as white";    
-			gameGui = $("<button>Play against " + joinText + "</button>")
-					.attr({id: toJoinId(metaData.id)})
-					.click(function() {
-						that.join(metaData.id);
-					});
+			gameGui = that.createJoinButton(metaData);
 		}
 		else {
-			var startDate = $.format.date(new Date(metaData.start), "yyyy.MM.dd HH:mm");
-			var gameDescription = metaData.blackPlayer + " VS " + metaData.whitePlayer + ", " + startDate;
-			
-			var stateDescription = metaData.state == "FINISHED" ? "Finished: " : "Playing: ";
-			gameGui = $("<a>" + stateDescription + gameDescription + "</a>").attr({
-				href: "game.html#" + metaData.id,
-				target: "_blank"
-			});
+			gameGui = that.createOpenGameLink(metaData);
 		}
 		
 		$games.append($("<li/>").append(gameGui));			
+	};
+	
+	that.createJoinButton = function(metaData) {
+		var joinText = metaData.blackPlayer == null ? metaData.whitePlayer + " as black" : metaData.blackPlayer + " as white";    
+		return $("<button>Play against " + joinText + "</button>")
+				.attr({id: toJoinId(metaData.id)})
+				.click(function() {
+					that.join(metaData.id);
+				});		
+	};
+	
+	that.join = function(gameId) {
+		gameRest.startGame(gameId, dummyPlayerId2, function() {
+			that.openGame(gameId);
+		});
+	};
+	
+	that.openGame = function(gameId) {		
+		window.location = "game.html#" + gameId;		
+	};
+	
+	that.createOpenGameLink = function(metaData) {
+		var startDate = $.format.date(new Date(metaData.start), "yyyy.MM.dd HH:mm");
+		var gameDescription = metaData.blackPlayer + " VS " + metaData.whitePlayer + ", " + startDate;
+		
+		var stateDescription = metaData.state == "FINISHED" ? "Finished: " : "Playing: ";
+		return $("<a>" + stateDescription + gameDescription + "</a>")
+				.attr({
+					href: "game.html#" + metaData.id,
+					target: "_blank"
+				});		
 	};
 	
 	that.activateButton = function() {
@@ -67,15 +86,7 @@ var GAME_LAUNCHER = function($controls, $games, gameRest) {
 	that.initiate = function() {
 		var boardSize = $controls.find("#board_size").val();
 		var color = $controls.find("#player_color").val();
-		gameRest.newGame(dummyPlayerId1, boardSize, color, function(gameId) {
-			window.location = "game.html#" + gameId;		
-		});
-	};
-	
-	that.join = function(gameId) {
-		gameRest.startGame(gameId, dummyPlayerId2, function() {
-			window.location = "game.html#" + gameId;		
-		});
+		gameRest.newGame(dummyPlayerId1, boardSize, color, that.openGame);
 	};
 	
 	return that;
