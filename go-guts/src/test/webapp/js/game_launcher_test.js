@@ -27,19 +27,12 @@ var finishedGames = [
 var cancelledGames = [
         new MetaData(9, 0, "CANCELLED", "Mr Swartz", "Betty White")];		
 
-restMock.getGameListWithState = function(state, success) {
-	if (state == "INITIATED") {
-		success(initiatedGames);
-	}
-	else if (state == "STARTED") {
-		success(startedGames);
-	}
-	else if (state == "FINISHED") {
-		success(finishedGames);
-	}
-	else if (state == "CANCELLED") {
-		success(cancelledGames);
-	}
+restMock.getGameList = function(success) {
+	success([].concat(
+			initiatedGames,
+			startedGames,
+			finishedGames,
+			cancelledGames));
 };
 
 restMock.startGame = function(gameId, playerId, success) {
