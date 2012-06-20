@@ -1,9 +1,13 @@
-var PLAYER_CONTEXT = function($login, rest, contextIdParam) {
+var PLAYER_CONTEXT = function($login, rest) {
 	var that = {};
 	
-	var contextId = contextIdParam;
+	var match = /contextid=(\d+)/.exec(window.location);
+	var contextId = match ? match[1] : undefined;
 	
 	that.addContextIdToUrl = function(url) {
+		if (!contextId) {
+			return url;
+		}
 		if (url.indexOf("?") != -1) {
 			url += "&";
 		}

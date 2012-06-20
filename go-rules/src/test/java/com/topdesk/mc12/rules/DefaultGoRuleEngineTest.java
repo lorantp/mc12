@@ -22,6 +22,7 @@ import com.topdesk.mc12.rules.scoring.ScoreCalculator;
 public class DefaultGoRuleEngineTest {
 	private static final Player PLAYER_BLACK = Player.create("Batman", "magicmissle@thedarkness.com");
 	private static final Player PLAYER_WHITE = Player.create("Pikachu", "lightningstrikes@thesameplacetwice.com");
+	
 	private static final CaptureResolver CAPTURE_RESOLVER = new CaptureResolver() {
 		@Override
 		public Set<Stone> calculateCapturedStones(Stone move, Set<Stone> currentStones, int boardSize) {
