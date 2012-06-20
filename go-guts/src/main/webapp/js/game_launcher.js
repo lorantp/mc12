@@ -1,8 +1,8 @@
-var initNewGame = function() {
+var initGameLauncher = function() {
 	var rest = REST("rest");
 	var gameRest = GAME_REST(rest);
 	
-	var init = new INITIATE(
+	var init = new GAME_LAUNCHER(
 			$("#launch_game"), 
 			$("#games"),
 			gameRest);
