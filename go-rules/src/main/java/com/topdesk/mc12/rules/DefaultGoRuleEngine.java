@@ -1,6 +1,6 @@
 package com.topdesk.mc12.rules;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkState;
 
 import java.util.Set;
 
@@ -12,12 +12,15 @@ import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.common.Score;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
+import com.topdesk.mc12.persistence.entities.Player;
 import com.topdesk.mc12.rules.capturing.CaptureResolver;
 import com.topdesk.mc12.rules.entities.Game;
 import com.topdesk.mc12.rules.entities.Stone;
 import com.topdesk.mc12.rules.scoring.ScoreCalculator;
 
 public class DefaultGoRuleEngine implements GoRuleEngine {
+	private static final double KOMI = 5.5;
+	
 	private final CaptureResolver captureResolver;
 	private final ScoreCalculator scoreCalculator;
 	
@@ -57,7 +60,8 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 		game.applyPass();
 		if (lastMovePass) {
 			Score score = scoreCalculator.calculate(game.getStones());
-			game.setWinner(score.getWhite() + 5 <= score.getBlack() ? game.getBlack() : game.getWhite());
+			Player winner = score.getWhite() + KOMI < score.getBlack() ? game.getBlack() : game.getWhite();
+			game.setWinner(winner);
 		}
 	}
 	
