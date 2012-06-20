@@ -63,7 +63,12 @@ public class DefaultGameRestlet implements GameRestlet {
 	public List<GameMetaData> getAll(GameState state) {
 		CriteriaQuery<GameMetaData> query = entityManager.get().getCriteriaBuilder().createQuery(GameMetaData.class);
 		Root<GameData> game = query.from(GameData.class);
-		query.multiselect(game.get("id"), game.get("start"), game.get("state"), game.join("black", JoinType.LEFT).get("nickname"), game.join("white", JoinType.LEFT).get("nickname"));
+		query.multiselect(
+				game.get("id"),
+				game.get("start"),
+				game.get("state"),
+				game.join("black", JoinType.LEFT).get("nickname"),
+				game.join("white", JoinType.LEFT).get("nickname"));
 		if (state != null) {
 			query.where(game.get("state").in(state));
 		}

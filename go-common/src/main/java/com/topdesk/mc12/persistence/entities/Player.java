@@ -3,6 +3,7 @@ package com.topdesk.mc12.persistence.entities;
 import java.security.Principal;
 
 import javax.annotation.Nonnull;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,7 +22,7 @@ public final class Player implements DatabaseEntity, Principal {
 	}
 	
 	@Id @GeneratedValue private Long id;
-	@Nonnull private String nickname;
+	@Column(nullable=false, unique=true) private String nickname;
 	@Nonnull private String email;
 	@Override
 	public String getName() {
