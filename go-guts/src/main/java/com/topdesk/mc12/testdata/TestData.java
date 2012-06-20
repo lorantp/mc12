@@ -19,25 +19,34 @@ import com.topdesk.mc12.persistence.entities.Player;
 
 @Slf4j
 public class TestData {
-	private static final boolean ADD_MOVES = false;
-	private static final BoardSize SIZE = BoardSize.NINETEEN;
-	
 	@Inject private Provider<EntityManager> entityManager;
 	
 	private final Player jorn = Player.create("Jorn", "jornh@topdesk.com");
 	private final Player bernd = Player.create("Bernd", "berndj@topdesk.com");
 	private final Player bart = Player.create("Bart", "barte@topdesk.com");
 	private final Player krisz = Player.create("Krisz", "krisztianh@topdesk.com");
+	private DateTime nextDate = new DateTime(DateTimeZone.forID("Europe/Berlin")).minusDays(1).withHourOfDay(9);
+	private int nextSize = 0;
 	
 	@Transactional
 	public void create() {
 		createUsers();
-		createGame(jorn, bernd);
-		createGame(jorn, bart);
-		createGame(jorn, krisz);
-		createGame(bernd, bart);
-		createGame(bernd, krisz);
-		createGame(bart, krisz);
+		createGames(jorn, bernd);
+		createGames(jorn, bart);
+		createGames(jorn, krisz);
+		createGames(bernd, bart);
+		createGames(bernd, krisz);
+		createGames(bart, krisz);
+		
+		createNewGames(jorn);
+		createNewGames(bart);
+		createNewGames(bernd);
+		createNewGames(krisz);
+	}
+	
+	private void createNewGames(Player player) {
+		entityManager.get().persist(new GameData(player, null, nextDate().getMillis(), nextSize(), GameState.INITIATED));
+		entityManager.get().persist(new GameData(null, player, nextDate().getMillis(), nextSize(), GameState.INITIATED));
 	}
 	
 	private void createUsers() {
@@ -47,29 +56,42 @@ public class TestData {
 		entityManager.get().persist(krisz);
 	}
 	
-	private void createGame(Player black, Player white) {
-		DateTime start = new DateTime(DateTimeZone.forID("Europe/Berlin"));
-		GameData game = new GameData(black, white, start.getMillis(), SIZE, GameState.STARTED);
+	private void createGames(Player black, Player white) {
+		createGame(black, white, nextDate(), nextSize(), false);
+		createGame(black, white, nextDate(), nextSize(), true);
+	}
+	
+	private BoardSize nextSize() {
+		return BoardSize.values()[nextSize++ % 3];
+	}
+	
+	private void createGame(Player black, Player white, DateTime date, BoardSize size, boolean finish) {
+		GameData game = new GameData(black, white, date.getMillis(), size, finish ? GameState.FINISHED : GameState.STARTED);
 		entityManager.get().persist(game);
-		if (ADD_MOVES) {
-			createMoves(game);
+		if (finish) {
+			createMoves(game, size);
 		}
 		entityManager.get().flush();
 		log.info("Created game: {}", entityManager.get().find(GameData.class, game.getId()));
 	}
 	
-	private void createMoves(GameData game) {
+	private DateTime nextDate() {
+		return nextDate = nextDate.plusHours(1);
+	}
+	
+	private void createMoves(GameData game, BoardSize size) {
 		int moves = 0;
-		for (int x = 0; x < SIZE.getSize(); x += 2) {
-			for (int y = 1; y < SIZE.getSize(); y += 2) {
+		for (int x = 0; x < size.getSize(); x += 2) {
+			for (int y = 1; y < size.getSize(); y += 2) {
 				Color color = moves++ % 2 == 0 ? Color.BLACK : Color.WHITE;
-				if (Math.random() < 0.1) {
-					entityManager.get().persist(Move.createPass(game, color));
-				}
-				else {
-					entityManager.get().persist(Move.create(game, color, x, y));
-				}
+				entityManager.get().persist(Move.create(game, color, x, y));
 			}
 		}
+		
+		Color color = moves++ % 2 == 0 ? Color.BLACK : Color.WHITE;
+		entityManager.get().persist(Move.createPass(game, color));
+		
+		color = moves++ % 2 == 0 ? Color.BLACK : Color.WHITE;
+		entityManager.get().persist(Move.createPass(game, color));
 	}
 }

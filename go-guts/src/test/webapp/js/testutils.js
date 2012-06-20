@@ -25,7 +25,7 @@ var nextStone = {color: "BLACK"};
 
 var mockPlayer = {
 		id: 1337,
-		nickname: "Wonderful Wizzard",
+		name: "Wonderful Wizzard",
 		email: "inyour@dreams.com"
 }
 

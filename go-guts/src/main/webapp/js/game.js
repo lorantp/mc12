@@ -1,4 +1,9 @@
 var initGame = function() {
+	var id = location.hash.split("#")[1];
+	if (id == undefined) {
+		window.location = "./";
+	}
+	
 	var rest = REST("rest");
 	var contextId = /contextid=(\d+)/.exec(window.location)[1];
 	var playerContext = PLAYER_CONTEXT($("body"), rest, contextId);
@@ -6,7 +11,6 @@ var initGame = function() {
 	var gameRest = GAME_REST(playerContext);
 	
 	var game = GAME(gameRest);
-	var id = location.hash.split("#")[1];
 	game.draw(id);
 };
 
@@ -74,19 +78,17 @@ var GAME = function(gameRest) {
 		$("#cancel").click(function() {
 			that.cancel(board);
 		});
-		$("#pass").css({visibility: "hidden"});
+		$("#pass").remove();
 		board.setEnabled(false);
 	}
 	
 	that.activateGameMode = function() {
 		$("#pass").click(that.pass);
-		$("#cancel").css({visibility: "hidden"});			
+		$("#cancel").remove();			
 	}
 	
 	that.disableGameMode = function(board) {		
-		$("#buttons").css({visibility: "hidden"});
-		$("#pass").click(null);
-		$("#cancel").click(null);
+		$("#buttons").remove();
 		board.setEnabled(false);
 	}
 	

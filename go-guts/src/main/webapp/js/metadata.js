@@ -6,11 +6,17 @@ var METADATA = function($parent) {
 		that.showPlayer(game.black, "#playerone", game.whiteStonesCaptured, "black");
 		that.showPlayer(game.white, "#playertwo", game.blackStonesCaptured, "white");
 		that.showStartTime(new Date(game.start));
-		that.showTurn(game.finished, game.totalMoves, blackTurn ? "BLACK" : "WHITE");
+		
+		if (!game.finished) {
+			that.showCurrentTurn(game.totalMoves + 1, blackTurn ? "BLACK" : "WHITE");
+		}
+		else {
+			that.showResults(game.winner.name.toUpperCase());
+		}
 	}
 	
 	that.showPlayer = function(player, idSelector, captured, color) {
-		$(idSelector).append(player ? player.nickname.toUpperCase() : "?");
+		$(idSelector).append(player ? player.name.toUpperCase() : "?");
 		$("#" + color + "captured").append(captured);
 	}
 	
@@ -22,21 +28,14 @@ var METADATA = function($parent) {
 		element.append(date.toLocaleTimeString()); 
 	}
 	
-	that.showTurn = function(finished, turn, color) {
-		if (!finished) {			
-			that.showCurrentTurn(turn + 1, color);
-		}
-		else {
-			that.showLastTurn(turn);
-		}
-	}
-	
 	that.showCurrentTurn = function(turn, color) {
-		$("#gamedata").append(String(turn) + " - " + color + " MOVES");
+		$("#gamedata").append("TURN: " + String(turn) + " - " + color + " MOVES");
 	}
 	
-	that.showLastTurn = function(turn) {
-		$("#gamedata").append(String(turn) + " - GAME FINISHED");
+	that.showResults = function(winner) {
+		$("#gamedata").append(String(winner.toUpperCase()) + " WON");
+		$("#blackcaptured").remove();
+		$("#whitecaptured").remove();
 	}
 	
 	return that;

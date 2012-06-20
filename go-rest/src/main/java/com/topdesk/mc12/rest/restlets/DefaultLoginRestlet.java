@@ -28,7 +28,7 @@ public class DefaultLoginRestlet implements LoginRestlet {
 
 	@Override
 	public int get(String playerName) {
-		List<Player> playersFound = selectByField("nickname", playerName, Player.class);
+		List<Player> playersFound = selectByField("name", playerName, Player.class);
 		if(playersFound.size() != 1) {
 			throw GoException.createBadRequest("Couldn't authenticate " + playerName);
 		}

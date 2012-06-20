@@ -23,7 +23,7 @@ import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.common.PlayerContext;
 import com.topdesk.mc12.common.PlayerContextMap;
 import com.topdesk.mc12.persistence.entities.Player;
- 
+
 /**
  * A Jersey ContainerRequestFilter that provides a SecurityContext for all
  * requests processed by this application.
@@ -81,7 +81,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     private Player authenticatePlayer() {
     	String name = httpRequest.getParameter("name");
     	log.trace("Authenticating request from {}", name);
-    	List<Player> list = selectByField("nickname", name, Player.class);
+    	List<Player> list = selectByField("name", name, Player.class);
     	if (list.size() != 1) {
     		throw GoException.createBadRequest("No authorization");
     	}
@@ -93,9 +93,11 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
 		EntityManager em = entities.get();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<E> unconditionalQuery = cb.createQuery(entityClass);
-    	Root<E> entityStructure = unconditionalQuery.from(entityClass);
-		CriteriaQuery<E> finishedQuery = unconditionalQuery.select(entityStructure).where(cb.equal(entityStructure.get(fieldName), value));
-    	return em.createQuery(finishedQuery).getResultList();
+		Root<E> entityStructure = unconditionalQuery.from(entityClass);
+		CriteriaQuery<E> finishedQuery = unconditionalQuery.select(
+				entityStructure).where(
+				cb.equal(entityStructure.get(fieldName), value));
+		return em.createQuery(finishedQuery).getResultList();
 	}
     
     private static final class PlayerContexedSecurity implements SecurityContext {
@@ -128,4 +130,3 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
         }
 	}
 }
- 

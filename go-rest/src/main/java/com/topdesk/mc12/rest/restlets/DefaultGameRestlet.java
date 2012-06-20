@@ -4,8 +4,10 @@ import java.util.List;
 
 import javax.inject.Provider;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import lombok.extern.slf4j.Slf4j;
@@ -61,11 +63,23 @@ public class DefaultGameRestlet implements GameRestlet {
 	
 	@Override
 	public List<GameMetaData> getAll(GameState state) {
-		CriteriaQuery<GameMetaData> query = entityManager.get().getCriteriaBuilder().createQuery(GameMetaData.class);
+		CriteriaBuilder builder = entityManager.get().getCriteriaBuilder();
+		CriteriaQuery<GameMetaData> query = builder.createQuery(GameMetaData.class);
 		Root<GameData> game = query.from(GameData.class);
-		query.multiselect(game.get("id"), game.get("start"), game.get("state"), game.join("black", JoinType.LEFT).get("nickname"), game.join("white", JoinType.LEFT).get("nickname"));
+		Path<Object> stateField = game.get("state");
+		query.multiselect(
+				game.get("id"),
+				game.get("start"),
+				stateField,
+				game.join("black", JoinType.LEFT).get("name"),
+				game.join("white", JoinType.LEFT).get("name"));
+		
 		if (state != null) {
-			query.where(game.get("state").in(state));
+			query.where(stateField.in(state));
+		}
+		else {
+			query.where(stateField.in(GameState.INITIATED, GameState.STARTED, GameState.FINISHED));
+			query.orderBy(builder.asc(stateField), builder.desc(game.get("start")));
 		}
 		return entityManager.get().createQuery(query).getResultList();
 	}

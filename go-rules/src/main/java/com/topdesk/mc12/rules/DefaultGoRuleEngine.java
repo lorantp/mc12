@@ -1,6 +1,6 @@
 package com.topdesk.mc12.rules;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkState;
 
 import java.util.Set;
 
@@ -12,12 +12,15 @@ import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.common.Score;
 import com.topdesk.mc12.persistence.entities.GameData;
 import com.topdesk.mc12.persistence.entities.Move;
+import com.topdesk.mc12.persistence.entities.Player;
 import com.topdesk.mc12.rules.capturing.CaptureResolver;
 import com.topdesk.mc12.rules.entities.Game;
 import com.topdesk.mc12.rules.entities.Stone;
 import com.topdesk.mc12.rules.scoring.ScoreCalculator;
 
 public class DefaultGoRuleEngine implements GoRuleEngine {
+	private static final double KOMI = 5.5;
+	
 	private final CaptureResolver captureResolver;
 	private final ScoreCalculator scoreCalculator;
 	
@@ -56,7 +59,9 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 		boolean lastMovePass = game.isLastMovePass();
 		game.applyPass();
 		if (lastMovePass) {
-			game.setFinished(true);
+			Score score = scoreCalculator.calculate(game.getStones());
+			Player winner = score.getWhite() + KOMI < score.getBlack() ? game.getBlack() : game.getWhite();
+			game.setWinner(winner);
 		}
 	}
 	
@@ -70,15 +75,19 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 		applyCapture(new Stone(x, y, color), game);
 		game.addStone(x, y, color);
 	}
-
-	@Override
-	public Score calculateScore(Game game) {
-		return scoreCalculator.calculate(game.getStones());
-	}
 	
 	private void applyCapture(Stone move, Game game) {
 		Set<Stone> capturedStones = captureResolver.calculateCapturedStones(move, game.getStones(), game.getSize());
 		game.capture(capturedStones, move.getColor());
+		
+		switch (move.getColor()) {
+		case BLACK:
+			game.setWhiteStonesCaptured(game.getWhiteStonesCaptured() + capturedStones.size());
+			break;
+		case WHITE:
+			game.setBlackStonesCaptured(game.getBlackStonesCaptured() + capturedStones.size());
+			break;
+		}
 	}
 	
 	/**
@@ -111,7 +120,7 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 			throw GoException.createNotAcceptable("This game is already finished");
 		}
 		if (game.getNextTurn() != color) {
-			String nickname = (color == Color.BLACK ? game.getBlack() : game.getWhite()).getNickname();
+			String nickname = (color == Color.BLACK ? game.getBlack() : game.getWhite()).getName();
 			throw GoException.createNotAcceptable("It is not " + nickname + "'s turn");
 		}
 	}

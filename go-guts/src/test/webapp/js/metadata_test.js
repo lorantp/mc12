@@ -18,28 +18,12 @@ describe("showing data format", function() {
 	});
 	
 	it('should show turn number', function() {
-		expect$methodToBeCalledWith("append", ["7 - TURQOISE MOVES"]);
+		expect$methodToBeCalledWith("append", ["TURN: 7 - TURQOISE MOVES"]);
 		md.showCurrentTurn(7, "TURQOISE");
 	});
 	
 	it('should show only turn number when game ends', function() {
-		expect$methodToBeCalledWith("append", ["7 - GAME FINISHED"]);
-		md.showLastTurn(7);
-	});
-	
-	it('should show current turn during match', function() {
-		spyOn(md, "showCurrentTurn");
-		spyOn(md, "showLastTurn");
-		md.showTurn(false, 7, "TURQOISE");
-		expect(md.showCurrentTurn).toHaveBeenCalledWith(8,"TURQOISE");
-		expect(md.showLastTurn).wasNotCalled();
-	});
-	
-	it('should show last turn after match', function() {
-		spyOn(md, "showCurrentTurn");
-		spyOn(md, "showLastTurn");
-		md.showTurn(true, 7);
-		expect(md.showLastTurn).toHaveBeenCalledWith(7);
-		expect(md.showCurrentTurn).wasNotCalled();
+		expect$methodToBeCalledWith("append", ["BOB WON"]);
+		md.showResults("Bob");
 	});
 });
