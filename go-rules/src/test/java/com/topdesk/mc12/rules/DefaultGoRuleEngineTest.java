@@ -1,11 +1,12 @@
 package com.topdesk.mc12.rules;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+
 import java.util.Collections;
 import java.util.Set;
 
-import org.hamcrest.core.Is;
 import org.joda.time.DateTime;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,12 +41,30 @@ public class DefaultGoRuleEngineTest {
 	}
 	
 	@Test
-	public void whiteHasAdvantage() {
-		scoreCalculator.setBlackScore(6);
-		scoreCalculator.setWhiteScore(1);
+	public void playerCanPass() {
+		int totalMoves = game.getTotalMoves();
+		ruleEngine.applyPass(game, Color.BLACK);
+		ruleEngine.applyMove(game, Color.WHITE, 0, 0);
+		assertThat(totalMoves + 2, is(game.getTotalMoves()));
+		
+	}
+	
+	@Test
+	public void whiteWinsWithDifferenceOf_5() {
+		scoreCalculator.setBlackScore(5);
+		scoreCalculator.setWhiteScore(0);
 		ruleEngine.applyPass(game, Color.BLACK);
 		ruleEngine.applyPass(game, Color.WHITE);
-		Assert.assertThat(game.getWinner(), Is.is(PLAYER_WHITE));
+		assertThat(game.getWinner(), is(PLAYER_WHITE));
+	}
+	
+	@Test
+	public void blackWinsWithDifferenceOf_6() {
+		scoreCalculator.setBlackScore(6);
+		scoreCalculator.setWhiteScore(0);
+		ruleEngine.applyPass(game, Color.BLACK);
+		ruleEngine.applyPass(game, Color.WHITE);
+		assertThat(game.getWinner(), is(PLAYER_BLACK));
 	}
 
 	@Test
