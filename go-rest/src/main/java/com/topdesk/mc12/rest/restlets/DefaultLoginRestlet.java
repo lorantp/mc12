@@ -32,7 +32,11 @@ public class DefaultLoginRestlet implements LoginRestlet {
 		if(playersFound.size() != 1) {
 			throw GoException.createBadRequest("Couldn't authenticate " + playerName);
 		}
-		return contextMap.startNew(playersFound.get(0)).getId();
+		Player player = playersFound.get(0);
+		if (contextMap.hasContextFor(player)) {
+			return contextMap.getContextFor(player).getId();
+		}
+		return contextMap.startNew(player).getId();
 	}
 
     @Transactional
