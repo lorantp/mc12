@@ -47,6 +47,8 @@ public class TestData {
 	private void createNewGames(Player player) {
 		entityManager.get().persist(new GameData(player, null, nextDate().getMillis(), nextSize(), GameState.INITIATED));
 		entityManager.get().persist(new GameData(null, player, nextDate().getMillis(), nextSize(), GameState.INITIATED));
+		entityManager.get().persist(new GameData(player, null, nextDate().getMillis(), nextSize(), GameState.CANCELLED));
+		entityManager.get().persist(new GameData(null, player, nextDate().getMillis(), nextSize(), GameState.CANCELLED));
 	}
 	
 	private void createUsers() {
