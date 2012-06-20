@@ -49,7 +49,7 @@ var initLauncher = function() {
 			.append($("<select id='player_color' />").append("<option value='RED'>Red</option>"))
 			.append(initButton);
 	gameContainer = $("<div id='games' />");
-	launcher = GAME_LAUNCHER(initContainer, gameContainer, restMock);
+	launcher = GAME_LAUNCHER(initContainer, gameContainer, restMock, contextMock);
 };
 
 describe("list of games", function() {	
@@ -112,7 +112,7 @@ describe("init game buttton", function() {
 	
 	it("should initiate a new game with the specified board size and player color", function() {
 		spyOn(restMock, "newGame");
-		launcher.activateButton();
+		launcher.activateButtons();
 		initButton.click();
 		expect(restMock.newGame).toHaveBeenCalledWith(1, "42", "RED", launcher.openGame);
 	});

@@ -34,6 +34,13 @@ var restMock = {
 		doPass: function() {}
 };
 
+var contextMock = {
+		addContextIdToUrl: function(url) {
+			return url;
+		},
+		login: function() {}
+};
+
 var expect$methodToBeCalledWith = function (jqMethodName, expectedArguments, callThrough) {
 	var spy = spyOn($.fn, jqMethodName).andCallFake(function() {
 		for (i in expectedArguments) {
