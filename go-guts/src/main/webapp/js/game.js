@@ -1,9 +1,13 @@
 var initGame = function() {
+	var id = location.hash.split("#")[1];
+	if (id == undefined) {
+		window.location = "/";
+	}
+	
 	var rest = REST("rest");
 	var gameRest = GAME_REST(rest);
 	
 	var game = GAME(gameRest);
-	var id = location.hash.split("#")[1];
 	game.draw(id);
 };
 
