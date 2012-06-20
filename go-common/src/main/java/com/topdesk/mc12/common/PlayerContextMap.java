@@ -1,7 +1,4 @@
-package com.topdesk.mc12.authentication;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.UriInfo;
+package com.topdesk.mc12.common;
 
 import com.topdesk.mc12.persistence.entities.Player;
 
@@ -15,6 +12,6 @@ public interface PlayerContextMap {
 	boolean hasContextFor(Player player);
 	PlayerContext getContextFor(Player player);
 	
-	PlayerContext retrieveFrom(HttpServletRequest httpRequest);
-	PlayerContext startNew(Player player, UriInfo info);
+	PlayerContext retrieveFrom(int contextId);
+	PlayerContext startNew(Player player);
 }

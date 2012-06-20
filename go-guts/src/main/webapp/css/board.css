@@ -14,15 +14,15 @@
 #board[gosize="13"] {
 	height: 624px;
 	width: 624px;
-/* 	background-image: url("../img/grid13x13.svg");
- */
+	background-image: url("../img/grid13x13.svg");
+
 }
 
 #board[gosize="9"] {
 	height: 432px;
 	width: 432px;
-/* 	background-image: url("../img/grid9x9.svg");
- */}
+	background-image: url("../img/grid9x9.svg");
+}
 
 div .abs {
 	position: absolute;

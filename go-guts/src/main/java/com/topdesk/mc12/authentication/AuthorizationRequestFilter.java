@@ -1,5 +1,6 @@
 package com.topdesk.mc12.authentication;
  
+import java.security.Principal;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,8 @@ import com.google.inject.persist.Transactional;
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
 import com.topdesk.mc12.common.GoException;
+import com.topdesk.mc12.common.PlayerContext;
+import com.topdesk.mc12.common.PlayerContextMap;
 import com.topdesk.mc12.persistence.entities.Player;
  
 /**
@@ -49,20 +53,30 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
      */
     public ContainerRequest filter(ContainerRequest request) {
     	log.trace("Authorizing request: {}", request);
+    	if (uriInfo.getPath().startsWith("context")) { // User is trying to obtain a session.
+    		return request;
+    	}
+    	
     	if (request.getUserPrincipal() != null) {
     		log.trace("Request already authenticated");
     		return request;
     	}
     	
-    	if (httpRequest.getAttribute("contextid") != null) {
+    	if (httpRequest.getParameter("contextid") != null) {
     		log.trace("Request belongs to already authorized player");
-    		request.setSecurityContext(sessions.retrieveFrom(httpRequest));
+    		PlayerContext context = sessions.retrieveFrom(Integer.valueOf(httpRequest.getParameter("contextid")));
+    		request.setSecurityContext(createFromPlayerContext(context));
+    		return request;
     	}
 
-        PlayerContext securityContext = sessions.startNew(authenticatePlayer(), uriInfo);
-		request.setSecurityContext(securityContext);
+        PlayerContext context = sessions.startNew(authenticatePlayer());
+		request.setSecurityContext(createFromPlayerContext(context));
         return request;
     }
+
+	private PlayerContexedSecurity createFromPlayerContext(PlayerContext context) {
+		return new PlayerContexedSecurity(context, uriInfo);
+	}
  
     private Player authenticatePlayer() {
     	String name = httpRequest.getParameter("name");
@@ -82,6 +96,36 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     	Root<E> entityStructure = unconditionalQuery.from(entityClass);
 		CriteriaQuery<E> finishedQuery = unconditionalQuery.select(entityStructure).where(cb.equal(entityStructure.get(fieldName), value));
     	return em.createQuery(finishedQuery).getResultList();
+	}
+    
+    private static final class PlayerContexedSecurity implements SecurityContext {
+		private final PlayerContext playerContext;
+		private final UriInfo uriInfo;
+
+		public PlayerContexedSecurity(PlayerContext playerContext, UriInfo uriInfo) {
+			this.playerContext = playerContext;
+			this.uriInfo = uriInfo;
+		}
+
+		@Override
+		public Principal getUserPrincipal() {
+			return playerContext.getPlayer();
+		}
+		
+		@Override
+        public boolean isUserInRole(String role) {
+            return true;
+        }
+ 
+		@Override
+        public boolean isSecure() {
+            return "https".equals(uriInfo.getRequestUri().getScheme());
+        }
+ 
+		@Override
+        public String getAuthenticationScheme() {
+            return SecurityContext.FORM_AUTH;
+        }
 	}
 }
  

@@ -1,17 +1,23 @@
 var initGameLauncher = function() {
 	var rest = REST("rest");
-	var playerContext = PLAYER_CONTEXT(rest);
-	var gameRest = GAME_REST(rest, playerContext);
+	var player_context = PLAYER_CONTEXT($("#login"), rest);
+	var gameRest = GAME_REST(player_context);
 	
 	var gameLauncher = new GAME_LAUNCHER(
-			$("#launch_game"), 
+			$("body"), 
 			$("#games"),
-			gameRest);
-	gameLauncher.showGames();
-	gameLauncher.activateButton();
+			gameRest,
+			player_context);
+	
+	gameLauncher.activateButtons();
+	var success = function() {
+		gameLauncher.showGames();
+	}
+	
+	player_context.authenticate(success);
 };
 
-var GAME_LAUNCHER = function($controls, $games, gameRest) {
+var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 	that = {};
 	
 	var dummyPlayerId1 = 1;
@@ -53,7 +59,7 @@ var GAME_LAUNCHER = function($controls, $games, gameRest) {
 			
 			var stateDescription = metaData.state == "FINISHED" ? "Finished: " : "Playing: ";
 			gameGui = $("<a>" + stateDescription + gameDescription + "</a>").attr({
-				href: "game.html#" + metaData.id,
+				href: context.addContextIdToUrl("game.html#" + metaData.id),
 				target: "_blank"
 			});
 		}
@@ -61,8 +67,11 @@ var GAME_LAUNCHER = function($controls, $games, gameRest) {
 		$games.append($("<li/>").append(gameGui));			
 	};
 	
-	that.activateButton = function() {
+	that.activateButtons = function() {
 		$controls.find("#initiate").click(that.initiate);
+		$controls.find("#loginbutton").click(function() {
+			context.login(that.showGames);
+		});
 	};
 	
 	that.initiate = function() {

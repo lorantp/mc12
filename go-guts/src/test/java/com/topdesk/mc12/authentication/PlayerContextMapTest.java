@@ -4,14 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.topdesk.mc12.common.PlayerContext;
+import com.topdesk.mc12.common.PlayerContextMap;
 import com.topdesk.mc12.persistence.entities.Player;
 
 public class PlayerContextMapTest {
@@ -28,61 +26,38 @@ public class PlayerContextMapTest {
 	
 	@Test
 	public void createNewContext() {
-		PlayerContext context = map.startNew(testPlayer1, null);
+		PlayerContext context = map.startNew(testPlayer1);
 
 		assertNotNull(context);
-		assertEquals(context.getUserPrincipal(), testPlayer1);
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testRetrieveWithoutSessionId() {
-		map.retrieveFrom(mock(HttpServletRequest.class));
+		assertEquals(context.getPlayer(), testPlayer1);
 	}
 	
 	@Test
 	public void testRetrieveFromSessionId() {
-		final PlayerContext context = map.startNew(testPlayer1, null);
-		HttpServletRequestWrapper httpRequest = new HttpServletRequestWrapper(mock(HttpServletRequest.class)) {
-			@Override
-			public Object getAttribute(String name) {
-				return String.valueOf(context.getId());
-			}
-		};
-		assertEquals(map.retrieveFrom(httpRequest), context);
+		final PlayerContext context = map.startNew(testPlayer1);
+		assertEquals(map.retrieveFrom(context.getId()), context);
 	}
 	
 	@Test
 	public void testRetrieveFromPlayer() {
-		PlayerContext context = map.startNew(testPlayer1, null);
+		PlayerContext context = map.startNew(testPlayer1);
 		assertEquals(map.getContextFor(testPlayer1), context);
 	}
 	
 	@Test
 	public void testMultiplePlayerContext() {
-		PlayerContext context1 = map.startNew(testPlayer1, null);
-		PlayerContext context2 = map.startNew(testPlayer2, null);
+		PlayerContext context1 = map.startNew(testPlayer1);
+		PlayerContext context2 = map.startNew(testPlayer2);
 		assertEquals(map.getContextFor(testPlayer1), context1);
 		assertEquals(map.getContextFor(testPlayer2), context2);
 	}
 	
 	@Test
 	public void testMultipleSessionIdContexts() {
-		final PlayerContext context1 = map.startNew(testPlayer1, null);
-		HttpServletRequestWrapper httpRequest1 = new HttpServletRequestWrapper(mock(HttpServletRequest.class)) {
-			@Override
-			public Object getAttribute(String name) {
-				return String.valueOf(context1.getId());
-			}
-		};
-		final PlayerContext context2 = map.startNew(testPlayer2, null);
-		HttpServletRequestWrapper httpRequest2 = new HttpServletRequestWrapper(mock(HttpServletRequest.class)) {
-			@Override
-			public Object getAttribute(String name) {
-				return String.valueOf(context2.getId());
-			}
-		};
-		assertEquals(map.retrieveFrom(httpRequest1), context1);
-		assertEquals(map.retrieveFrom(httpRequest2), context2);
+		final PlayerContext context1 = map.startNew(testPlayer1);
+		final PlayerContext context2 = map.startNew(testPlayer2);
+		assertEquals(map.retrieveFrom(context1.getId()), context1);
+		assertEquals(map.retrieveFrom(context2.getId()), context2);
 	}
 	
 	@Test(expected=NullPointerException.class)
@@ -90,15 +65,10 @@ public class PlayerContextMapTest {
 		map.getContextFor(null);
 	}
 	
-	@Test(expected=NullPointerException.class)
-	public void testNoNullHttpRequest() {
-		map.retrieveFrom(null);
-	}
-	
 	@Test
 	public void testHasPlayerCheck() {
 		assertFalse(map.hasContextFor(testPlayer1));
-		map.startNew(testPlayer1, null);
+		map.startNew(testPlayer1);
 		assertTrue(map.hasContextFor(testPlayer1));
 	}
 }

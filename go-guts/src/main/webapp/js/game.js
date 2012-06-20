@@ -1,6 +1,9 @@
 var initGame = function() {
 	var rest = REST("rest");
-	var gameRest = GAME_REST(rest);
+	var contextId = /contextid=(\d+)/.exec(window.location)[1];
+	var playerContext = PLAYER_CONTEXT($("body"), rest, contextId);
+	
+	var gameRest = GAME_REST(playerContext);
 	
 	var game = GAME(gameRest);
 	var id = location.hash.split("#")[1];
