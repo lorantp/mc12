@@ -65,7 +65,7 @@ var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 	};
 	
 	that.openGame = function(gameId) {		
-		window.location = "game.html#" + gameId;
+		window.location = context.addContextIdToUrl("game.html#" + gameId);
 	};
 	
 	that.createOpenGameLink = function(metaData) {
