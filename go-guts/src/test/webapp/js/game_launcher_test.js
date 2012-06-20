@@ -98,12 +98,10 @@ describe("list of games", function() {
 		var openCurrentLink = launcher.createOpenGameLink(new MetaData(1, 0, "STARTED", "Arnold", "Betty White"));
 		expect(openCurrentLink.text()).toBe("Playing: Arnold VS Betty White, 1970.01.01 01:00");
 		expect(openCurrentLink.attr("href")).toBe("game.html#1");
-		expect(openCurrentLink.attr("target")).toBe("_blank");
 		
 		var openFinishedLink = launcher.createOpenGameLink(new MetaData(2, 0, "FINISHED", "Arnold", "Betty White"));
 		expect(openFinishedLink.text()).toBe("Finished: Arnold VS Betty White, 1970.01.01 01:00");
 		expect(openFinishedLink.attr("href")).toBe("game.html#2");
-		expect(openFinishedLink.attr("target")).toBe("_blank");
 	});
 });
 

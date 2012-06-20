@@ -69,7 +69,6 @@ var GAME_LAUNCHER = function($controls, $games, gameRest) {
 		return $("<a>" + stateDescription + gameDescription + "</a>")
 				.attr({
 					href: "game.html#" + metaData.id,
-					target: "_blank"
 				});		
 	};
 	
