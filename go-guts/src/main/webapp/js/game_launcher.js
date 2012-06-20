@@ -21,13 +21,7 @@ var GAME_LAUNCHER = function($controls, $games, gameRest) {
 	};
 	
 	that.showGames = function() {
-		gameRest.getGameListWithState("INITIATED", function(gamesMetaData) {
-			gamesMetaData.forEach(that.showGame);
-		});		
-		gameRest.getGameListWithState("STARTED", function(gamesMetaData) {
-			gamesMetaData.forEach(that.showGame);
-		});		
-		gameRest.getGameListWithState("FINISHED", function(gamesMetaData) {
+		gameRest.getGameList(function(gamesMetaData) {
 			gamesMetaData.forEach(that.showGame);
 		});		
 	};
