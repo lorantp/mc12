@@ -17,11 +17,6 @@ describe("showing data format", function() {
 		md.showPlayer(null, "", 17, "turqoise");
 	});
 	
-	it('should show epoch start time', function() {
-		expect$methodToBeCalledWith("append", ["Thu, 01 Jan 1970 00:00:00 GMT"]);
-		md.showStartTime(new Date(0));
-	});
-	 
 	it('should show turn number', function() {
 		expect$methodToBeCalledWith("append", ["7 - TURQOISE MOVES"]);
 		md.showCurrentTurn(7, "TURQOISE");

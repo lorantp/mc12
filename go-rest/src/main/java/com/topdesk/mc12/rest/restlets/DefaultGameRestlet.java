@@ -7,8 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.SecurityContext;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,6 +14,7 @@ import org.joda.time.DateTime;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
+import com.google.inject.servlet.RequestScoped;
 import com.topdesk.mc12.common.BoardSize;
 import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.common.GameState;
@@ -32,21 +31,22 @@ import com.topdesk.mc12.rules.entities.Game;
 
 @Slf4j
 @Transactional
+@RequestScoped
 public class DefaultGameRestlet implements GameRestlet {
 	private final Provider<EntityManager> entityManager;
 	private final GoRuleEngine ruleEngine;
-	
-	@Context private SecurityContext context;
+	private final Player player;
 	
 	@Inject
-	public DefaultGameRestlet(Provider<EntityManager> entityManager, GoRuleEngine ruleEngine) {
+	public DefaultGameRestlet(Provider<EntityManager> entityManager, GoRuleEngine ruleEngine, Player player) {
 		this.entityManager = entityManager;
 		this.ruleEngine = ruleEngine;
+		this.player = player;
 	}
 	
 	@Override
 	public Game get(long gameId) {
-		log.error("Over here we actually have the elusive and magical {}", context);
+		log.error("Over here we actually have the elusive and magical {}", player);
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
 		if (gameData == null) {
 			throw GoException.createNotFound("Game with id " + gameId + " not found");
