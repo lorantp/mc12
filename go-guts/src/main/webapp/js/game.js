@@ -8,6 +8,11 @@ var initGame = function() {
 	var contextId = /contextid=(\d+)/.exec(window.location)[1];
 	var playerContext = PLAYER_CONTEXT($("body"), rest, contextId);
 	
+	if(contextId) {
+		var link = $("#return");
+		link.attr("href", playerContext.addContextIdToUrl(link.attr("href")));
+	}
+	
 	var gameRest = GAME_REST(playerContext);
 	
 	var game = GAME(gameRest);
