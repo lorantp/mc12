@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import com.topdesk.mc12.persistence.entities.Player;
@@ -12,7 +13,7 @@ import com.topdesk.mc12.persistence.entities.Player;
 /**
  * SecurityContext used to perform authorization checks.
  */
-public class PlayerContext implements SecurityContext {
+public @EqualsAndHashCode class PlayerContext implements SecurityContext {
 	private static AtomicInteger sessionNumber = new AtomicInteger(0);
 	
 	public static PlayerContext create(Player player, UriInfo uriInfo) {

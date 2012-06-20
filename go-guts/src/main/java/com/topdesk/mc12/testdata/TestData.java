@@ -3,7 +3,6 @@ package com.topdesk.mc12.testdata;
 import javax.inject.Provider;
 import javax.persistence.EntityManager;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.joda.time.DateTime;
@@ -25,7 +24,7 @@ public class TestData {
 	
 	@Inject private Provider<EntityManager> entityManager;
 	
-	private final @Getter Player jorn = Player.create("Jorn", "jornh@topdesk.com");
+	private final Player jorn = Player.create("Jorn", "jornh@topdesk.com");
 	private final Player bernd = Player.create("Bernd", "berndj@topdesk.com");
 	private final Player bart = Player.create("Bart", "barte@topdesk.com");
 	private final Player krisz = Player.create("Krisz", "krisztianh@topdesk.com");

@@ -19,7 +19,6 @@ import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
 import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.persistence.entities.Player;
-import com.topdesk.mc12.testdata.TestData;
  
 /**
  * A Jersey ContainerRequestFilter that provides a SecurityContext for all
@@ -33,15 +32,12 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     HttpServletRequest httpRequest;
 
     private final Provider<EntityManager> entities;
-    private final SessionMap sessions;
-
-	private final TestData data;
+    private final PlayerContextMap sessions;
 
     @Inject
-    public AuthorizationRequestFilter(Provider<EntityManager> entities, SessionMap sessions, TestData data) {
+    public AuthorizationRequestFilter(Provider<EntityManager> entities, PlayerContextMap sessions) {
 		this.entities = entities;
 		this.sessions = sessions;
-		this.data = data;
 	}
  
     /**
@@ -52,22 +48,17 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
      * @return the decorated request
      */
     public ContainerRequest filter(ContainerRequest request) {
-    	if (request.getAbsolutePath() != null) { // TODO Temp escape to prevent filtering right now. 
-    		request.setSecurityContext(PlayerContext.create(data.getJorn(), uriInfo));
-    		return request;
-    	}
-    	
     	log.trace("Authorizing request: {}", request);
     	if (request.getUserPrincipal() != null) {
     		log.trace("Request already authenticated");
     		return request;
     	}
     	
-    	if (httpRequest.getAttribute("sessionid") != null) {
+    	if (httpRequest.getAttribute("contextid") != null) {
     		log.trace("Request belongs to already authorized player");
     		request.setSecurityContext(sessions.retrieveFrom(httpRequest));
     	}
-    	
+
         PlayerContext securityContext = sessions.startNew(authenticatePlayer(), uriInfo);
 		request.setSecurityContext(securityContext);
         return request;
