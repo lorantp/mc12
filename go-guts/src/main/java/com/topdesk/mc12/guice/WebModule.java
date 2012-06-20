@@ -1,13 +1,16 @@
 package com.topdesk.mc12.guice;
 
+import static com.google.inject.Scopes.SINGLETON;
+
 import com.google.common.collect.ImmutableMap;
-import com.google.inject.Scopes;
 import com.sun.jersey.api.core.ResourceConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import com.topdesk.mc12.authentication.AuthorizationRequestFilter;
+import com.topdesk.mc12.authentication.DefaultSessionMap;
 import com.topdesk.mc12.authentication.PlayerProvider;
+import com.topdesk.mc12.authentication.SessionMap;
 import com.topdesk.mc12.persistence.entities.Player;
 import com.topdesk.mc12.rest.RestInterfaceConfig;
 import com.topdesk.mc12.rest.producers.GoExceptionMapper;
@@ -21,12 +24,13 @@ public class WebModule extends JerseyServletModule {
 	protected void configureServlets() {
 		bind(RestInterfaceConfig.class);
 		
-		bind(RuntimeExceptionMapper.class).in(Scopes.SINGLETON);
-		bind(GoExceptionMapper.class).in(Scopes.SINGLETON);
+		bind(RuntimeExceptionMapper.class).in(SINGLETON);
+		bind(GoExceptionMapper.class).in(SINGLETON);
 		
 		bind(Player.class).toProvider(PlayerProvider.class);
 		
-		bind(AuthorizationRequestFilter.class).in(Scopes.SINGLETON);
+		bind(SessionMap.class).to(DefaultSessionMap.class).in(SINGLETON);
+		bind(AuthorizationRequestFilter.class).in(SINGLETON);
 		bind(GameRestlet.class).to(DefaultGameRestlet.class);
 		
 		serve("/rest/*").with(GuiceContainer.class, ImmutableMap.<String, String> builder()

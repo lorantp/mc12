@@ -17,9 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import com.google.inject.persist.Transactional;
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
-import com.topdesk.mc12.authentication.SessionMap.PlayerContext;
 import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.persistence.entities.Player;
+import com.topdesk.mc12.testdata.TestData;
  
 /**
  * A Jersey ContainerRequestFilter that provides a SecurityContext for all
@@ -35,10 +35,13 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     private final Provider<EntityManager> entities;
     private final SessionMap sessions;
 
+	private final TestData data;
+
     @Inject
-    public AuthorizationRequestFilter(Provider<EntityManager> entities, SessionMap sessions) {
+    public AuthorizationRequestFilter(Provider<EntityManager> entities, SessionMap sessions, TestData data) {
 		this.entities = entities;
 		this.sessions = sessions;
+		this.data = data;
 	}
  
     /**
@@ -49,6 +52,11 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
      * @return the decorated request
      */
     public ContainerRequest filter(ContainerRequest request) {
+    	if (request.getAbsolutePath() != null) { // TODO Temp escape to prevent filtering right now. 
+    		request.setSecurityContext(PlayerContext.create(data.getJorn(), uriInfo));
+    		return request;
+    	}
+    	
     	log.trace("Authorizing request: {}", request);
     	if (request.getUserPrincipal() != null) {
     		log.trace("Request already authenticated");
