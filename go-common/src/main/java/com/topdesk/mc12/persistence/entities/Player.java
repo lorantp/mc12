@@ -23,6 +23,7 @@ public final class Player implements DatabaseEntity, Principal {
 	@Id @GeneratedValue private Long id;
 	@Nonnull private String nickname;
 	@Nonnull private String email;
+	
 	@Override
 	public String getName() {
 		return nickname;
