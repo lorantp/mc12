@@ -17,7 +17,8 @@ public class StoneScoreCalculator implements ScoreCalculator {
 		for (Stone stone : stones) {
 			if(stone.getColor() == Color.BLACK) {
 				black++;
-			} else {
+			}
+			else {
 				white++;
 			}
 		}
