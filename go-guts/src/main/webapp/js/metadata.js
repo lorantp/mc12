@@ -11,12 +11,12 @@ var METADATA = function($parent) {
 			that.showCurrentTurn(game.totalMoves + 1, blackTurn ? "BLACK" : "WHITE");
 		}
 		else {
-			that.showResults(game.winner.nickname.toUpperCase());
+			that.showResults(game.winner.name.toUpperCase());
 		}
 	}
 	
 	that.showPlayer = function(player, idSelector, captured, color) {
-		$(idSelector).append(player ? player.nickname.toUpperCase() : "?");
+		$(idSelector).append(player ? player.name.toUpperCase() : "?");
 		$("#" + color + "captured").append(captured);
 	}
 	

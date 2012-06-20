@@ -71,8 +71,8 @@ public class DefaultGameRestlet implements GameRestlet {
 				game.get("id"),
 				game.get("start"),
 				stateField,
-				game.join("black", JoinType.LEFT).get("nickname"),
-				game.join("white", JoinType.LEFT).get("nickname"));
+				game.join("black", JoinType.LEFT).get("name"),
+				game.join("white", JoinType.LEFT).get("name"));
 		
 		if (state != null) {
 			query.where(stateField.in(state));

@@ -116,7 +116,7 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 			throw GoException.createNotAcceptable("This game is already finished");
 		}
 		if (game.getNextTurn() != color) {
-			String nickname = (color == Color.BLACK ? game.getBlack() : game.getWhite()).getNickname();
+			String nickname = (color == Color.BLACK ? game.getBlack() : game.getWhite()).getName();
 			throw GoException.createNotAcceptable("It is not " + nickname + "'s turn");
 		}
 	}
