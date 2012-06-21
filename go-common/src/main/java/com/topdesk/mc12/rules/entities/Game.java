@@ -19,7 +19,7 @@ public class Game {
 	private final Player black;
 	private final Player white;
 	private final int size;
-	private final long start;
+	private final Long start;
 	
 	@Setter(AccessLevel.NONE) private int totalMoves = 0;
 	
@@ -30,7 +30,7 @@ public class Game {
 	@Setter(AccessLevel.NONE) private boolean lastMovePass = false;
 	private Player winner;
 	
-	public Game(long id, Player black, Player white, int size, long start) {
+	public Game(long id, Player black, Player white, int size, Long start) {
 		this.id = id;
 		this.black = black;
 		this.white = white;

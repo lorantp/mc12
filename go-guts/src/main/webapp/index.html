@@ -37,7 +37,7 @@
 		chromium.org/developers/how-tos/chrome-frame-getting-started -->
 		<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
 		<header>
-
+		
 		</header>
 		<div id="login" class = "shadowed bordered overlay">
 			TOPdesk presents
@@ -47,9 +47,24 @@
 			<button id="loginbutton">Login</button>
 		</div>
 		<div id="content" class="shadowed infobox">
-			<div id="games" class="bordered">
-				List of Games
-			</div>
+			<table width=100% id="running_games" class="bordered">
+				<thead>
+					<tr><th colspan=5>Started Games</th></tr>
+					<tr><th>Black</th><th>White</th><th>Board size</th><th>Started</th><th>Play</th></tr>
+				</thead>
+			</table>
+			<table width=100% id="initiated_games" class="bordered">
+				<thead>
+					<th colspan=5>Initiated Games</th>
+					<tr><th>Black</th><th>White</th><th>Board size</th><th>Initiated</th><th>Play</th></tr>
+				</thead>
+			</table>
+			<table width=100% id="finished_games" class="bordered">
+				<thead>
+					<tr><th colspan=6>Finished Games</th>
+					<tr><th>Black</th><th>White</th><th>Winner</th><th>Board size</th><th>Finished</th><th>View game</th></tr>
+				</thead>
+			</table>
 			<div id="launch_game" class="bordered">
 				Size of board:
 				<select id="board_size">
@@ -73,6 +88,7 @@
 		<script src="js/rest/game_rest.js"> </script>
 		<script src="js/player_context.js"> </script>
 		<script src="js/game_launcher.js"> </script>
+		<script src="js/debug.js">
 		<script src="js/plugins.js">
 		</script>
 		<!-- end scripts -->

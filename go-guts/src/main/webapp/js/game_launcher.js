@@ -28,34 +28,27 @@ var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 	};
 	
 	that.showGames = function() {
-		gameRest.getGameList(function(gamesMetaData) {
-			gamesMetaData.forEach(that.showGame);
+		gameRest.getGameListWithState("STARTED", function(gamesMetaData) {
+			gamesMetaData.forEach(that.showStartedGame);
+		});		
+		gameRest.getGameListWithState("INITIATED", function(gamesMetaData) {
+			gamesMetaData.forEach(that.showInitiatedGame);
+		});		
+		gameRest.getGameListWithState("FINISHED", function(gamesMetaData) {
+			gamesMetaData.forEach(that.showFinishedGame);
 		});		
 	};
 	
-	that.showGame = function(metaData) {
-		if (metaData.state == "CANCELLED") {
-			return;
-		}
-		
-		var gameGui;
-		if(metaData.state == "INITIATED") {
-			gameGui = that.createJoinButton(metaData);
-		}
-		else {
-			gameGui = that.createOpenGameLink(metaData);
-		}
-		
-		$games.append($("<li/>").append(gameGui));			
+	that.showStartedGame = function(metaData) {
+		$('#running_games tr:last').after('<tr><td>' + metaData.blackPlayer + '</td><td>' + metaData.whitePlayer +'</td><td>' + metaData.boardSize + 'x' + metaData.boardSize + '</td><td>' + metaData.initiate + '</td><td>button</td></tr>');
 	};
 	
-	that.createJoinButton = function(metaData) {
-		var joinText = metaData.blackPlayer == null ? metaData.whitePlayer + " as black" : metaData.blackPlayer + " as white";    
-		return $("<button>Play against " + joinText + "</button>")
-				.attr({id: toJoinId(metaData.id)})
-				.click(function() {
-					that.join(metaData.id);
-				});		
+	that.showInitiatedGame = function(metaData) {
+		$('#initiated_games tr:last').after('<tr><td>' + (metaData.blackPlayer ? metaData.blackPlayer : 'button') + '</td><td>' + (metaData.whitePlayer ? metaData.whitePlayer : 'button')  +'</td><td>' + metaData.boardSize + 'x' + metaData.boardSize + '</td><td>' + metaData.initiate + '</td></tr>');
+	};
+	
+	that.showFinishedGame = function(metaData) {
+		$('#finished_games tr:last').after('<tr><td>' + metaData.blackPlayer + '</td><td>' + metaData.whitePlayer + '</td><td>' + metaData.winner +'</td><td>' + metaData.boardSize + 'x' + metaData.boardSize + '</td><td>' + metaData.finished + '</td><td>button</td></tr>');
 	};
 	
 	that.join = function(gameId) {
@@ -66,17 +59,6 @@ var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 	
 	that.openGame = function(gameId) {		
 		window.location = context.addContextIdToUrl("game.html#" + gameId);
-	};
-	
-	that.createOpenGameLink = function(metaData) {
-		var startDate = $.format.date(new Date(metaData.start), "yyyy.MM.dd HH:mm");
-		var gameDescription = metaData.blackPlayer + " VS " + metaData.whitePlayer + ", " + startDate;
-		
-		var stateDescription = metaData.state == "FINISHED" ? "Finished: " : "Playing: ";
-		return $("<a>" + stateDescription + gameDescription + "</a>")
-				.attr({
-					href: context.addContextIdToUrl("game.html#" + metaData.id),
-				});		
 	};
 	
 	that.activateButtons = function() {

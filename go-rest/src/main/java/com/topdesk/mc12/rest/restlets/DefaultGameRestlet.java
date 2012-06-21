@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
@@ -77,7 +78,7 @@ public class DefaultGameRestlet implements GameRestlet {
 		}
 		
 		List<GameData> games = entityManager.get().createQuery(query).getResultList();
-		return Lists.transform(games, new MetaDataFunction());
+		return ImmutableList.copyOf(Lists.transform(games, new MetaDataFunction()));
 	}
 	
 	@Override
@@ -183,8 +184,8 @@ public class DefaultGameRestlet implements GameRestlet {
 					gameData.getId(),
 					gameData.getState(),
 					gameData.getBoardSize().getSize(),
-					gameData.getBlack().getName(),
-					gameData.getWhite().getName(),
+					gameData.getBlack() == null ? null : game.getBlack().getName(),
+					gameData.getWhite() == null ? null : game.getWhite().getName(),
 					gameData.getInitiate(),
 					gameData.getStart(),
 					gameData.getFinish(),
