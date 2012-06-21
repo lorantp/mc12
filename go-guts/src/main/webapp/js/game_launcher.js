@@ -1,15 +1,15 @@
 var initGameLauncher = function() {
 	var rest = REST("rest");
-	var player_context = PLAYER_CONTEXT($("#login"), rest);
+	var player_context = PLAYER_CONTEXT($("body"), rest);
 	var gameRest = GAME_REST(player_context);
 	
 	var init = new GAME_LAUNCHER(
-			$("body"), 
+			$("#launch_game"), 
 			$("#games"),
 			gameRest,
 			player_context);
 	
-	init.activateButtons();
+	init.activateButton();
 	
 	player_context.authenticate(init.showGames);
 };
@@ -76,11 +76,8 @@ var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 				});		
 	};
 	
-	that.activateButtons = function() {
+	that.activateButton = function() {
 		$controls.find("#initiate").click(that.initiate);
-		$controls.find("#loginbutton").click(function() {
-			context.login(that.showGames);
-		});
 	};
 	
 	that.initiate = function() {
