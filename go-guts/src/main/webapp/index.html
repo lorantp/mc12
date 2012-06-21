@@ -1,4 +1,4 @@
-<!doctype html> <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!DOCTYPE HTML> <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
@@ -31,27 +31,34 @@
 		<!-- All JavaScript at the bottom, except this Modernizr build.
 		Modernizr enables HTML5 elements & feature detects for optimal performance.
 		Create your own custom Modernizr build: www.modernizr.com/download/ -->
-		<script src="js/libs/modernizr-2.5.3.min.js"></script>
+		<script src="js/libs/modernizr-2.5.3.min.js"> </script>
 	</head>
 	<body onload="initGameLauncher();">
 		<!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
 		chromium.org/developers/how-tos/chrome-frame-getting-started -->
 		<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
 		<header>
-
+		
 		</header>
-		<div id="login" class = "shadowed bordered overlay">
-			TOPdesk presents
-			<h1>GO</h1>
-			Please login:
-			<textarea id="name" rows="1" cols="20"></textarea>
-			<button id="loginbutton">Login</button>
-		</div>
 		<div id="content" class="shadowed infobox">
-			<div id="games">				
-				List of Games
-				<div id="game_list"></div>
-			</div>
+			<table width=100% id="running_games" class="bordered">
+				<thead>
+					<tr><th colspan=5>Started Games</th></tr>
+					<tr><th>Black</th><th>White</th><th>Board size</th><th>Started</th><th>Play</th></tr>
+				</thead>
+			</table>
+			<table width=100% id="initiated_games" class="bordered">
+				<thead>
+					<th colspan=5>Initiated Games</th>
+					<tr><th>Black</th><th>White</th><th>Board size</th><th>Initiated</th><th>Play</th></tr>
+				</thead>
+			</table>
+			<table width=100% id="finished_games" class="bordered">
+				<thead>
+					<tr><th colspan=6>Finished Games</th>
+					<tr><th>Black</th><th>White</th><th>Winner</th><th>Board size</th><th>Finished</th><th>View game</th></tr>
+				</thead>
+			</table>
 			<div id="launch_game" class="bordered">
 				Size of board:
 				<select id="board_size">
@@ -69,15 +76,16 @@
 		</div>
 		<!-- JavaScript at the bottom for fast page loading -->
 		<!-- scripts concatenated and minified via build script -->
-		<script src="js/libs/jquery-1.7.2.js"></script>
-		<script src="js/libs/jquery-1.7.2.min.js"></script>
-		<script src="js/libs/jquery.dateFormat-1.0.js"></script>		
+		<script src="js/libs/jquery-1.7.2.js"> </script>
+		<script src="js/libs/jquery-1.7.2.min.js"> </script>
+		<script src="js/libs/jquery.dateFormat-1.0.js"> </script>
 		<script src="js/libs/jquery-ui-1.8.21.custom.min.js"></script>		
-		<script src="js/rest/rest.js"></script>
-		<script src="js/rest/game_rest.js"></script>
-		<script src="js/player_context.js"></script>
-		<script src="js/game_launcher.js"></script>
-		<script src="js/plugins.js"></script>
+		<script src="js/rest/rest.js"> </script>
+		<script src="js/rest/game_rest.js"> </script>
+		<script src="js/player_context.js"> </script>
+		<script src="js/game_launcher.js"> </script>
+		<script src="js/debug.js"> </script>
+		<script src="js/plugins.js"> </script>
 		<!-- end scripts -->
 	</body>
 </html>

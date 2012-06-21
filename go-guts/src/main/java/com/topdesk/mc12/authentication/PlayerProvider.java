@@ -9,8 +9,8 @@ import com.topdesk.mc12.persistence.entities.Player;
 
 @RequestScoped
 public class PlayerProvider implements Provider<Player> {
-	private SecurityContext sc;
-
+	private final SecurityContext sc;
+	
 	@Inject
 	public PlayerProvider(SecurityContext sc) {
 		this.sc = sc;

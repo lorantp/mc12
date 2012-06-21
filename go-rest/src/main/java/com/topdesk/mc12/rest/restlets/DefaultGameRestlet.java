@@ -6,7 +6,6 @@ import javax.inject.Provider;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
@@ -14,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.joda.time.DateTime;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.google.inject.servlet.RequestScoped;
@@ -62,24 +64,21 @@ public class DefaultGameRestlet implements GameRestlet {
 	@Override
 	public List<GameMetaData> getAll(GameState state) {
 		CriteriaBuilder builder = entityManager.get().getCriteriaBuilder();
-		CriteriaQuery<GameMetaData> query = builder.createQuery(GameMetaData.class);
-		Root<GameData> game = query.from(GameData.class);
-		Path<Object> stateField = game.get("state");
-		query.multiselect(
-				game.get("id"),
-				game.get("start"),
-				stateField,
-				game.join("black", JoinType.LEFT).get("name"),
-				game.join("white", JoinType.LEFT).get("name"));
+		CriteriaQuery<GameData> query = builder.createQuery(GameData.class);
+		Root<GameData> root = query.from(GameData.class);
+		Path<Object> stateField = root.get("state");
+		query.select(root);
 		
 		if (state != null) {
 			query.where(stateField.in(state));
 		}
 		else {
 			query.where(stateField.in(GameState.INITIATED, GameState.STARTED, GameState.FINISHED));
-			query.orderBy(builder.asc(stateField), builder.desc(game.get("start")));
+			query.orderBy(builder.asc(stateField), builder.desc(root.get("start")));
 		}
-		return entityManager.get().createQuery(query).getResultList();
+		
+		List<GameData> games = entityManager.get().createQuery(query).getResultList();
+		return ImmutableList.copyOf(Lists.transform(games, new MetaDataFunction()));
 	}
 	
 	@Override
@@ -91,6 +90,7 @@ public class DefaultGameRestlet implements GameRestlet {
 		
 		if (game.isFinished()) {
 			gameData.setState(GameState.FINISHED);
+			gameData.setFinish(new DateTime().getMillis());
 			entityManager.get().merge(gameData);
 		}
 		
@@ -114,13 +114,7 @@ public class DefaultGameRestlet implements GameRestlet {
 	
 	@Override
 	public long newGame(NewGame newGame) {
-		GameData game = new GameData(null, null, new DateTime().getMillis(), BoardSize.get(newGame.getBoardSize()), GameState.INITIATED);
-		if (newGame.getColor() == Color.BLACK) {
-			game.setBlack(player);
-		}
-		else {
-			game.setWhite(player);
-		}
+		GameData game = GameData.createInitiated(player, newGame.getColor(), new DateTime().getMillis(), BoardSize.get(newGame.getBoardSize()));
 		
 		entityManager.get().persist(game);
 		entityManager.get().flush();
@@ -131,7 +125,7 @@ public class DefaultGameRestlet implements GameRestlet {
 	@Override
 	public void startGame(long gameId) {
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
-		checkInitiated(gameData);
+		checkState(gameData, GameState.INITIATED);
 		
 		boolean whiteInitiated = gameData.getBlack() == null;
 		Player initiated = whiteInitiated ? gameData.getWhite() : gameData.getBlack();
@@ -158,7 +152,7 @@ public class DefaultGameRestlet implements GameRestlet {
 	@Override
 	public void cancelGame(long gameId) {
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
-		checkInitiated(gameData);
+		checkState(gameData, GameState.INITIATED);
 		getPlayerColor(gameData);
 		gameData.setState(GameState.CANCELLED);
 		entityManager.get().persist(gameData);
@@ -166,9 +160,9 @@ public class DefaultGameRestlet implements GameRestlet {
 		log.info("Player {} cancelled game {}", player.getName(), gameData);
 	}
 	
-	private void checkInitiated(GameData gameData) {
-		if (gameData.getState() != GameState.INITIATED) {
-			throw GoException.createNotAcceptable("Game is not in INITIATED state");
+	private void checkState(GameData gameData, GameState state) {
+		if (gameData.getState() != state) {
+			throw GoException.createNotAcceptable("Game is not in " + state + " state");
 		}
 	}
 	
@@ -180,5 +174,22 @@ public class DefaultGameRestlet implements GameRestlet {
 			return Color.WHITE;
 		}
 		throw GoException.createUnauthorized("Player " + player.getName() + " does not participate in game " + game.getId());
+	}
+	
+	private final class MetaDataFunction implements Function<GameData, GameMetaData> {
+		@Override
+		public GameMetaData apply(GameData gameData) {
+			Game game = ruleEngine.applyMoves(gameData);
+			return new GameMetaData(
+					gameData.getId(),
+					gameData.getState(),
+					gameData.getBoardSize().getSize(),
+					gameData.getBlack() == null ? null : game.getBlack().getName(),
+					gameData.getWhite() == null ? null : game.getWhite().getName(),
+					gameData.getInitiate(),
+					gameData.getStart(),
+					gameData.getFinish(),
+					game.isFinished() ? game.getWinner().getName() : null);
+		}
 	}
 }

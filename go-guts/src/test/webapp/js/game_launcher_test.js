@@ -112,7 +112,7 @@ describe("init game buttton", function() {
 	
 	it("should initiate a new game with the specified board size and player color", function() {
 		spyOn(restMock, "newGame");
-		launcher.activateButtons();
+		launcher.activateButton();
 		initButton.click();
 		expect(restMock.newGame).toHaveBeenCalledWith(1, "42", "RED", launcher.openGame);
 	});
