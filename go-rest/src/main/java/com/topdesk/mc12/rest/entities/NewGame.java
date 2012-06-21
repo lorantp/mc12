@@ -7,7 +7,6 @@ import com.topdesk.mc12.common.Color;
 
 @Data @NoArgsConstructor
 public class NewGame {
-	private long playerId;
 	private int boardSize;
 	private Color color;
 }

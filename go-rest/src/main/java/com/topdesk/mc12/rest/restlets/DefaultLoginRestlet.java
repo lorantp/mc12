@@ -54,7 +54,7 @@ public class DefaultLoginRestlet implements LoginRestlet {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<E> query = builder.createQuery(entity);
 		Root<E> root = query.from(entity);
-		query.select(root).where(builder.equal(root.get(fieldName), value));
+		query.select(root).where(builder.equal(builder.upper(root.get(fieldName).as(String.class)), value.toUpperCase()));
 		return em.createQuery(query).getResultList();
 	}
 }

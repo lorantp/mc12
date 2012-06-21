@@ -13,7 +13,6 @@ import javax.ws.rs.core.MediaType;
 import com.topdesk.mc12.common.GameState;
 import com.topdesk.mc12.rest.entities.GameMetaData;
 import com.topdesk.mc12.rest.entities.NewGame;
-import com.topdesk.mc12.rest.entities.PlayerId;
 import com.topdesk.mc12.rest.entities.RestMove;
 import com.topdesk.mc12.rules.entities.Game;
 
@@ -25,10 +24,10 @@ public interface GameRestlet {
 	@GET @Path("/all") List<GameMetaData> getAll();
 	@GET @Path("/all/{state}") List<GameMetaData> getAll(@PathParam("state") GameState state);
 	
-	@POST @Path("/{id}/pass") void pass(@PathParam("id") long gameId, PlayerId playerId);
+	@POST @Path("/{id}/pass") void pass(@PathParam("id") long gameId);
 	@POST @Path("/{id}/move") void move(@PathParam("id") long gameId, RestMove restMove);
 	
 	@POST @Path("/new") long newGame(NewGame newGame);
-	@POST @Path("/{id}/start") void startGame(@PathParam("id") long gameId, PlayerId playerId);
+	@POST @Path("/{id}/start") void startGame(@PathParam("id") long gameId);
 	@POST @Path("/{id}/cancel") void cancelGame(@PathParam("id") long gameId);
 }
