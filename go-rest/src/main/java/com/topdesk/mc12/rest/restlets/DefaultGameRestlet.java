@@ -66,7 +66,7 @@ public class DefaultGameRestlet implements GameRestlet {
 		CriteriaQuery<GameData> query = builder.createQuery(GameData.class);
 		Root<GameData> root = query.from(GameData.class);
 		Path<Object> stateField = root.get("state");
-		query.multiselect(root);
+		query.select(root);
 		
 		if (state != null) {
 			query.where(stateField.in(state));
@@ -181,13 +181,13 @@ public class DefaultGameRestlet implements GameRestlet {
 			Game game = ruleEngine.applyMoves(gameData);
 			return new GameMetaData(
 					gameData.getId(),
-					gameData.getInitiate(),
-					gameData.getStart(),
-					gameData.getFinish(),
 					gameData.getState(),
 					gameData.getBoardSize().getSize(),
 					gameData.getBlack().getName(),
 					gameData.getWhite().getName(),
+					gameData.getInitiate(),
+					gameData.getStart(),
+					gameData.getFinish(),
 					game.isFinished() ? game.getWinner().getName() : null);
 		}
 	}

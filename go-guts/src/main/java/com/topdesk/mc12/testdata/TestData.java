@@ -27,48 +27,51 @@ import com.topdesk.mc12.persistence.entities.Player;
 public class TestData {
 	@Inject private Provider<EntityManager> entityManager;
 	
-	private static final List<Player> PLAYERS = ImmutableList.of(
+	private final List<Player> players = ImmutableList.of(
 			Player.create("Bart", "barte@topdesk.com"),
 			Player.create("Bernd", "berndj@topdesk.com"),
 			Player.create("Jorn", "jornh@topdesk.com"),
 			Player.create("Krisz", "krisztianh@topdesk.com"));
 	private DateTime nextDate = new DateTime(DateTimeZone.forID("Europe/Berlin")).minusDays(1).withHourOfDay(9);
-	private int nextSize = 0;
+	private final Iterator<BoardSize> sizes = Iterables.cycle(EnumSet.allOf(BoardSize.class)).iterator();
 	
 	@Transactional
 	public void create() {
 		createUsers();
-		for (Player black : PLAYERS) {
+		
+		for (Player black : players) {
 			createNewAndCancelled(black);
-			for (Player white : PLAYERS) {
+			
+			for (Player white : players) {
 				createStartedAndFinished(black, white);
 			}
 		}
+		
 		entityManager.get().flush();
 	}
 	
 	private void createUsers() {
-		for (Player player : PLAYERS) {
+		for (Player player : players) {
 			persist(player);
 		}
 		entityManager.get().flush();
-		log.debug("Created {} test users", PLAYERS.size());
+		log.debug("Created {} test users", players.size());
 	}
 	
 	private void createNewAndCancelled(Player player) {
-		persist(GameData.createInitiated(player, Color.BLACK, nextDate(), nextSize()));
-		persist(GameData.createInitiated(player, Color.WHITE, nextDate(), nextSize()));
+		persist(GameData.createInitiated(player, Color.BLACK, nextDate(), sizes.next()));
+		persist(GameData.createInitiated(player, Color.WHITE, nextDate(), sizes.next()));
 		log.debug("Created 2 initiated games for player {}", player.getName());
 		
-		persist(GameData.createCancelled(player, Color.BLACK, nextDate(), nextDate(), nextSize()));
-		persist(GameData.createCancelled(player, Color.WHITE, nextDate(), nextDate(), nextSize()));
+		persist(GameData.createCancelled(player, Color.BLACK, nextDate(), nextDate(), sizes.next()));
+		persist(GameData.createCancelled(player, Color.WHITE, nextDate(), nextDate(), sizes.next()));
 		log.debug("Created 2 cancelled games for player {}", player.getName());
 	}
 	
 	private void createStartedAndFinished(Player black, Player white) {
-		persist(GameData.createStarted(black, white, nextDate(), nextDate(), nextSize()));
+		persist(GameData.createStarted(black, white, nextDate(), nextDate(), sizes.next()));
 		
-		GameData game = GameData.createFinished(black, white, nextDate(), nextDate(), nextDate(), nextSize());
+		GameData game = GameData.createFinished(black, white, nextDate(), nextDate(), nextDate(), sizes.next());
 		persist(game);
 		
 		Iterator<Color> colors = Iterables.cycle(EnumSet.allOf(Color.class)).iterator();
@@ -85,10 +88,6 @@ public class TestData {
 	
 	private long nextDate() {
 		return (nextDate = nextDate.plusHours(1)).getMillis();
-	}
-	
-	private BoardSize nextSize() {
-		return BoardSize.values()[nextSize++ % 3];
 	}
 	
 	private void persist(DatabaseEntity entity) {
