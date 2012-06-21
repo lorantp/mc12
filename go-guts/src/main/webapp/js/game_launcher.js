@@ -1,3 +1,4 @@
+
 var initGameLauncher = function() {
 	var rest = REST("rest");
 	var player_context = PLAYER_CONTEXT($("body"), rest);
@@ -24,9 +25,17 @@ var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 		return "join_" + gameId;
 	};
 	
+	that.applySkin = function() {
+		$("#game_states").accordion({
+			fillSpace: true,
+			animated: false
+		});
+	};
+	
 	that.showGames = function() {
 		gameRest.getGameListWithState("STARTED", function(gamesMetaData) {
 			gamesMetaData.forEach(that.showStartedGame);
+			that.applySkin();
 		});		
 		gameRest.getGameListWithState("INITIATED", function(gamesMetaData) {
 			gamesMetaData.forEach(that.showInitiatedGame);
