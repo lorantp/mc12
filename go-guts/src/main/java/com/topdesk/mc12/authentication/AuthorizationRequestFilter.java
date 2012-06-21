@@ -1,8 +1,10 @@
 package com.topdesk.mc12.authentication;
  
 import java.security.Principal;
+import java.util.Arrays;
 
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
@@ -46,14 +48,21 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     		return request;
     	}
     	
-    	if (httpRequest.getParameter("contextid") != null) {
-    		log.trace("Request belongs to already authorized player");
-    		PlayerContext context = contextMap.getById(Integer.valueOf(httpRequest.getParameter("contextid")), httpRequest);
-    		request.setSecurityContext(new PlayerContexedSecurity(context, uriInfo));
-    		return request;
+    	if (httpRequest.getCookies() != null ) {
+    		for (Cookie cookie : Arrays.asList(httpRequest.getCookies())) {
+    			log.trace("Cookie found: cookieName: {} cookieValue: {}", cookie.getName(), cookie.getValue());
+    			if (cookie.getName().equals("contextId")) {
+    				PlayerContext context = contextMap.getById(Integer.valueOf(cookie.getValue()), httpRequest);
+    				if (context == null) {
+    					GoException.createUnauthorized("PlayerContext is no longer valid.");
+    				}
+    				request.setSecurityContext(new PlayerContexedSecurity(context, uriInfo));
+    				return request;
+    			}
+    		}
     	}
 
-        throw GoException.createBadRequest("No authorization");
+        throw GoException.createUnauthorized("No authorization");
     }
 
 	private static final class PlayerContexedSecurity implements SecurityContext {

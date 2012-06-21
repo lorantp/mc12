@@ -114,7 +114,7 @@ var GAME_LIST = function($content, gameRest) {
 	};
 	
 	that.openGame = function(gameId) {		
-		window.location = context.addContextIdToUrl("game.html#" + gameId);
+		window.location = "game.html#" + gameId;
 	};
 	
 	return that;
