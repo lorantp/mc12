@@ -36,16 +36,16 @@ public class DefaultLoginRestlet implements LoginRestlet {
 			Player player = Player.create(playerName, playerName + "@topdesk.com");
 			entityManager.get().persist(player);
 			log.info("Created new player and logged in for {}", player);
-			return contextMap.startNew(player, request).getId();
+			return contextMap.startNew(player, request).hashCode();
 		}
 		
 		Player player = players.get(0);
 		if (contextMap.hasContextFor(player, request)) {
 			log.info("Using existing login for {}", player);
-			return contextMap.getByPlayer(player, request).getId();
+			return contextMap.getByPlayer(player, request).hashCode();
 		}
 		log.info("Logged in for {}", player);
-		return contextMap.startNew(player, request).getId();
+		return contextMap.startNew(player, request).hashCode();
 	}
 	
 	private <E> List<E> selectByField(String fieldName, String value, Class<E> entity) {

@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import com.topdesk.mc12.common.PlayerContext;
@@ -19,6 +20,6 @@ public @Data @RequiredArgsConstructor(access=AccessLevel.PRIVATE) class DefaultP
 		return new DefaultPlayerContext(sessionNumber.incrementAndGet(), player);
 	}
 	
-	private final int id;
+	private @Getter(AccessLevel.NONE) final int uniquefier;
     private final Player player;
 }

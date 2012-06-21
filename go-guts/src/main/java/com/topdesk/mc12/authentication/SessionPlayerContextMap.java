@@ -19,7 +19,7 @@ public class SessionPlayerContextMap implements PlayerContextMap {
 	@Override
 	public PlayerContext startNew(Player player, HttpServletRequest request) {
 		PlayerContext context = DefaultPlayerContext.create(checkNotNull(player));
-		request.getSession().setAttribute(Integer.toString(context.getId()), context);
+		request.getSession().setAttribute(Integer.toString(context.hashCode()), context);
 		return context;
 	}
 
