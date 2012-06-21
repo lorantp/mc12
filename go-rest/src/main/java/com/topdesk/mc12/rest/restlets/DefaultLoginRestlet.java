@@ -31,16 +31,16 @@ public class DefaultLoginRestlet implements LoginRestlet {
 	@Override
 	@Transactional
 	public int get(String playerName) {
-		List<Player> playersFound = selectByField("name", playerName, Player.class);
+		List<Player> players = selectByField("name", playerName, Player.class);
 		
-		if (playersFound.isEmpty()) {
+		if (players.isEmpty()) {
 			Player player = Player.create(playerName, playerName + "@topdesk.com");
 			entityManager.get().persist(player);
 			log.info("Created new player and logged in for {}", player);
 			return contextMap.startNew(player).getId();
 		}
 		
-		Player player = playersFound.get(0);
+		Player player = players.get(0);
 		if (contextMap.hasContextFor(player)) {
 			log.info("Using existing login for {}", player);
 			return contextMap.getContextFor(player).getId();
