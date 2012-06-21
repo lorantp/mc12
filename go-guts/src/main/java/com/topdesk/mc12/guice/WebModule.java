@@ -1,6 +1,6 @@
 package com.topdesk.mc12.guice;
 
-import static com.google.inject.Scopes.SINGLETON;
+import static com.google.inject.Scopes.*;
 
 import com.google.common.collect.ImmutableMap;
 import com.sun.jersey.api.core.ResourceConfig;

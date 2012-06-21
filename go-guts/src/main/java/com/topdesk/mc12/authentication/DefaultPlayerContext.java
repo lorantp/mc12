@@ -12,11 +12,11 @@ import com.topdesk.mc12.persistence.entities.Player;
 /**
  * SecurityContext used to perform authorization checks.
  */
-public @Data @RequiredArgsConstructor(access=AccessLevel.PRIVATE) class DefaulPlayerContext implements PlayerContext {
+public @Data @RequiredArgsConstructor(access=AccessLevel.PRIVATE) class DefaultPlayerContext implements PlayerContext {
 	private static AtomicInteger sessionNumber = new AtomicInteger(0);
 	
-	public static DefaulPlayerContext create(Player player) {
-		return new DefaulPlayerContext(sessionNumber.incrementAndGet(), player);
+	public static DefaultPlayerContext create(Player player) {
+		return new DefaultPlayerContext(sessionNumber.incrementAndGet(), player);
 	}
 	
 	private final int id;

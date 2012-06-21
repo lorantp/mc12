@@ -8,13 +8,15 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.google.inject.servlet.RequestScoped;
-import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.common.PlayerContextMap;
 import com.topdesk.mc12.persistence.entities.Player;
 
+@Slf4j
 @RequestScoped
 public class DefaultLoginRestlet implements LoginRestlet {
 	private final Provider<EntityManager> entityManager;
@@ -25,27 +27,34 @@ public class DefaultLoginRestlet implements LoginRestlet {
 		this.entityManager = entityManager;
 		this.contextMap = contextMap;
 	}
-
+	
 	@Override
+	@Transactional
 	public int get(String playerName) {
 		List<Player> playersFound = selectByField("name", playerName, Player.class);
-		if(playersFound.size() != 1) {
-			throw GoException.createBadRequest("Couldn't authenticate " + playerName);
+		
+		if (playersFound.isEmpty()) {
+			Player player = Player.create(playerName, playerName + "@topdesk.com");
+			entityManager.get().persist(player);
+			log.info("Created new player and logged in for {}", player);
+			return contextMap.startNew(player).getId();
 		}
+		
 		Player player = playersFound.get(0);
 		if (contextMap.hasContextFor(player)) {
+			log.info("Using existing login for {}", player);
 			return contextMap.getContextFor(player).getId();
 		}
+		log.info("Logged in for {}", player);
 		return contextMap.startNew(player).getId();
 	}
-
-    @Transactional
-	private <E> List<E> selectByField(String fieldName, String value, Class<E> entityClass) {
+	
+	private <E> List<E> selectByField(String fieldName, String value, Class<E> entity) {
 		EntityManager em = entityManager.get();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<E> unconditionalQuery = cb.createQuery(entityClass);
-    	Root<E> entityStructure = unconditionalQuery.from(entityClass);
-		CriteriaQuery<E> finishedQuery = unconditionalQuery.select(entityStructure).where(cb.equal(entityStructure.get(fieldName), value));
-    	return em.createQuery(finishedQuery).getResultList();
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+		CriteriaQuery<E> query = builder.createQuery(entity);
+		Root<E> root = query.from(entity);
+		query.select(root).where(builder.equal(root.get(fieldName), value));
+		return em.createQuery(query).getResultList();
 	}
 }

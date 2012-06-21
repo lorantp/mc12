@@ -1,6 +1,6 @@
 package com.topdesk.mc12.authentication;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import java.util.Map;
 
@@ -10,8 +10,8 @@ import com.topdesk.mc12.common.PlayerContextMap;
 import com.topdesk.mc12.persistence.entities.Player;
 
 public class DefaultPlayerContextMap implements PlayerContextMap {
-	private Map<Player, PlayerContext> playerLookup = Maps.newHashMap();
-	private Map<Integer, PlayerContext> idLookup = Maps.newHashMap();
+	private final Map<Player, PlayerContext> playerLookup = Maps.newHashMap();
+	private final Map<Integer, PlayerContext> idLookup = Maps.newHashMap();
 	
 	@Override
 	public PlayerContext retrieveFrom(int contextId) {
@@ -20,7 +20,7 @@ public class DefaultPlayerContextMap implements PlayerContextMap {
 
 	@Override
 	public PlayerContext startNew(Player player) {
-		PlayerContext context = DefaulPlayerContext.create(checkNotNull(player));
+		PlayerContext context = DefaultPlayerContext.create(checkNotNull(player));
 		playerLookup.put(player, context);
 		idLookup.put(context.getId(), context);
 		return context;
