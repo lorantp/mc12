@@ -10,6 +10,7 @@ var initGameLauncher = function() {
 			gameRest,
 			player_context);
 	
+	init.initStyle();
 	init.activateButton();
 	
 	player_context.authenticate(init.showGames);
@@ -25,36 +26,87 @@ var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 		return "join_" + gameId;
 	};
 	
-	that.applySkin = function() {
+	that.initStyle = function() {
+		$("#board_size").buttonset();
+		$("#player_color").buttonset();
+		$("#initiate").button();
+	};
+	
+	that.applyAccordionStlye = function() {
 		$("#game_states").accordion({
-			fillSpace: true,
-			animated: false
+			collapsible: true,
+			fillSpace: true
 		});
 	};
 	
 	that.showGames = function() {
-		gameRest.getGameListWithState("STARTED", function(gamesMetaData) {
-			gamesMetaData.forEach(that.showStartedGame);
-			that.applySkin();
+		gameRest.getGameList(function(gamesMetaData) {
+			gamesMetaData.forEach(that.showGame);
+			that.applyAccordionStlye();
 		});		
-		gameRest.getGameListWithState("INITIATED", function(gamesMetaData) {
-			gamesMetaData.forEach(that.showInitiatedGame);
-		});		
-		gameRest.getGameListWithState("FINISHED", function(gamesMetaData) {
-			gamesMetaData.forEach(that.showFinishedGame);
-		});
 	};
 	
-	that.showStartedGame = function(metaData) {
-		$('#running_games tr:last').after('<tr><td>' + metaData.blackPlayer + '</td><td>' + metaData.whitePlayer +'</td><td>' + metaData.boardSize + 'x' + metaData.boardSize + '</td><td>' + metaData.initiate + '</td><td><a href=game.html#' + metaData.id + '>Play!</a></td></tr>');
+	that.showGame = function(metaData) {
+		if (metaData.state == "INITIATED") {
+			that.showInitiatedGame(metaData);
+		}
+		else if (metaData.state == "STARTED") {
+			that.showStartedGame(metaData);
+		}
+		else if (metaData.state == "FINISHED") {
+			that.showFinishedGame(metaData);
+		}
+	};
+	
+	var boardDescription = function(metaData) {
+		return metaData.boardSize + "x" + metaData.boardSize;
 	};
 	
 	that.showInitiatedGame = function(metaData) {
-		$('#initiated_games tr:last').after('<tr><td>' + (metaData.blackPlayer ? metaData.blackPlayer : '<u>Play!</u>') + '</td><td>' + (metaData.whitePlayer ? metaData.whitePlayer : '<u>Play!</u>')  +'</td><td>' + metaData.boardSize + 'x' + metaData.boardSize + '</td><td>' + metaData.initiate + '</td></tr>');
+		var joinButton = $("<button>Join</button>")
+				.button()
+				.click(function() {
+					that.join(metaData.id);
+				});
+		$("#initiated_games tr:last").after(
+				$("<tr />")
+				.append("<td>" + (metaData.blackPlayer ? metaData.blackPlayer : "?") + "</td>")
+				.append("<td>" + (metaData.whitePlayer ? metaData.whitePlayer : "?") + "</td>")
+				.append("<td>" + boardDescription(metaData) + "</td>")
+				.append("<td>" + metaData.initiate + "</td>")
+				.append($("<td />").append(joinButton))
+		);
+	};
+	
+	that.createOpenButton = function(id) {		
+		return $("<button>Open Game</button>")
+				.button()
+				.click(function() {
+					that.openGame(id);
+				});
+	};
+	
+	that.showStartedGame = function(metaData) {
+		$("#running_games tr:last").after(
+				$("<tr />")
+				.append("<td>" + metaData.blackPlayer + "</td>")
+				.append("<td>" + metaData.whitePlayer + "</td>")
+				.append("<td>" + boardDescription(metaData) + "</td>")
+				.append("<td>" + metaData.start + "</td>")
+				.append($("<td />").append(that.createOpenButton(metaData.id)))
+		);
 	};
 	
 	that.showFinishedGame = function(metaData) {
-		$('#finished_games tr:last').after('<tr><td>' + metaData.blackPlayer + '</td><td>' + metaData.whitePlayer + '</td><td>' + metaData.winner +'</td><td>' + metaData.boardSize + 'x' + metaData.boardSize + '</td><td>' + metaData.finish + '</td><td>button</td></tr>');
+		$("#finished_games tr:last").after(
+			$("<tr />")
+				.append("<td>" + metaData.blackPlayer + "</td>")
+				.append("<td>" + metaData.whitePlayer + "</td>")
+				.append("<td>" + metaData.winner + "</td>")
+				.append("<td>" + boardDescription(metaData) + "</td>")
+				.append("<td>" + metaData.finish + "</td>")
+				.append($("<td />").append(that.createOpenButton(metaData.id)))
+		);
 	};
 	
 	that.join = function(gameId) {
@@ -72,8 +124,8 @@ var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 	};
 	
 	that.initiate = function() {
-		var boardSize = $controls.find("#board_size").val();
-		var color = $controls.find("#player_color").val();
+		var boardSize = $("input:radio[name=board_size]:checked").val();
+		var color = $("input:radio[name=player_color]:checked").val();
 		gameRest.newGame(dummyPlayerId1, boardSize, color, that.openGame);
 	};
 	

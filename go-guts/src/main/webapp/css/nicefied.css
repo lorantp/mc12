@@ -1,12 +1,11 @@
-body {
-	background-color: #FFFFFF;
+body {	background-color: #FFFFFF;
 	font-family: verdana;
 	text-align: center;
-	color: #AA1221;
 }
 
 .shadowed {
-	box-shadow: 6px 10px 6px #332355;
+	margin-right: 50px;
+	color: #AA1221;	box-shadow: 6px 10px 6px #332355;
 }
 
 .bordered {
@@ -19,6 +18,19 @@ body {
 	width: 40em;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.left_aligned {
+	text-align: left;
+}
+
+.margined {
+	margin: 8px;
+}
+
+.unpadded {
+	padding-top: 0px;
+	padding-bottom: 0px;
 }
 
 .capture {
