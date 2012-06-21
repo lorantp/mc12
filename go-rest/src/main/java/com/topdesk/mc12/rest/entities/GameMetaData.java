@@ -1,16 +1,18 @@
 package com.topdesk.mc12.rest.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import com.topdesk.mc12.common.GameState;
 
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data
 public class GameMetaData {
-	private long id;
-	private long start;
-	private GameState state;
-	private String blackPlayer;
-	private String whitePlayer;
+	private final long id;
+	private final long initiate;
+	private final long start;
+	private final long finish;
+	private final GameState state;
+	private final int boardSize;
+	private final String blackPlayer;
+	private final String whitePlayer;
+	private final String winner;
 }
