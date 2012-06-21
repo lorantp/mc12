@@ -9,9 +9,9 @@ import com.topdesk.mc12.persistence.entities.Player;
  * {@link Player}
  */
 public interface PlayerContextMap {
-	boolean hasContextFor(Player player);
-	PlayerContext getContextFor(Player player);
-	
-	PlayerContext retrieveFrom(int contextId);
 	PlayerContext startNew(Player player);
+
+	boolean hasContextFor(Player player);
+	PlayerContext getByPlayer(Player player);
+	PlayerContext getById(int contextId);
 }

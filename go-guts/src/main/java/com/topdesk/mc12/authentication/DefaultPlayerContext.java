@@ -10,7 +10,7 @@ import com.topdesk.mc12.common.PlayerContext;
 import com.topdesk.mc12.persistence.entities.Player;
 
 /**
- * SecurityContext used to perform authorization checks.
+ * Identifies a Player with a separate id.
  */
 public @Data @RequiredArgsConstructor(access=AccessLevel.PRIVATE) class DefaultPlayerContext implements PlayerContext {
 	private static AtomicInteger sessionNumber = new AtomicInteger(0);

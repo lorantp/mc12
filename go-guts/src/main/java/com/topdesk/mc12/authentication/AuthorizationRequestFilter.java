@@ -27,11 +27,11 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     @Context
     HttpServletRequest httpRequest;
 
-    private final PlayerContextMap sessions;
+    private final PlayerContextMap contextMap;
 
     @Inject
     public AuthorizationRequestFilter(PlayerContextMap sessions) {
-		this.sessions = sessions;
+		this.contextMap = sessions;
 	}
  
     @Override
@@ -48,7 +48,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     	
     	if (httpRequest.getParameter("contextid") != null) {
     		log.trace("Request belongs to already authorized player");
-    		PlayerContext context = sessions.retrieveFrom(Integer.valueOf(httpRequest.getParameter("contextid")));
+    		PlayerContext context = contextMap.getById(Integer.valueOf(httpRequest.getParameter("contextid")));
     		request.setSecurityContext(new PlayerContexedSecurity(context, uriInfo));
     		return request;
     	}

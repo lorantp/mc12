@@ -10,11 +10,8 @@ var initGameLauncher = function() {
 			player_context);
 	
 	init.activateButtons();
-	var success = function() {
-		init.showGames();
-	}
 	
-	player_context.authenticate(success);
+	player_context.authenticate(init.showGames);
 };
 
 var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
