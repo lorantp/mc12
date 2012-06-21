@@ -31,16 +31,16 @@ public class DefaultLoginRestlet implements LoginRestlet {
 	@Override
 	@Transactional
 	public int get(String playerName) {
-		List<Player> playersFound = selectByField("name", playerName, Player.class);
+		List<Player> players = selectByField("name", playerName, Player.class);
 		
-		if (playersFound.isEmpty()) {
+		if (players.isEmpty()) {
 			Player player = Player.create(playerName, playerName + "@topdesk.com");
 			entityManager.get().persist(player);
 			log.info("Created new player and logged in for {}", player);
 			return contextMap.startNew(player).getId();
 		}
 		
-		Player player = playersFound.get(0);
+		Player player = players.get(0);
 		if (contextMap.hasContextFor(player)) {
 			log.info("Using existing login for {}", player);
 			return contextMap.getByPlayer(player).getId();
@@ -54,7 +54,7 @@ public class DefaultLoginRestlet implements LoginRestlet {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<E> query = builder.createQuery(entity);
 		Root<E> root = query.from(entity);
-		query.select(root).where(builder.equal(root.get(fieldName), value));
+		query.select(root).where(builder.equal(builder.upper(root.get(fieldName).as(String.class)), value.toUpperCase()));
 		return em.createQuery(query).getResultList();
 	}
 }

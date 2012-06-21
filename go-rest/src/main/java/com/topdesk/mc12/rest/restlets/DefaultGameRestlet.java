@@ -26,7 +26,6 @@ import com.topdesk.mc12.persistence.entities.Move;
 import com.topdesk.mc12.persistence.entities.Player;
 import com.topdesk.mc12.rest.entities.GameMetaData;
 import com.topdesk.mc12.rest.entities.NewGame;
-import com.topdesk.mc12.rest.entities.PlayerId;
 import com.topdesk.mc12.rest.entities.RestMove;
 import com.topdesk.mc12.rules.GoRuleEngine;
 import com.topdesk.mc12.rules.entities.Game;
@@ -48,7 +47,6 @@ public class DefaultGameRestlet implements GameRestlet {
 	
 	@Override
 	public Game get(long gameId) {
-		log.error("We are logging the {} here because actually it would become unused. However, it should be removed from all the rest calls and this one should be used instead.", player);
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
 		if (gameData == null) {
 			throw GoException.createNotFound("Game with id " + gameId + " not found");
@@ -85,10 +83,10 @@ public class DefaultGameRestlet implements GameRestlet {
 	}
 	
 	@Override
-	public void pass(long gameId, PlayerId playerId) {
+	public void pass(long gameId) {
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
 		Game game = ruleEngine.applyMoves(gameData);
-		Color color = getPlayerColor(gameData, playerId.getPlayerId());
+		Color color = getPlayerColor(gameData);
 		ruleEngine.applyPass(game, color);
 		
 		if (game.isFinished()) {
@@ -98,25 +96,24 @@ public class DefaultGameRestlet implements GameRestlet {
 		
 		entityManager.get().persist(Move.createPass(gameData, color));
 		entityManager.get().flush();
-		log.info("Player {} passed in game {}", playerId.getPlayerId(), game);
+		log.info("Player {} passed in game {}", player.getName(), game);
 	}
 	
 	@Override
 	public void move(long gameId, RestMove restMove) {
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
 		Game game = ruleEngine.applyMoves(gameData);
-		Color color = getPlayerColor(gameData, restMove.getPlayerId());
+		Color color = getPlayerColor(gameData);
 		ruleEngine.applyMove(game, color, restMove.getX(), restMove.getY());
 		
 		Move move = Move.create(gameData, color, restMove.getX(), restMove.getY());
 		entityManager.get().persist(move);
 		entityManager.get().flush();
-		log.info("Player {} made move {} in game {}", new Object[] { restMove.getPlayerId(), move, gameData });
+		log.info("Player {} made move {} in game {}", new Object[] { player.getName(), move, gameData.getId() });
 	}
 	
 	@Override
 	public long newGame(NewGame newGame) {
-		Player player = entityManager.get().find(Player.class, newGame.getPlayerId());
 		GameData game = new GameData(null, null, new DateTime().getMillis(), BoardSize.get(newGame.getBoardSize()), GameState.INITIATED);
 		if (newGame.getColor() == Color.BLACK) {
 			game.setBlack(player);
@@ -124,54 +121,49 @@ public class DefaultGameRestlet implements GameRestlet {
 		else {
 			game.setWhite(player);
 		}
+		
 		entityManager.get().persist(game);
 		entityManager.get().flush();
-		log.info("Player {} initiated game {}", player, game);
+		log.info("Player {} initiated game {}", player.getName(), game.getId());
 		return game.getId();
 	}
 	
 	@Override
-	public void startGame(long gameId, PlayerId playerId) {
+	public void startGame(long gameId) {
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
 		checkInitiated(gameData);
 		
-		long playerIdValue = playerId.getPlayerId();
-		Player joiningPlayer = entityManager.get().find(Player.class, playerIdValue);
-		if (joiningPlayer == null) {
-			throw GoException.createNotFound("Player with id of " + playerId + "is not recogized");
-		}
-		
 		boolean whiteInitiated = gameData.getBlack() == null;
 		Player initiated = whiteInitiated ? gameData.getWhite() : gameData.getBlack();
-		if (playerIdValue == initiated.getId()) {
+		if (player.getId() == initiated.getId()) {
 			throw GoException.createNotAcceptable("Can't play against yourself");
-		}
-		
-		Player player = entityManager.get().find(Player.class, playerId.getPlayerId());
-		if (player == null) {
-			throw GoException.createNotFound("Player with id " + playerId.getPlayerId() + " not found");
 		}
 		
 		if (gameData.getBlack() == null) {
 			gameData.setBlack(player);
 		}
-		else {
+		else if (gameData.getWhite() == null) {
 			gameData.setWhite(player);
 		}
+		else {
+			throw new IllegalStateException("Inconsistent game state");
+		}
+		
 		gameData.setState(GameState.STARTED);
 		entityManager.get().merge(gameData);
 		entityManager.get().flush();
-		log.info("Player {} joined and started game {}", player, gameData);
+		log.info("Player {} joined and started game {}", player.getName(), gameData.getId());
 	}
 	
 	@Override
 	public void cancelGame(long gameId) {
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
 		checkInitiated(gameData);
+		getPlayerColor(gameData);
 		gameData.setState(GameState.CANCELLED);
 		entityManager.get().persist(gameData);
 		entityManager.get().flush();
-		log.info("Someone cancelled game {}", gameData);
+		log.info("Player {} cancelled game {}", player.getName(), gameData);
 	}
 	
 	private void checkInitiated(GameData gameData) {
@@ -180,13 +172,13 @@ public class DefaultGameRestlet implements GameRestlet {
 		}
 	}
 	
-	private Color getPlayerColor(GameData game, long playerId) {
-		if (game.getBlack().getId() == playerId) {
+	private Color getPlayerColor(GameData game) {
+		if (game.getBlack() != null && game.getBlack().getId() == player.getId()) {
 			return Color.BLACK;
 		}
-		else if (game.getWhite().getId() == playerId) {
+		else if (game.getWhite() != null && game.getWhite().getId() == player.getId()) {
 			return Color.WHITE;
 		}
-		throw GoException.createNotAcceptable("Player " + playerId + " does not participate in game " + game.getId());
+		throw GoException.createUnauthorized("Player " + player.getName() + " does not participate in game " + game.getId());
 	}
 }

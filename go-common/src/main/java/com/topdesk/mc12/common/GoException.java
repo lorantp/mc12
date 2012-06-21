@@ -18,6 +18,10 @@ public class GoException extends RuntimeException {
 		return new GoException(message, Status.BAD_REQUEST);
 	}
 	
+	public static GoException createUnauthorized(String message) {
+		return new GoException(message, Status.UNAUTHORIZED);
+	}
+	
 	private GoException(String message, Status status) {
 		super(message);
 		this.status = status;
