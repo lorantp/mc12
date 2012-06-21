@@ -18,7 +18,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
-import com.google.inject.servlet.RequestScoped;
 import com.topdesk.mc12.common.BoardSize;
 import com.topdesk.mc12.common.Color;
 import com.topdesk.mc12.common.GameState;
@@ -34,7 +33,6 @@ import com.topdesk.mc12.rules.entities.Game;
 
 @Slf4j
 @Transactional
-@RequestScoped
 public class DefaultGameRestlet implements GameRestlet {
 	private final Provider<EntityManager> entityManager;
 	private final GoRuleEngine ruleEngine;

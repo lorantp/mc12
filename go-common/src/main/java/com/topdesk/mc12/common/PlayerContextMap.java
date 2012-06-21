@@ -1,5 +1,7 @@
 package com.topdesk.mc12.common;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.topdesk.mc12.persistence.entities.Player;
 
 /**
@@ -9,9 +11,9 @@ import com.topdesk.mc12.persistence.entities.Player;
  * {@link Player}
  */
 public interface PlayerContextMap {
-	PlayerContext startNew(Player player);
+	PlayerContext startNew(Player player, HttpServletRequest request);
 
-	boolean hasContextFor(Player player);
-	PlayerContext getByPlayer(Player player);
-	PlayerContext getById(int contextId);
+	boolean hasContextFor(Player player, HttpServletRequest request);
+	PlayerContext getByPlayer(Player player, HttpServletRequest request);
+	PlayerContext getById(int contextId, HttpServletRequest request);
 }

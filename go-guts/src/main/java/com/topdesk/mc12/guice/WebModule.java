@@ -1,6 +1,6 @@
 package com.topdesk.mc12.guice;
 
-import static com.google.inject.Scopes.*;
+import static com.google.inject.Scopes.SINGLETON;
 
 import com.google.common.collect.ImmutableMap;
 import com.sun.jersey.api.core.ResourceConfig;
@@ -8,8 +8,8 @@ import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import com.topdesk.mc12.authentication.AuthorizationRequestFilter;
-import com.topdesk.mc12.authentication.DefaultPlayerContextMap;
 import com.topdesk.mc12.authentication.PlayerProvider;
+import com.topdesk.mc12.authentication.SessionPlayerContextMap;
 import com.topdesk.mc12.common.PlayerContextMap;
 import com.topdesk.mc12.persistence.entities.Player;
 import com.topdesk.mc12.rest.RestInterfaceConfig;
@@ -31,7 +31,7 @@ public class WebModule extends JerseyServletModule {
 		
 		bind(Player.class).toProvider(PlayerProvider.class);
 		
-		bind(PlayerContextMap.class).to(DefaultPlayerContextMap.class).in(SINGLETON);
+		bind(PlayerContextMap.class).to(SessionPlayerContextMap.class).in(SINGLETON);
 		bind(AuthorizationRequestFilter.class).in(SINGLETON);
 		bind(GameRestlet.class).to(DefaultGameRestlet.class);
 		bind(LoginRestlet.class).to(DefaultLoginRestlet.class);
