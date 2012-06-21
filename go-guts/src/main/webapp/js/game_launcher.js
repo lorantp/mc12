@@ -10,7 +10,6 @@ var initGameLauncher = function() {
 			player_context);
 	
 	init.activateButton();
-	init.showGames();
 	
 	player_context.authenticate(init.showGames);
 };
