@@ -35,9 +35,6 @@ var restMock = {
 };
 
 var contextMock = {
-		addContextIdToUrl: function(url) {
-			return url;
-		},
 		login: function() {}
 };
 

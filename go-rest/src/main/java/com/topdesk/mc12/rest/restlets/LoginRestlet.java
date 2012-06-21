@@ -14,4 +14,5 @@ import javax.ws.rs.core.MediaType;
 @Consumes(MediaType.APPLICATION_JSON)
 public interface LoginRestlet {
 	@GET @Path("/{name}") int get(@Context HttpServletRequest request, @PathParam("name") String playerName);
+	@GET @Path("/check/{id}") boolean checkId(@Context HttpServletRequest request, @PathParam("id") String id);
 }

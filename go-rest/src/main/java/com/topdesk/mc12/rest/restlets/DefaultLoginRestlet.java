@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
+import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.common.PlayerContextMap;
 import com.topdesk.mc12.persistence.entities.Player;
 
@@ -55,5 +56,14 @@ public class DefaultLoginRestlet implements LoginRestlet {
 		Root<E> root = query.from(entity);
 		query.select(root).where(builder.equal(builder.upper(root.get(fieldName).as(String.class)), value.toUpperCase()));
 		return em.createQuery(query).getResultList();
+	}
+
+	@Override
+	public boolean checkId(HttpServletRequest request, String id) {
+		boolean validId = contextMap.getById(Integer.valueOf(id), request) != null;
+		if (!validId) {
+			throw GoException.createNotAcceptable("Id is invalid.");
+		}
+		return true;
 	}
 }
