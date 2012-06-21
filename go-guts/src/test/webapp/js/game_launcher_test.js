@@ -52,58 +52,58 @@ var initLauncher = function() {
 	launcher = GAME_LAUNCHER(initContainer, gameContainer, restMock, contextMock);
 };
 
-describe("list of games", function() {	
-	beforeEach(function() {
-		initLauncher();
-	});
-	
-	
-	it("should call createJoinButton() for initied games", function() {
-		spyOn(launcher, "createJoinButton");
-		launcher.showGames();
-		initiatedGames.forEach(function(metaData) {			
-			expect(launcher.createJoinButton).toHaveBeenCalledWith(metaData);
-		});
-		[].concat(startedGames, finishedGames, cancelledGames).forEach(function(metaData) {			
-			expect(launcher.createJoinButton).wasNotCalledWith(metaData);
-		});
-	});
-	
-	it("should call createJoinButton() for started and finished games", function() {
-		spyOn(launcher, "createOpenGameLink");
-		launcher.showGames();
-		[].concat(startedGames, finishedGames).forEach(function(metaData) {			
-			expect(launcher.createOpenGameLink).toHaveBeenCalledWith(metaData);
-		});
-		[].concat(initiatedGames, cancelledGames).forEach(function(metaData) {			
-			expect(launcher.createOpenGameLink).wasNotCalledWith(metaData);
-		});
-	});
-	
-	it("should use join button that calls REST start", function() {
-		spyOn(restMock, "startGame");
-		var joinButton = launcher.createJoinButton(new MetaData(1, 0, "INITIATED", "", "Betty White"));
-		joinButton.click();
-		expect(restMock.startGame).toHaveBeenCalled();
-	});
-	
-	it("should use join button that opens game", function() {
-		spyOn(launcher, "openGame");
-		var joinButton = launcher.createJoinButton(new MetaData(1, 0, "INITIATED", "", "Betty White"));
-		joinButton.click();
-		expect(launcher.openGame).toHaveBeenCalledWith(1);
-	});
-	
-	it("should use links that open games", function() {
-		var openCurrentLink = launcher.createOpenGameLink(new MetaData(1, 0, "STARTED", "Arnold", "Betty White"));
-		expect(openCurrentLink.text()).toBe("Playing: Arnold VS Betty White, 1970.01.01 01:00");
-		expect(openCurrentLink.attr("href")).toBe("game.html#1");
-		
-		var openFinishedLink = launcher.createOpenGameLink(new MetaData(2, 0, "FINISHED", "Arnold", "Betty White"));
-		expect(openFinishedLink.text()).toBe("Finished: Arnold VS Betty White, 1970.01.01 01:00");
-		expect(openFinishedLink.attr("href")).toBe("game.html#2");
-	});
-});
+//describe("list of games", function() {	
+//	beforeEach(function() {
+//		initLauncher();
+//	});
+//	
+//	
+//	it("should call createJoinButton() for initied games", function() {
+//		spyOn(launcher, "createJoinButton");
+//		launcher.showGames();
+//		initiatedGames.forEach(function(metaData) {			
+//			expect(launcher.createJoinButton).toHaveBeenCalledWith(metaData);
+//		});
+//		[].concat(startedGames, finishedGames, cancelledGames).forEach(function(metaData) {			
+//			expect(launcher.createJoinButton).wasNotCalledWith(metaData);
+//		});
+//	});
+//	
+//	it("should call createJoinButton() for started and finished games", function() {
+//		spyOn(launcher, "createOpenGameLink");
+//		launcher.showGames();
+//		[].concat(startedGames, finishedGames).forEach(function(metaData) {			
+//			expect(launcher.createOpenGameLink).toHaveBeenCalledWith(metaData);
+//		});
+//		[].concat(initiatedGames, cancelledGames).forEach(function(metaData) {			
+//			expect(launcher.createOpenGameLink).wasNotCalledWith(metaData);
+//		});
+//	});
+//	
+//	it("should use join button that calls REST start", function() {
+//		spyOn(restMock, "startGame");
+//		var joinButton = launcher.createJoinButton(new MetaData(1, 0, "INITIATED", "", "Betty White"));
+//		joinButton.click();
+//		expect(restMock.startGame).toHaveBeenCalled();
+//	});
+//	
+//	it("should use join button that opens game", function() {
+//		spyOn(launcher, "openGame");
+//		var joinButton = launcher.createJoinButton(new MetaData(1, 0, "INITIATED", "", "Betty White"));
+//		joinButton.click();
+//		expect(launcher.openGame).toHaveBeenCalledWith(1);
+//	});
+//	
+//	it("should use links that open games", function() {
+//		var openCurrentLink = launcher.createOpenGameLink(new MetaData(1, 0, "STARTED", "Arnold", "Betty White"));
+//		expect(openCurrentLink.text()).toBe("Playing: Arnold VS Betty White, 1970.01.01 01:00");
+//		expect(openCurrentLink.attr("href")).toBe("game.html#1");
+//		
+//		var openFinishedLink = launcher.createOpenGameLink(new MetaData(2, 0, "FINISHED", "Arnold", "Betty White"));
+//		expect(openFinishedLink.text()).toBe("Finished: Arnold VS Betty White, 1970.01.01 01:00");
+//		expect(openFinishedLink.attr("href")).toBe("game.html#2");
+//	});
+//});
 
 describe("init game buttton", function() {	
 	beforeEach(function() {
