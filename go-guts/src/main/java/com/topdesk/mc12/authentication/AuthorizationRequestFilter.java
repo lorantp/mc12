@@ -50,28 +50,19 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     	
     	if (httpRequest.getCookies() != null ) {
     		for (Cookie cookie : Arrays.asList(httpRequest.getCookies())) {
-    			log.debug("httpRequest cookieName: {} cookieValue: {}", cookie.getName(), cookie.getValue());
+    			log.trace("Cookie found: cookieName: {} cookieValue: {}", cookie.getName(), cookie.getValue());
     			if (cookie.getName().equals("contextId")) {
     				PlayerContext context = contextMap.getById(Integer.valueOf(cookie.getValue()), httpRequest);
     				if (context == null) {
     					GoException.createUnauthorized("PlayerContext is no longer valid.");
     				}
     				request.setSecurityContext(new PlayerContexedSecurity(context, uriInfo));
-    				System.out.println("SUCCESSFULLY Set SecurityContext via Cookie!!!");    				
     				return request;
     			}
     		}
     	}
-    	
-//    	if (httpRequest.getParameter("contextid") != null) {
-//    		log.trace("Request belongs to already authorized player");
-//    		PlayerContext context = contextMap.getById(Integer.valueOf(httpRequest.getParameter("contextid")), httpRequest);
-//    		request.setSecurityContext(new PlayerContexedSecurity(context, uriInfo));
-//System.out.println("Set SecurityContext via PARAMETER!!!");    				
-//    		return request;
-//    	}
 
-        throw GoException.createBadRequest("No authorization");
+        throw GoException.createUnauthorized("No authorization");
     }
 
 	private static final class PlayerContexedSecurity implements SecurityContext {
