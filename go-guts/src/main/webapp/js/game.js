@@ -1,11 +1,16 @@
 var initGame = function() {
 	var id = location.hash.split("#")[1];
 	if (id == undefined) {
-		window.location = "/";
+		window.location = "./";
 	}
 	
 	var rest = REST("rest");
-	var gameRest = GAME_REST(rest);
+	var playerContext = PLAYER_CONTEXT($("body"), rest);
+	
+	var link = $("#return");
+	link.attr("href", playerContext.addContextIdToUrl(link.attr("href")));
+	
+	var gameRest = GAME_REST(playerContext);
 	
 	var game = GAME(gameRest);
 	game.draw(id);

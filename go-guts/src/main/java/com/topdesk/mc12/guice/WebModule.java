@@ -8,15 +8,17 @@ import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import com.topdesk.mc12.authentication.AuthorizationRequestFilter;
-import com.topdesk.mc12.authentication.DefaultSessionMap;
+import com.topdesk.mc12.authentication.DefaultPlayerContextMap;
 import com.topdesk.mc12.authentication.PlayerProvider;
-import com.topdesk.mc12.authentication.SessionMap;
+import com.topdesk.mc12.common.PlayerContextMap;
 import com.topdesk.mc12.persistence.entities.Player;
 import com.topdesk.mc12.rest.RestInterfaceConfig;
 import com.topdesk.mc12.rest.producers.GoExceptionMapper;
 import com.topdesk.mc12.rest.producers.RuntimeExceptionMapper;
 import com.topdesk.mc12.rest.restlets.DefaultGameRestlet;
+import com.topdesk.mc12.rest.restlets.DefaultLoginRestlet;
 import com.topdesk.mc12.rest.restlets.GameRestlet;
+import com.topdesk.mc12.rest.restlets.LoginRestlet;
 
 // see http://code.google.com/p/google-guice/wiki/ServletModule
 public class WebModule extends JerseyServletModule {
@@ -29,9 +31,10 @@ public class WebModule extends JerseyServletModule {
 		
 		bind(Player.class).toProvider(PlayerProvider.class);
 		
-		bind(SessionMap.class).to(DefaultSessionMap.class).in(SINGLETON);
+		bind(PlayerContextMap.class).to(DefaultPlayerContextMap.class).in(SINGLETON);
 		bind(AuthorizationRequestFilter.class).in(SINGLETON);
 		bind(GameRestlet.class).to(DefaultGameRestlet.class);
+		bind(LoginRestlet.class).to(DefaultLoginRestlet.class);
 		
 		serve("/rest/*").with(GuiceContainer.class, ImmutableMap.<String, String> builder()
 				.put(JSONConfiguration.FEATURE_POJO_MAPPING, "true")

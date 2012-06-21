@@ -48,7 +48,7 @@ public class DefaultGameRestlet implements GameRestlet {
 	
 	@Override
 	public Game get(long gameId) {
-		log.error("Over here we actually have the elusive and magical {}", player);
+		log.error("We are logging the {} here because actually it would become unused. However, it should be removed from all the rest calls and this one should be used instead.", player);
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
 		if (gameData == null) {
 			throw GoException.createNotFound("Game with id " + gameId + " not found");

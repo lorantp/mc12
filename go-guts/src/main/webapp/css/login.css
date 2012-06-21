@@ -1,0 +1,13 @@
+.overlay {
+	width: 90%;
+	height: 90%;
+	margin: auto;
+	z-index: 200;
+	display: none;
+	float: top;
+}
+
+#login {
+	background-color: #ACACAC;
+	font-size: 3em;
+}

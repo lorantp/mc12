@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 @Data @NoArgsConstructor
 @Entity
 public final class Player implements DatabaseEntity, Principal {
-	public static Player create(String nickname, String email) {
+	public static Player create(String name, String email) {
 		Player player = new Player();
-		player.setName(nickname);
+		player.setName(name);
 		player.setEmail(email);
 		return player;
 	}

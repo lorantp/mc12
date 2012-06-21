@@ -22,7 +22,7 @@
 		<!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
 
 		<link rel="stylesheet" href="css/style.css">
-		<link rel="stylesheet" href="css/go.css">
+		<link rel="stylesheet" href="css/login.css">
 		<link rel="stylesheet" href="css/nicefied.css">
 
 		<!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
@@ -39,6 +39,13 @@
 		<header>
 
 		</header>
+		<div id="login" class = "shadowed bordered overlay">
+			TOPdesk presents
+			<h1>GO</h1>
+			Please login:
+			<textarea id="name" rows="1" cols="20"></textarea>
+			<button id="loginbutton">Login</button>
+		</div>
 		<div id="content" class="shadowed infobox">
 			<div id="games" class="bordered">
 				List of Games
@@ -64,8 +71,9 @@
 		<script src="js/libs/jquery.dateFormat-1.0.js"></script>
 		<script src="js/rest/rest.js"></script>
 		<script src="js/rest/game_rest.js"></script>
-		<script src="js/plugins.js"></script>
+		<script src="js/player_context.js"></script>
 		<script src="js/game_launcher.js"></script>
+		<script src="js/plugins.js"></script>
 		<!-- end scripts -->
 	</body>
 </html>
