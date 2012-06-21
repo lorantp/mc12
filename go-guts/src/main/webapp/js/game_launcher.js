@@ -26,6 +26,10 @@ var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 		return "join_" + gameId;
 	};
 	
+	var formatTime = function(time) {
+		return $.format.date(new Date(time), "yyyy.MM.dd HH:mm");
+	};
+	
 	that.initStyle = function() {
 		$("#board_size").buttonset();
 		$("#player_color").buttonset();
@@ -73,7 +77,7 @@ var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 				.append("<td>" + (metaData.blackPlayer ? metaData.blackPlayer : "?") + "</td>")
 				.append("<td>" + (metaData.whitePlayer ? metaData.whitePlayer : "?") + "</td>")
 				.append("<td>" + boardDescription(metaData) + "</td>")
-				.append("<td>" + metaData.initiate + "</td>")
+				.append("<td>" + formatTime(metaData.initiate) + "</td>")
 				.append($("<td />").append(joinButton))
 		);
 	};
@@ -92,7 +96,7 @@ var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 				.append("<td>" + metaData.blackPlayer + "</td>")
 				.append("<td>" + metaData.whitePlayer + "</td>")
 				.append("<td>" + boardDescription(metaData) + "</td>")
-				.append("<td>" + metaData.start + "</td>")
+				.append("<td>" + formatTime(metaData.start) + "</td>")
 				.append($("<td />").append(that.createOpenButton(metaData.id)))
 		);
 	};
@@ -104,7 +108,7 @@ var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 				.append("<td>" + metaData.whitePlayer + "</td>")
 				.append("<td>" + metaData.winner + "</td>")
 				.append("<td>" + boardDescription(metaData) + "</td>")
-				.append("<td>" + metaData.finish + "</td>")
+				.append("<td>" + formatTime(metaData.finish) + "</td>")
 				.append($("<td />").append(that.createOpenButton(metaData.id)))
 		);
 	};
