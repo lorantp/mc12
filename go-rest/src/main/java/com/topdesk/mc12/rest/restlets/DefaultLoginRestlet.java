@@ -43,7 +43,7 @@ public class DefaultLoginRestlet implements LoginRestlet {
 		Player player = players.get(0);
 		if (contextMap.hasContextFor(player)) {
 			log.info("Using existing login for {}", player);
-			return contextMap.getContextFor(player).getId();
+			return contextMap.getByPlayer(player).getId();
 		}
 		log.info("Logged in for {}", player);
 		return contextMap.startNew(player).getId();

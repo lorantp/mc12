@@ -7,16 +7,15 @@ var initGame = function() {
 	var rest = REST("rest");
 	var playerContext = PLAYER_CONTEXT($("body"), rest);
 	
-	var link = $("#return");
-	link.attr("href", playerContext.addContextIdToUrl(link.attr("href")));
-	
 	var gameRest = GAME_REST(playerContext);
 	
-	var game = GAME(gameRest);
-	game.draw(id);
+	var game = GAME(gameRest, playerContext);
+	playerContext.authenticate(function() {
+		game.draw(id);
+	});
 };
 
-var GAME = function(gameRest) {
+var GAME = function(gameRest, playerContext) {
 	var that = {};
 	
 	var nextStone = {};
@@ -43,6 +42,9 @@ var GAME = function(gameRest) {
 			board.draw();
 			that.updateGameState(board, initMode, game.finished);
 			METADATA($("#content")).showData(game);
+
+			var link = $("#return");
+			link.attr("href", playerContext.addContextIdToUrl(link.attr("href")));
 		});
 	}
 	
