@@ -48,7 +48,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     	
     	if (httpRequest.getParameter("contextid") != null) {
     		log.trace("Request belongs to already authorized player");
-    		PlayerContext context = contextMap.getById(Integer.valueOf(httpRequest.getParameter("contextid")));
+    		PlayerContext context = contextMap.getById(Integer.valueOf(httpRequest.getParameter("contextid")), httpRequest);
     		request.setSecurityContext(new PlayerContexedSecurity(context, uriInfo));
     		return request;
     	}
