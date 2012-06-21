@@ -22,6 +22,7 @@
 		<!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
 
 		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/trontastic/jquery-ui-1.8.21.custom.css"  />	
 		<link rel="stylesheet" href="css/login.css">
 		<link rel="stylesheet" href="css/nicefied.css">
 
@@ -47,8 +48,9 @@
 			<button id="loginbutton">Login</button>
 		</div>
 		<div id="content" class="shadowed infobox">
-			<div id="games" class="bordered">
+			<div id="games">				
 				List of Games
+				<div id="game_list"></div>
 			</div>
 			<div id="launch_game" class="bordered">
 				Size of board:
@@ -67,8 +69,10 @@
 		</div>
 		<!-- JavaScript at the bottom for fast page loading -->
 		<!-- scripts concatenated and minified via build script -->
-		<script src="js/libs/jquery-1.7.1.js"></script>
-		<script src="js/libs/jquery.dateFormat-1.0.js"></script>
+		<script src="js/libs/jquery-1.7.2.js"></script>
+		<script src="js/libs/jquery-1.7.2.min.js"></script>
+		<script src="js/libs/jquery.dateFormat-1.0.js"></script>		
+		<script src="js/libs/jquery-ui-1.8.21.custom.min.js"></script>		
 		<script src="js/rest/rest.js"></script>
 		<script src="js/rest/game_rest.js"></script>
 		<script src="js/player_context.js"></script>

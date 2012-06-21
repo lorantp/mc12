@@ -5,12 +5,11 @@ var initGameLauncher = function() {
 	
 	var init = new GAME_LAUNCHER(
 			$("body"), 
-			$("#games"),
+			$("#game_list"),
 			gameRest,
 			player_context);
 	
 	init.activateButtons();
-	
 	player_context.authenticate(init.showGames);
 };
 
@@ -27,6 +26,9 @@ var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 	that.showGames = function() {
 		gameRest.getGameList(function(gamesMetaData) {
 			gamesMetaData.forEach(that.showGame);
+			$games.accordion({
+				collapsible: true
+			});
 		});		
 	};
 	
@@ -43,16 +45,20 @@ var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 			gameGui = that.createOpenGameLink(metaData);
 		}
 		
-		$games.append($("<li/>").append(gameGui));			
+		$games.append(gameGui.header);			
+		$games.append(gameGui.content);			
 	};
 	
 	that.createJoinButton = function(metaData) {
-		var joinText = metaData.blackPlayer == null ? metaData.whitePlayer + " as black" : metaData.blackPlayer + " as white";    
-		return $("<button>Play against " + joinText + "</button>")
-				.attr({id: toJoinId(metaData.id)})
-				.click(function() {
-					that.join(metaData.id);
-				});		
+		var joinText = metaData.blackPlayer == null ? metaData.whitePlayer + " as black" : metaData.blackPlayer + " as white";
+		return {
+			header: $("<h3><a href='#'>Play against " + joinText + "</a></h3>"),			
+			content: $("<div />").append($("<button>Join</button>")
+					.attr({id: toJoinId(metaData.id)})
+					.click(function() {
+						that.join(metaData.id);
+					}))			
+		};
 	};
 	
 	that.join = function(gameId) {
@@ -67,13 +73,17 @@ var GAME_LAUNCHER = function($controls, $games, gameRest, context) {
 	
 	that.createOpenGameLink = function(metaData) {
 		var startDate = $.format.date(new Date(metaData.start), "yyyy.MM.dd HH:mm");
-		var gameDescription = metaData.blackPlayer + " VS " + metaData.whitePlayer + ", " + startDate;
-		
+		var gameDescription = metaData.blackPlayer + " VS " + metaData.whitePlayer + ", " + startDate;		
 		var stateDescription = metaData.state == "FINISHED" ? "Finished: " : "Playing: ";
-		return $("<a>" + stateDescription + gameDescription + "</a>")
-				.attr({
-					href: context.addContextIdToUrl("game.html#" + metaData.id),
-				});		
+		
+		return {
+			header: $("<h3><a href='#'>" + stateDescription + gameDescription + "</a></h3>"),			
+			content: $("<div />").append($("<button>View Game</button>")
+					.attr({id: toJoinId(metaData.id)})
+					.click(function() {
+						that.openGame(metaData.id);
+					}))
+		};
 	};
 	
 	that.activateButtons = function() {
