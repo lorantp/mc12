@@ -19,7 +19,7 @@ var PLAYER_CONTEXT = function($body, rest) {
     
     var createLoginScreen = function() {
         if (!$login) {
-            $login = $("<div id='login' class = 'shadowed bordered overlay'></div>");
+            $login = $("#login");
             $login.append("TOPdesk presents");
             $login.append($("<h1></h1>").append("GO"));
             $login.append("Please login:");

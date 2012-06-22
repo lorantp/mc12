@@ -11,38 +11,16 @@ var GAME_LIST = function($content, gameRest) {
 	
 	that.showGames = function() {
 		gameRest.getGameList(function(gamesMetaData) {
-			that.createGameStateHeaders();			
+			$content.removeClass("hidden");
+			
 			gamesMetaData.forEach(that.showGame);
-			that.applyAccordionStlye();
+			
+			$content.accordion({
+				collapsible: true,
+				fillSpace: true
+			});
 		});		
 	};
-	
-	that.createGameStateHeaders = function() {		
-		appendHeader("Initiated Games", "initiated_games", ["Black", "White", "Board size", "Initiated", "Play"]);
-		appendHeader("Running Games", "running_games", ["Black", "White", "Board size", "Started", "Play"]);
-		appendHeader("Finished Games", "finished_games", ["Black", "White", "Winner", "Board size", "Finished", "View game"]);
-	};
-	
-	that.applyAccordionStlye = function() {
-		$content.accordion({
-			collapsible: true,
-			fillSpace: true
-		});
-	};
-	
-	var appendHeader = function(title, tableId, columns) {
-		$content.append("<h3><a href='#'>" + title + "</a></h3>");
-		
-		var tr = $("<tr />");
-		columns.forEach(function(column) {			
-			tr.append("<th>" + column + "</th>");
-		});
-		$content.append($("<div />")
-				.append($("<table width=100% id='" + tableId + "' class='bordered' />")
-				.append($("<thead />")
-				.append(tr))));
-	};
-	
 	
 	that.showGame = function(metaData) {
 		if (metaData.state == "INITIATED") {

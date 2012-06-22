@@ -3,6 +3,10 @@ body {	background-color: #FFFFFF;
 	text-align: center;
 }
 
+.hidden {
+	display: none;
+}
+
 .shadowed {
 	margin-right: 50px;
 	color: #AA1221;	box-shadow: 6px 10px 6px #332355;

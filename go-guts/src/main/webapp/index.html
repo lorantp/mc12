@@ -37,11 +37,9 @@
 		<!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
 		chromium.org/developers/how-tos/chrome-frame-getting-started -->
 		<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
-		<header>
-		
-		</header>
 		<div id="content" class="left_aligned infobox">
-			<div id="launch_game">
+			<div id="login" class="ui-widget-content"> </div>
+			<div id="launch_game" class="hidden">
 				<div id="board_size" class="margined">
 					<input type="radio" id="size19" value="19" name="board_size" checked="checked" />
 					<label for="size19">Large board (19x19)</label>
@@ -58,7 +56,33 @@
 				</div>
 				<button id="initiate" class="margined">Initiate game</button>
 			</div>
-			<div id="game_states"> </div>
+			<div id="game_states" class="hidden">
+				<h3><a href='#'>Initiated Games</a></h3>
+				<div><table width=100% id='initiated_games' class='bordered'><thead><tr>
+					<th>Black</th>
+					<th>White</th>
+					<th>Board size</th>
+					<th>Initiated</th>
+					<th>Play</th>
+				</tr></thead></table></div>
+				<h3><a href='#'>Running Games</a></h3>
+				<div><table width=100% id='running_games' class='bordered'><thead><tr>
+					<th>Black</th>
+					<th>White</th>
+					<th>Board size</th>
+					<th>Started</th>
+					<th>Play</th>
+				</tr></thead></table></div>
+				<h3><a href='#'>Finished Games</a></h3>
+				<div><table width=100% id='finished_games' class='bordered'><thead><tr>
+					<th>Black</th>
+					<th>White</th>
+					<th>Winner</th>
+					<th>Board size</th>
+					<th>Finished</th>
+					<th>View</th>
+				</tr></thead></table></div>
+			</div>
 		</div>
 		<!-- JavaScript at the bottom for fast page loading -->
 		<!-- scripts concatenated and minified via build script -->
