@@ -1,15 +1,7 @@
-.overlay {
-	position: absolute;
-	top: 1%;
-	left: 5%;
-	margin:auto;
-	width: 90%;
-	height: 80%;
-	z-index: 200;
-	display: none;
+#login {
+	font-size: 2em;
 }
 
-#login {
-	background-color: #ACACAC;
-	font-size: 3em;
+#login_form > * {
+	display: inline-block;
 }

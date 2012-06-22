@@ -20,16 +20,11 @@ var GAME = function(gameRest) {
 	var nextStone = {};
 	
 	var gameId;
-	var playerId;
 	
 	that.draw = function(id) {
 		gameRest.getGame(id, function(game) {
-			gameId = game.id;
-			
 			var initMode = game.black == null || game.white == null;
-			if (!initMode) {
-				playerId = game.totalMoves % 2 == 0 ? game.black.id : game.white.id;
-			}
+			gameId = game.id;
 			
 			var board = BOARD(
 					$("#board"),
@@ -52,8 +47,11 @@ var GAME = function(gameRest) {
 			
 			confirmMove: function() {
 				if (nextStone && (nextStone.x || nextStone.x == 0) && (nextStone.y || nextStone.y == 0)) {
-					gameRest.doMove(gameId, playerId, nextStone.x, nextStone.y);
-					$("[target=true]").attr({target: "false", stone: nextStone.color});
+					gameRest.doMove(gameId, nextStone.x, nextStone.y);
+					$("[target=true]").attr({
+						target: "false", 
+						stone: nextStone.color
+					});
 				}
 			}	
 	};
@@ -99,7 +97,7 @@ var GAME = function(gameRest) {
 	}
 	
 	that.pass = function() {
-		gameRest.doPass(gameId, playerId);
+		gameRest.doPass(gameId);
 	};
 	
 	that.clearMove = function() {

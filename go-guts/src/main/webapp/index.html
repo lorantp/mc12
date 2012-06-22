@@ -37,17 +37,18 @@
 		<!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
 		chromium.org/developers/how-tos/chrome-frame-getting-started -->
 		<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
-		<div id="content" class="left_aligned infobox">
-			<div id="login" class="ui-widget-content">
-				<p>TOPdesk presents</p>
-				<h3>GO</h3>
-				<p>Please login</p>
-				<form id="login_form">
-				<fieldset>
-					<label for="name">Name</label>
-					<input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
-				</fieldset>
-				</form>
+		<div id="content" class="left_aligned infobox">			
+			<div id="login" class="hidden centered">
+				<h4>TOPdesk presents</h4>
+				<h3>Game of Go</h3>
+				<div class="ui-widget-content ui-corner-all padded">
+					<h5>Log in to play</h5>
+					<form id="login_form" method="post">
+						<label for="login_username">Name</label> 
+						<input type="text" name="username" id="login_username" title="Please provide your username" />
+						<button id="login_button" type="submit">Log in</button>   
+					</form>
+				</div>	
 			</div>
 			<div id="launch_game" class="hidden">
 				<div id="board_size" class="margined">

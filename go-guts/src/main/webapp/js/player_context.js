@@ -1,40 +1,35 @@
-var PLAYER_CONTEXT = function($body, rest) {
+var PLAYER_CONTEXT = function($login, rest) {
     var that = {};
 
     var match = /contextId=(-?\d+)/.exec(document.cookie);
     var contextId = match ? match[1] : undefined;
     
-    var $login;
-    
     var login = function(success) {
-        rest.getData("context/" + $login.find("#name").val(), {}, function(data) {
+		var userName = $login.find("#login_username").val();
+        rest.getData("context/" + userName, {}, function(data) {
             contextId = data;
-            $login.css("display", "none");
-            
             that.setCookie("contextId", contextId);
-            
+            $login.addClass("hidden");            
             success();
         });
     };
     
     that.authenticate = function(success) {
-    	var forceLogin = function() {
+		var forceLogin = function() {
+			$login.find("#login_button").button();
+			$login.removeClass("hidden");
         	contextId = undefined;
     		$login.find("#login_form").submit(function() {
     			login(success);
-				return true;
+				return false;
     		});
-    		$login.css("display", "inline");
-    	}
-        if (!contextId) {
-        	forceLogin();
-        } else {
-            rest.getData("context/check/" + contextId, {}, function() {
-            	success();
-            	if ($login && $login.length) {
-            		$login.css("display", "none");
-            	}
-            }, forceLogin);
+		};
+		
+        if (contextId) {
+			rest.getData("context/check/" + contextId, {}, success, forceLogin);
+        }
+		else {
+			forceLogin();
         }
     };
     

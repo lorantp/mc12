@@ -1,10 +1,14 @@
-body {	background-color: #FFFFFF;
+body {
 	font-family: verdana;
-	text-align: center;
+	text-align: center;	
 }
 
 .hidden {
 	display: none;
+}
+
+.centered {
+	text-align: center;
 }
 
 .shadowed {
@@ -19,7 +23,7 @@ body {	background-color: #FFFFFF;
 }
 
 .infobox {
-	width: 40em;
+	width: 50em;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -37,6 +41,10 @@ body {	background-color: #FFFFFF;
 	padding-bottom: 0px;
 }
 
+.padded {
+	padding: 15px;
+}
+
 .capture {
 	background-color: #AADE22;
 }
@@ -44,6 +52,10 @@ body {	background-color: #FFFFFF;
 .left {
 	float: left;
 	margin-left: 50px;
+}
+
+.block {	
+	display: block;;
 }
 
 .right {

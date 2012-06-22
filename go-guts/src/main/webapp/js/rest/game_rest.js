@@ -14,19 +14,19 @@ var GAME_REST = function(rest) {
 		rest.getData(prefix + 'all/' + state, {}, success);
 	};
 	
-	that.doMove = function(gameId, playerId, x, y, success) {
+	that.doMove = function(gameId, x, y, success) {
 		rest.postData(prefix + gameId + '/move', {x: x, y: y}, success);
 	};	
 	
-	that.doPass = function(gameId, playerId, success) {
+	that.doPass = function(gameId, success) {
 		rest.postData(prefix + gameId + '/pass', {}, success);
 	};
 	
-	that.newGame = function(playerId, boardSize, color, success) {
+	that.newGame = function(boardSize, color, success) {
 		rest.postData(prefix + 'new', {boardSize: boardSize, color: color}, success);
 	};
 	
-	that.startGame = function(gameId, playerId, success) {
+	that.startGame = function(gameId, success) {
 		rest.postData(prefix + gameId + '/start', {}, success);
 	};
 	
