@@ -16,13 +16,14 @@ var PLAYER_CONTEXT = function($login, rest) {
     
     that.authenticate = function(success) {
 		var forceLogin = function() {
-			$login.find("#login_button").button();
-			$login.removeClass("hidden");
         	contextId = undefined;
-    		$login.find("#login_form").submit(function() {
-    			login(success);
-				return false;
-    		});
+			$login.load("login.html", function() {
+				$login.find("#login_button").button();				
+	    		$login.find("#login_form").submit(function() {
+	    			login(success);
+					return false;
+	    		});
+			});
 		};
 		
         if (contextId) {
