@@ -32,7 +32,7 @@ public class TestData {
 			Player.create("Bernd", "berndj@topdesk.com"),
 			Player.create("Jorn", "jornh@topdesk.com"),
 			Player.create("Krisz", "krisztianh@topdesk.com"));
-	private DateTime nextDate = new DateTime(DateTimeZone.forID("Europe/Berlin")).minusDays(1).withHourOfDay(9);
+	private DateTime nextDate = new DateTime(DateTimeZone.forID("Europe/Berlin")).minusDays(3).withHourOfDay(9);
 	private final Iterator<BoardSize> sizes = Iterables.cycle(EnumSet.allOf(BoardSize.class)).iterator();
 	
 	@Transactional
@@ -43,7 +43,9 @@ public class TestData {
 			createNewAndCancelled(black);
 			
 			for (Player white : players) {
-				createStartedAndFinished(black, white);
+				if (black != white) {
+					createStartedAndFinished(black, white);
+				}
 			}
 		}
 		
@@ -61,15 +63,16 @@ public class TestData {
 	private void createNewAndCancelled(Player player) {
 		persist(GameData.createInitiated(player, Color.BLACK, nextDate(), sizes.next()));
 		persist(GameData.createInitiated(player, Color.WHITE, nextDate(), sizes.next()));
-		log.debug("Created 2 initiated games for player {}", player.getName());
+		log.debug("Created 2 initiated games for {}", player.getName());
 		
 		persist(GameData.createCancelled(player, Color.BLACK, nextDate(), nextDate(), sizes.next()));
 		persist(GameData.createCancelled(player, Color.WHITE, nextDate(), nextDate(), sizes.next()));
-		log.debug("Created 2 cancelled games for player {}", player.getName());
+		log.debug("Created 2 cancelled games for {}", player.getName());
 	}
 	
 	private void createStartedAndFinished(Player black, Player white) {
 		persist(GameData.createStarted(black, white, nextDate(), nextDate(), sizes.next()));
+		log.debug("Created started game {} vs {}", black.getName(), white.getName());
 		
 		GameData game = GameData.createFinished(black, white, nextDate(), nextDate(), nextDate(), sizes.next());
 		persist(game);
@@ -84,6 +87,7 @@ public class TestData {
 		
 		persist(Move.createPass(game, colors.next()));
 		persist(Move.createPass(game, colors.next()));
+		log.debug("Created finished game {} vs {}", black.getName(), white.getName());
 	}
 	
 	private long nextDate() {
