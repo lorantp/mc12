@@ -4,13 +4,13 @@ var initGameLauncher = function() {
 	var player_context = PLAYER_CONTEXT($("body"), rest);
 	var gameRest = GAME_REST(rest);
 	
-	var init = new GAME_LAUNCHER(
+	var launcher = new GAME_LAUNCHER(
 			$("#launch_game"), 
 			$("#games"),
 			gameRest);
 	
-	init.initStyle();
-	init.activateButton();
+	launcher.initStyle();
+	launcher.activateButton();
 	
 	var gameList = GAME_LIST($("#game_states"), gameRest);	
 	player_context.authenticate(function() {

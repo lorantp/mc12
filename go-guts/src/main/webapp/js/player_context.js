@@ -17,26 +17,12 @@ var PLAYER_CONTEXT = function($body, rest) {
         });
     };
     
-    var createLoginScreen = function() {
-        if (!$login) {
-            $login = $("#login");
-            $login.append("TOPdesk presents");
-            $login.append($("<h1></h1>").append("GO"));
-            $login.append("Please login:");
-            $login.append($("<input type='text' id='name'></input>"));
-            $login.append($("<button id='loginbutton'></button>").append("Login"));
-        }
-        if (!$body.find("#login").length) {
-            $body.append($login);
-        }
-    }
-    
     that.authenticate = function(success) {
     	var forceLogin = function() {
         	contextId = undefined;
-    		createLoginScreen();
-    		$login.find("#loginbutton").click(function() {
+    		$login.find("#login_form").submit(function() {
     			login(success);
+				return true;
     		});
     		$login.css("display", "inline");
     	}
