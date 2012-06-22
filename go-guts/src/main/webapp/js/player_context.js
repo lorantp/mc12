@@ -1,7 +1,7 @@
 var PLAYER_CONTEXT = function($body, rest) {
     var that = {};
 
-    var match = /contextId=(\d+)/.exec(document.cookie);
+    var match = /contextId=(-?\d+)/.exec(document.cookie);
     var contextId = match ? match[1] : undefined;
     
     var $login;

@@ -28,7 +28,10 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 				});
 		injector.injectMembers(this);
 		service.start();
-		injector.getInstance(TestData.class).create();
+		
+//		Disabled test data since it's already in the persisted database. Uncomment to recreate.
+//		injector.getInstance(TestData.class).create();
+		
 		return injector;
 	}
 	
