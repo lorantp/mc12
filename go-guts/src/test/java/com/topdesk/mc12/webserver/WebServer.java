@@ -6,6 +6,10 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public class WebServer {
+	static {
+		System.setProperty("GoPersistence", "com.topdesk.mc12.go.test");
+	}
+	
 	private final Server server;
 	
 	public WebServer() {
