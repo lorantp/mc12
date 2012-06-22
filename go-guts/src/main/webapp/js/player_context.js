@@ -1,31 +1,16 @@
 var PLAYER_CONTEXT = function($body, rest) {
     var that = {};
 
-    that.getCookie = function(name) {
-        var value = null;
-        if(document.cookie)    //only if exists
-        {
-            var arr = document.cookie.split((escape(name) + '=')); 
-            if(2 <= arr.length)
-            {
-                var arr2 =     arr[1].split(';');
-                value  =     unescape(arr2[0]);
-            }
-        }
-        return value;
-    };
-   
-    var contextId = that.getCookie("contextId");
+    var match = /contextId=(\d+)/.exec(document.cookie);
+    var contextId = match ? match[1] : undefined;
     
     var $login;
     
     var login = function(success) {
-        //var contextId = get_cookie(#name);
         rest.getData("context/" + $login.find("#name").val(), {}, function(data) {
             contextId = data;
             $login.css("display", "none");
             
-            //TestCookies       
             that.setCookie("contextId", contextId);
             
             success();
