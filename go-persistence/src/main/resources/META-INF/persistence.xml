@@ -26,14 +26,12 @@ http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="2.0">
 		<class>com.topdesk.mc12.persistence.entities.Player</class>
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="update"/>
-			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
 			<!-- disable showing sql for debug
 			<property name="hibernate.show_sql" value="true"/>
 			-->
-			<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://test-mssql2008r2:1433;databaseName=barte_megamasterproductiedatabasethatisawesome"/>
-			<property name="javax.persistence.jdbc.user" value="mc12rOx" />
-			<property name="javax.persistence.jdbc.password" value="mc12rOx" />
+			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:h2:db/mc12_go_db"/>
 		</properties>
 	</persistence-unit>
 </persistence>

@@ -24,10 +24,5 @@
 			<artifactId>h2</artifactId>
 			<version>1.3.167</version>
 		</dependency>
-		<dependency>
-			<groupId>com.microsoft.sqlserver</groupId>
-			<artifactId>jdbc4-driver</artifactId>
-			<version>3.0.1301.202</version>
-		</dependency>
 	</dependencies>
 </project>
