@@ -103,7 +103,6 @@ public class DefaultGameRestlet implements GameRestlet {
 		
 		entityManager.get().persist(Move.createPass(gameData, color));
 		entityManager.get().flush();
-		log.info("Player {} passed in game {}", player.getName(), game);
 	}
 		
 	@Override
@@ -204,13 +203,15 @@ public class DefaultGameRestlet implements GameRestlet {
 		PASS {
 			@Override
 			void applyMove(GoRuleEngine ruleEngine, Game game, Color color) {
-				ruleEngine.applyPass(game, color);				
+				ruleEngine.applyPass(game, color);
+				log.info("{} player passed in game {}", color, game);
 			}
 		},
 		SURRENDER {
 			@Override
 			void applyMove(GoRuleEngine ruleEngine, Game game, Color color) {
-				ruleEngine.applySurrender(game, color);				
+				ruleEngine.applySurrender(game, color);
+				log.info("{} player surrendered in game {}", color, game);
 			}
 		};
 		

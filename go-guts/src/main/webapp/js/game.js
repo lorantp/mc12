@@ -46,9 +46,23 @@ var Game = function(gameRest) {
 		$("#pass").click(that.pass);
 		$("#cancel").click(function() {
 			that.cancel(board);
-		});		
+		});
+		
 		$("#surrender").click(function() {
-			that.surrender(board);
+			var dialogContent = $("<div title='Surrender'/>").append("<p>Are you sure you want to surrender?</p>");			
+			dialogContent.dialog({
+				resizable: false,
+				modal: true,
+				buttons: {
+					Surrender: function() {
+						that.surrender(board);
+						$(this).dialog( "close" );
+					},
+					Cancel: function() {
+						$(this).dialog( "close" );
+					}
+				}
+			});
 		});		
 	};
 	
@@ -124,7 +138,7 @@ var Game = function(gameRest) {
 		});
 	}
 	
-	that.surrender = function(board) {
+	that.surrender = function(board) {		
 		gameRest.surrenderGame(gameId, function() {			
 			that.disableGameMode(board);
 		});
