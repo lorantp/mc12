@@ -6,6 +6,7 @@ var initGame = function() {
 	
 	var rest = Rest("rest");
 	var playerContext = PlayerContext($("#content"), rest);
+	$("#logout").click(playerContext.logout);
 	
 	var gameRest = GameRest(rest);
 	var game = Game(gameRest, playerContext);
