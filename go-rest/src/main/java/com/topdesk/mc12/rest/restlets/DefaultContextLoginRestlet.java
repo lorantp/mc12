@@ -20,12 +20,12 @@ import com.topdesk.mc12.persistence.entities.Player;
 import com.topdesk.mc12.rest.entities.ContextData;
 
 @Slf4j
-public class DefaultLoginRestlet implements LoginRestlet {
+public class DefaultContextLoginRestlet implements ContextLoginRestlet {
 	private final Provider<EntityManager> entityManager;
 	private final PlayerContextMap contextMap;
 	
 	@Inject
-	public DefaultLoginRestlet(Provider<EntityManager> entityManager, PlayerContextMap contextMap) {
+	public DefaultContextLoginRestlet(Provider<EntityManager> entityManager, PlayerContextMap contextMap) {
 		this.entityManager = entityManager;
 		this.contextMap = contextMap;
 	}

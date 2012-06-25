@@ -39,7 +39,8 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     @Override
     public ContainerRequest filter(ContainerRequest request) {
     	log.trace("Authorizing request: {}", request);
-    	if (uriInfo.getPath().startsWith("context")) { // User is trying to login
+    	if (uriInfo.getPath().startsWith("context") || uriInfo.getPath().startsWith("login")) { // User is trying to login
+    		log.trace("Trying to login", request);
     		return request;
     	}
     	
@@ -49,19 +50,21 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     	}
     	
     	if (httpRequest.getCookies() != null ) {
-    		for (Cookie cookie : Arrays.asList(httpRequest.getCookies())) {
-    			log.trace("Cookie found: cookieName: {} cookieValue: {}", cookie.getName(), cookie.getValue());
+    		for (Cookie cookie : httpRequest.getCookies()) {
+    			String cookieValue = cookie.getValue();
+				log.trace("Cookie found: cookieName: {} cookieValue: {}", cookie.getName(), cookieValue);
     			if (cookie.getName().equals("contextId")) {
     				PlayerContext context = contextMap.getById(Integer.valueOf(cookie.getValue()), httpRequest);
     				if (context == null) {
-    					GoException.createUnauthorized("PlayerContext is no longer valid.");
+    					log.error("PlayerContext {} is no longer valid", cookie.getValue());
+    					continue;
     				}
     				request.setSecurityContext(new PlayerContexedSecurity(context, uriInfo));
     				return request;
     			}
     		}
     	}
-
+    	
         throw GoException.createUnauthorized("No authorization");
     }
 

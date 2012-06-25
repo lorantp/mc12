@@ -15,10 +15,12 @@ import com.topdesk.mc12.persistence.entities.Player;
 import com.topdesk.mc12.rest.RestInterfaceConfig;
 import com.topdesk.mc12.rest.producers.GoExceptionMapper;
 import com.topdesk.mc12.rest.producers.RuntimeExceptionMapper;
+import com.topdesk.mc12.rest.restlets.DefaultFacebookLoginRestlet;
 import com.topdesk.mc12.rest.restlets.DefaultGameRestlet;
-import com.topdesk.mc12.rest.restlets.DefaultLoginRestlet;
+import com.topdesk.mc12.rest.restlets.DefaultContextLoginRestlet;
+import com.topdesk.mc12.rest.restlets.FacebookLoginRestlet;
 import com.topdesk.mc12.rest.restlets.GameRestlet;
-import com.topdesk.mc12.rest.restlets.LoginRestlet;
+import com.topdesk.mc12.rest.restlets.ContextLoginRestlet;
 
 // see http://code.google.com/p/google-guice/wiki/ServletModule
 public class WebModule extends JerseyServletModule {
@@ -34,7 +36,8 @@ public class WebModule extends JerseyServletModule {
 		bind(PlayerContextMap.class).to(SessionPlayerContextMap.class).in(SINGLETON);
 		bind(AuthorizationRequestFilter.class).in(SINGLETON);
 		bind(GameRestlet.class).to(DefaultGameRestlet.class);
-		bind(LoginRestlet.class).to(DefaultLoginRestlet.class);
+		bind(ContextLoginRestlet.class).to(DefaultContextLoginRestlet.class);
+		bind(FacebookLoginRestlet.class).to(DefaultFacebookLoginRestlet.class);
 		
 		serve("/rest/*").with(GuiceContainer.class, ImmutableMap.<String, String> builder()
 				.put(JSONConfiguration.FEATURE_POJO_MAPPING, "true")

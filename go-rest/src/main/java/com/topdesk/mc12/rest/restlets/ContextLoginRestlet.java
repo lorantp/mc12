@@ -14,7 +14,7 @@ import com.topdesk.mc12.rest.entities.ContextData;
 @Path("context")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public interface LoginRestlet {
+public interface ContextLoginRestlet {
 	@GET @Path("/{name}") ContextData get(@Context HttpServletRequest request, @PathParam("name") String playerName);
 	@GET @Path("/check/{id}") ContextData checkId(@Context HttpServletRequest request, @PathParam("id") String id);
 }

@@ -14,7 +14,7 @@ var initGame = function() {
 	}, game.redirect);
 };
 
-var Game = function(gameRest) {
+var Game = function(gameRest, context) {
 	var that = {};
 	
 	var nextStone = {};
@@ -34,7 +34,7 @@ var Game = function(gameRest) {
 			board = Board(
 					$("#board"),
 					game.size,
-					that.colorOfTurn(game.totalMoves),
+					that.colorOfPlayer(game),
 					that.actions);
 			board.draw();
 			that.initButtons(board);
@@ -76,6 +76,7 @@ var Game = function(gameRest) {
 			gameId = game.id;				
 			
 			board.placeStones(game.stones);
+			board.setEnabled(that.itApostropheSPlayersTurn(game));
 			that.updateGameState(board, initMode, game.finished);
 			metaData.showData(game);
 			currentTurn = game.totalMoves;
@@ -84,6 +85,12 @@ var Game = function(gameRest) {
 			gameRest.getGame(id, update, that.redirect);
 		}, 1000);
 	};
+	
+	that.itApostropheSPlayersTurn = function(game) {
+		return game.totalMoves % 2 === 0 ? 
+				(game.black.id == context.playerId) :
+				(game.white.id == context.playerId)
+	}
 	
 	that.actions = {
 			updateNextStone: function(x, y) {
@@ -98,8 +105,14 @@ var Game = function(gameRest) {
 			}
 	};
 	
-	that.colorOfTurn = function(turn) {
-		return turn % 2 === 0 ? "BLACK" : "WHITE";
+	that.colorOfPlayer = function(game) {
+		if (game.black.id == context.playerId) {
+			return "BLACK";
+		}
+		if (game.white.id == context.playerId) {
+			return "WHITE";
+		}
+		return null;
 	}
 	
 	that.updateGameState = function(board, initMode, finished) {
