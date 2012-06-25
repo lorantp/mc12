@@ -62,6 +62,7 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 				.apiKey("73477428485.apps.googleusercontent.com")
 				.apiSecret("xLZFOen9KvQItfQKFV__eVca")
 				.callback("http://mc12.topdesk.com/test/rest/login/google")
+				.scope("https://apps-apis.google.com/a/feeds/user/#readonly")
 				.debug()
 				.build();
 		
@@ -114,7 +115,7 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 		String response = authRequest.send().getBody();
 		log.warn(response);
 		return response;
-//
+		
 //		Player player = loginHelper.getOrCreate(parse(response).get("username").asText());
 //		PlayerContext context = loginHelper.login(player, request);
 //		String contextId = Integer.toString(context.hashCode());
@@ -173,7 +174,7 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 		session.removeAttribute("googleToken");
 		
 		Token accessToken = googleService.getAccessToken(requestToken, new Verifier(token));
-		OAuthRequest authRequest = new OAuthRequest(Verb.GET, ""); // url?
+		OAuthRequest authRequest = new OAuthRequest(Verb.GET, "https://apps-apis.google.com/a/feeds/user/");
 		googleService.signRequest(accessToken, authRequest);
 		String response = authRequest.send().getBody();
 		System.err.println(response);
