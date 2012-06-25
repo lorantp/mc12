@@ -93,7 +93,7 @@ var Game = function(gameRest, context) {
 			gameId = game.id;				
 			
 			board.placeStones(game.stones);
-			board.setEnabled(that.itApostropheSPlayersTurn(game));
+			board.setEnabled(that.isOwnTurn(game));
 			that.updateGameState(board, initMode, game.finished);
 			metaData.showData(game);
 			currentGame = game;
@@ -103,8 +103,11 @@ var Game = function(gameRest, context) {
 		}, 1000);
 	};
 	
-	that.itApostropheSPlayersTurn = function(game) {
-		return game.totalMoves % 2 === 0 ? 
+	that.isOwnTurn = function(game) {
+		if (game.black == null || game.white == null) {
+			return false;
+		}
+		return game.totalMoves % 2 == 0 ? 
 				(game.black.id == context.playerId) :
 				(game.white.id == context.playerId)
 	}
