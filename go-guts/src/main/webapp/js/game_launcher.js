@@ -1,7 +1,8 @@
 var initGameLauncher = function() {
 	var rest = Rest("rest");
 	var player_context = PlayerContext($("#login"), rest);
-	
+	$("#logout").click(player_context.logout);
+
 	player_context.authenticate(function() {
 		var gameRest = GameRest(rest);	
 		var launcher = GameLauncher($("#launch_game"), gameRest);
@@ -21,6 +22,7 @@ var GameLauncher = function($controls, gameRest) {
 		$("#initiate").button();
 		$controls.find("#initiate").click(that.initiate);
 		$controls.removeClass("hidden");
+		$("#logout").removeClass("hidden");
 	};
 	
 	that.initiate = function() {

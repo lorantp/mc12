@@ -1,6 +1,6 @@
 package com.topdesk.mc12.rest.restlets;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkState;
 
 import java.util.List;
 
@@ -35,11 +35,12 @@ public class LoginHelper {
 	
 	@Transactional
 	public Player getOrCreate(String name) {
-		List<Player> players = selectByName(name);
+		String trimmedName = name.trim();
+		List<Player> players = selectByName(trimmedName);
 		checkState(players.size() < 2, "Player nicknames are supposed to be unique");
 		
 		if (players.isEmpty()) {
-			Player player = Player.create(name, name + "@topdesk.com");
+			Player player = Player.create(trimmedName, trimmedName + "@topdesk.com");
 			entityManager.get().persist(player);
 			entityManager.get().flush();
 			log.info("Created new {}", player);

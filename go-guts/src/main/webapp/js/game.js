@@ -6,6 +6,7 @@ var initGame = function() {
 	
 	var rest = Rest("rest");
 	var playerContext = PlayerContext($("#content"), rest);
+	$("#logout").click(playerContext.logout);
 	
 	var gameRest = GameRest(rest);
 	var game = Game(gameRest, playerContext);
@@ -44,12 +45,12 @@ var Game = function(gameRest, context) {
 	}
 	
 	that.initButtons = function(board) {
-		$("#pass").click(that.pass);
-		$("#cancel").click(function() {
+		$("#pass").button().click(that.pass);
+		$("#cancel").button().click(function() {
 			that.cancel(board);
 		});
 		
-		$("#surrender").click(function() {
+		$("#surrender").button().click(function() {
 			var dialogContent = $("<div title='Surrender'/>").append("<p>Are you sure you want to surrender?</p>");			
 			dialogContent.dialog({
 				resizable: false,
@@ -93,7 +94,7 @@ var Game = function(gameRest, context) {
 			gameId = game.id;				
 			
 			board.placeStones(game.stones);
-			board.setEnabled(that.itApostropheSPlayersTurn(game));
+			board.setEnabled(that.isOwnTurn(game));
 			that.updateGameState(board, initMode, game.finished);
 			metaData.showData(game);
 			currentGame = game;
@@ -103,8 +104,11 @@ var Game = function(gameRest, context) {
 		}, 1000);
 	};
 	
-	that.itApostropheSPlayersTurn = function(game) {
-		return game.totalMoves % 2 === 0 ? 
+	that.isOwnTurn = function(game) {
+		if (game.black == null || game.white == null) {
+			return false;
+		}
+		return game.totalMoves % 2 == 0 ? 
 				(game.black.id == context.playerId) :
 				(game.white.id == context.playerId)
 	}

@@ -4,11 +4,12 @@
 	<h5>Log in to play</h5>
 	<form id="login_form" title="Log in to play" method="post">
 		<label for="login_username">Name</label> 
-		<input type="text" name="username" id="login_username" title="Please provide your username" />
+		<input type="text" name="username" id="login_username" title="Please provide your username" class="ui-corner-all" />
 		<button id="login_button" type="submit">Log in</button>   
 	</form>
 	<div id="oauth_logins">
 		<a href="https://www.facebook.com/dialog/oauth?client_id=256317947803042&redirect_uri=http%3A%2F%2Flocalhost%2Frest%2Flogin%2Ffacebook">Facebook login</a>
+		<a href="https://www.facebook.com/dialog/oauth?client_id=256317947803042&redirect_uri=http%3A%2F%2Fmc12.topdesk.com%2Ftest%2Frest%2Flogin%2Ffacebook">Facebook login</a>
 		<!--<a href="rest/login/google/forward">Google login</a>-->
 		<a href="rest/login/twitter/forward">Twitter login</a>
 	</div>

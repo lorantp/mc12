@@ -152,6 +152,7 @@ public class DefaultGameRestlet implements GameRestlet {
 			throw new IllegalStateException("Inconsistent game state");
 		}
 		
+		gameData.setStart(new DateTime().getMillis());
 		gameData.setState(GameState.STARTED);
 		entityManager.get().merge(gameData);
 		entityManager.get().flush();
