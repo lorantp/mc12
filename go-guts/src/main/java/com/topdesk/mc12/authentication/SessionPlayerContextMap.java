@@ -17,19 +17,19 @@ public class SessionPlayerContextMap implements PlayerContextMap {
 	public PlayerContext getById(int contextId, HttpServletRequest request) {
 		return (PlayerContext) request.getSession().getAttribute(Integer.toString(contextId));
 	}
-
+	
 	@Override
 	public PlayerContext startNew(Player player, HttpServletRequest request) {
 		PlayerContext context = DefaultPlayerContext.create(checkNotNull(player));
 		request.getSession().setAttribute(Integer.toString(context.hashCode()), context);
 		return context;
 	}
-
+	
 	@Override
 	public boolean hasContextFor(Player player, HttpServletRequest request) {
 		return findPlayerContext(checkNotNull(player), request) != null;
 	}
-
+	
 	@Override
 	public PlayerContext getByPlayer(Player player, HttpServletRequest request) {
 		return findPlayerContext(player, request);

@@ -20,7 +20,7 @@ var PlayerContext = function($login, rest) {
     
     that.login = function(success) {
 		var userName = $login.find("#login_username").val();
-        rest.getData("context/" + userName, {}, function(data) {
+        rest.getData("login/unsafe/" + userName, {}, function(data) {
         	setKnownValues(data);
         	
             that.setCookie(cookieName, contextId);
@@ -42,7 +42,7 @@ var PlayerContext = function($login, rest) {
 		};
 		
         if (contextId) {
-			rest.getData("context/check/" + contextId, {}, function(data) {
+			rest.getData("login/check/" + contextId, {}, function(data) {
 				setKnownValues(data);
 				success();
 			}, error || forceLogin);
