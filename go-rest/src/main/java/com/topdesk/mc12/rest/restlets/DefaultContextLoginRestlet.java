@@ -96,7 +96,7 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 	}
 	
 	@Override
-	public Response twitterLogin(String token, String code) {
+	public String twitterLogin(String token, String code) {
 		HttpSession session = request.getSession(false);
 		if (session == null) {
 			throw GoException.createUnauthorized("No token");
@@ -113,14 +113,15 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 		twitterService.signRequest(accessToken, authRequest);
 		String response = authRequest.send().getBody();
 		log.warn(response);
-		
-		Player player = loginHelper.getOrCreate(parse(response).get("username").asText());
-		PlayerContext context = loginHelper.login(player, request);
-		String contextId = Integer.toString(context.hashCode());
-		return Response
-				.seeOther(URI.create("../"))
-				.cookie(new NewCookie("contextId", contextId, "/", null, null, -1, false))
-				.build();
+		return response;
+//
+//		Player player = loginHelper.getOrCreate(parse(response).get("username").asText());
+//		PlayerContext context = loginHelper.login(player, request);
+//		String contextId = Integer.toString(context.hashCode());
+//		return Response
+//				.seeOther(URI.create("../"))
+//				.cookie(new NewCookie("contextId", contextId, "/", null, null, -1, false))
+//				.build();
 	}
 	
 	private ContextData createData(PlayerContext context) {
@@ -159,7 +160,7 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 	}
 	
 	@Override
-	public Response googleLogin(String token) {
+	public String googleLogin(String token) {
 		HttpSession session = request.getSession(false);
 		if (session == null) {
 			throw GoException.createUnauthorized("No token");
@@ -178,7 +179,7 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 		System.err.println(response);
 		
 		// TODO finish
-		return null;
+		return response;
 	}
 	
 	@SneakyThrows(IOException.class)
