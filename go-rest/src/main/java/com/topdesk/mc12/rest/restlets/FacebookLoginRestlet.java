@@ -7,6 +7,5 @@ import javax.ws.rs.core.Response;
 
 @Path("login/facebook")
 public interface FacebookLoginRestlet {
-	@GET
-	Response login(@QueryParam("code") String code);
+	@GET Response login(@QueryParam("code") String code);
 }

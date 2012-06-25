@@ -1,15 +1,17 @@
 package com.topdesk.mc12.authentication;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import java.util.Collections;
 
+import javax.inject.Singleton;
 import javax.servlet.http.HttpServletRequest;
 
 import com.topdesk.mc12.common.PlayerContext;
 import com.topdesk.mc12.common.PlayerContextMap;
 import com.topdesk.mc12.persistence.entities.Player;
 
+@Singleton
 public class SessionPlayerContextMap implements PlayerContextMap {
 	@Override
 	public PlayerContext getById(int contextId, HttpServletRequest request) {

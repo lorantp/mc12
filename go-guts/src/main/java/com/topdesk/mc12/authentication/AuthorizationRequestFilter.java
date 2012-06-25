@@ -3,6 +3,7 @@ package com.topdesk.mc12.authentication;
 import java.security.Principal;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
@@ -22,6 +23,7 @@ import com.topdesk.mc12.common.PlayerContextMap;
  * requests processed by this application.
  */
 @Slf4j
+@Singleton
 public class AuthorizationRequestFilter implements ContainerRequestFilter {
     @Context
     UriInfo uriInfo;
