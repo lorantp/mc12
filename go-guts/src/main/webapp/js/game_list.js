@@ -56,7 +56,7 @@ var GameList = function($content, gameRest) {
 	};
 	
 	that.createOpenButton = function(id) {		
-		return $("<button>Open Game</button>")
+		return $("<button>Open</button>")
 				.attr({id: "open_game_" + id})
 				.button()
 				.click(function() {
