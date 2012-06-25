@@ -7,11 +7,11 @@ var initBoard = function() {
 	board = BOARD(
 			container,
 			boardMock.size,
-			boardMock.moves,
 			"BLACK",
 			actionsMock);
 	
 	board.draw();
+	board.placeStones(boardMock.moves);
 }
 
 describe("place move on board", function() {

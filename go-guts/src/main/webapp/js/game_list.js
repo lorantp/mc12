@@ -86,7 +86,7 @@ var GAME_LIST = function($content, gameRest) {
 	};
 	
 	that.join = function(gameId) {
-		gameRest.startGame(gameId, dummyPlayerId2, function() {
+		gameRest.startGame(gameId, function() {
 			that.openGame(gameId);
 		});
 	};

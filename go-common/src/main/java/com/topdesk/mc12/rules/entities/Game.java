@@ -1,6 +1,6 @@
 package com.topdesk.mc12.rules.entities;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.Collection;
 import java.util.Set;

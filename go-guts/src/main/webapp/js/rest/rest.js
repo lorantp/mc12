@@ -15,7 +15,6 @@ var REST = function() {
 			type:'post',
 			success: success || function(data, textStatus, jqXHR) {
 				console.log('success');
-				location.reload(true);
 			},
 			error: error || function(jqXHR, textStatus, errorThrown) {
 				alert(jqXHR.responseText);

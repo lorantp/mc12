@@ -5,13 +5,10 @@ var initGame = function() {
 	}
 	
 	var rest = REST("rest");
-	var playerContext = PLAYER_CONTEXT($("body"), rest);
 	
 	var gameRest = GAME_REST(rest);
 	var game = GAME(gameRest);
-	playerContext.authenticate(function() {
-		game.draw(id);
-	});
+	game.draw(id);
 };
 
 var GAME = function(gameRest) {
@@ -20,29 +17,52 @@ var GAME = function(gameRest) {
 	var nextStone = {};
 	
 	var gameId;
-	var playerId;
+	var board;
+	var metaData;
+	var currentTurn;
 	
 	that.draw = function(id) {
-		gameRest.getGame(id, function(game) {
-			gameId = game.id;
-			
-			var initMode = game.black == null || game.white == null;
-			if (!initMode) {
-				playerId = game.totalMoves % 2 == 0 ? game.black.id : game.white.id;
-			}
-			
-			var board = BOARD(
+		gameRest.getGame(id, function(game) {			
+			metaData = METADATA($("#content"));
+			board = BOARD(
 					$("#board"),
 					game.size,
-					game.stones,
 					that.colorOfTurn(game.totalMoves),
 					that.actions);
-			
 			board.draw();
-			that.updateGameState(board, initMode, game.finished);
-			METADATA($("#content")).showData(game);
+			that.initButtons(board);
+			that.updateBoard(game.id);
 		});
 	}
+	
+	that.initButtons = function(board) {
+		$("#pass").click(that.pass);
+		$("#cancel").click(function() {
+			that.cancel(board);
+		});		
+	};
+	
+	that.updateBoard = function(id) {
+		var update = function(game) {
+			if (currentTurn == game.totalMoves) {
+				return;
+			}
+			
+			var initMode = game.black == null || game.white == null;
+			gameId = game.id;				
+			
+			board.placeStones(game.stones);
+			that.updateGameState(board, initMode, game.finished);
+			metaData.showData(game);
+			currentTurn = game.totalMoves;
+		};
+		var redirect = function() {
+			window.location = "./";
+		};
+		setInterval(function() {
+			gameRest.getGame(id, update, redirect);
+		}, 1000);
+	};
 	
 	that.actions = {
 			updateNextStone: function(x, y) {
@@ -52,10 +72,9 @@ var GAME = function(gameRest) {
 			
 			confirmMove: function() {
 				if (nextStone && (nextStone.x || nextStone.x == 0) && (nextStone.y || nextStone.y == 0)) {
-					gameRest.doMove(gameId, playerId, nextStone.x, nextStone.y);
-					$("[target=true]").attr({target: "false", stone: nextStone.color});
+					gameRest.doMove(gameId, nextStone.x, nextStone.y);
 				}
-			}	
+			}
 	};
 	
 	that.colorOfTurn = function(turn) {
@@ -63,8 +82,8 @@ var GAME = function(gameRest) {
 	}
 	
 	that.updateGameState = function(board, initMode, finished) {
-		if (initMode) {				
-			that.activateInitMode(board);			
+		if (initMode) {
+			that.activateInitMode(board);
 		}
 		else if (finished) {				
 			that.disableGameMode(board);
@@ -75,16 +94,14 @@ var GAME = function(gameRest) {
 	};
 	
 	that.activateInitMode = function(board) {
-		$("#cancel").click(function() {
-			that.cancel(board);
-		});
-		$("#pass").remove();
+		$("#cancel").removeClass("hidden");
+		$("#pass").addClass("hidden");
 		board.setEnabled(false);
 	}
 	
 	that.activateGameMode = function() {
-		$("#pass").click(that.pass);
-		$("#cancel").remove();			
+		$("#pass").removeClass("hidden");
+		$("#cancel").addClass("hidden");
 	}
 	
 	that.disableGameMode = function(board) {		
@@ -99,7 +116,7 @@ var GAME = function(gameRest) {
 	}
 	
 	that.pass = function() {
-		gameRest.doPass(gameId, playerId);
+		gameRest.doPass(gameId);
 	};
 	
 	that.clearMove = function() {

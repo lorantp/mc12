@@ -1,43 +1,32 @@
-
 var initGameLauncher = function() {
 	var rest = REST("rest");
-	var player_context = PLAYER_CONTEXT($("body"), rest);
-	var gameRest = GAME_REST(rest);
+	var player_context = PLAYER_CONTEXT($("#login"), rest);
 	
-	var init = new GAME_LAUNCHER(
-			$("#launch_game"), 
-			$("#games"),
-			gameRest);
-	
-	init.initStyle();
-	init.activateButton();
-	
-	var gameList = GAME_LIST($("#game_states"), gameRest);	
 	player_context.authenticate(function() {
+		var gameRest = GAME_REST(rest);	
+		var launcher = new GAME_LAUNCHER($("#launch_game"), gameRest);
+		launcher.init();
+		
+		var gameList = GAME_LIST($("#game_states"), gameRest);	
 		gameList.showGames();
 	});
 };
 
-var GAME_LAUNCHER = function($controls, $games, gameRest) {
+var GAME_LAUNCHER = function($controls, gameRest) {
 	that = {};
 	
-	var dummyPlayerId1 = 1;
-	var dummyPlayerId2 = 2;
-	
-	that.initStyle = function() {
+	that.init = function() {
 		$("#board_size").buttonset();
 		$("#player_color").buttonset();
 		$("#initiate").button();
-	};
-	
-	that.activateButton = function() {
 		$controls.find("#initiate").click(that.initiate);
+		$controls.removeClass("hidden");
 	};
 	
 	that.initiate = function() {
 		var boardSize = $("input:radio[name=board_size]:checked").val();
 		var color = $("input:radio[name=player_color]:checked").val();
-		gameRest.newGame(dummyPlayerId1, boardSize, color, that.openGame);
+		gameRest.newGame(boardSize, color, that.openGame);
 	};
 	
 	return that;
