@@ -1,6 +1,7 @@
 body {
 	font-family: verdana;
-	text-align: center;	
+	text-align: center;
+	background-color: #202020;
 }
 
 .hidden {
@@ -13,7 +14,8 @@ body {
 
 .shadowed {
 	margin-right: 50px;
-	color: #AA1221;	box-shadow: 6px 10px 6px #332355;
+	color: #AA1221;	
+	box-shadow: 6px 10px 6px #303030;
 }
 
 .bordered {
@@ -55,7 +57,7 @@ body {
 }
 
 .block {	
-	display: block;;
+	display: block;
 }
 
 .right {
