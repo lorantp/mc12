@@ -1,5 +1,3 @@
-// Commented test out until UI is solid again
-
 var initButton =  $("<button id='initiate'>Init</button>");
 var initContainer;
 var gameContainer;
