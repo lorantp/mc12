@@ -6,15 +6,22 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.topdesk.mc12.rest.entities.ContextData;
 
-@Path("context")
+@Path("login")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public interface ContextLoginRestlet {
-	@GET @Path("/{name}") ContextData get(@Context HttpServletRequest request, @PathParam("name") String playerName);
+public interface LoginRestlet {
 	@GET @Path("/check/{id}") ContextData checkId(@Context HttpServletRequest request, @PathParam("id") String id);
+	
+	@GET @Path("/facebook") Response facebookLogin(@QueryParam("code") String code);
+	@GET @Path("/google") Response googleLogin(@QueryParam("code") String code);
+	@GET @Path("/google/forward") Response googleLoginRedirect();
+	@GET @Path("/unsafe/{name}") ContextData unsafeLogin(@PathParam("name") String playerName);
+
 }
