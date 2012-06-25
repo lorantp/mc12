@@ -28,4 +28,10 @@ public interface GoRuleEngine {
 	 * @throws GoException if the rules don't allow this
 	 */
 	void applyPass(Game game, Color color);
+	
+	/**
+	 * Apply rules for surrendering on an existing game
+	 * @throws GoException if the rules don't allow this
+	 */
+	void applySurrender(Game game, Color color);
 }

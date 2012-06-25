@@ -81,10 +81,19 @@ public class DefaultGameRestlet implements GameRestlet {
 	
 	@Override
 	public void pass(long gameId) {
+		doSpecialMove(gameId, SpecialMove.PASS);
+	}
+	
+	@Override
+	public void surrenderGame(long gameId) {
+		doSpecialMove(gameId, SpecialMove.SURRENDER);
+	}
+	
+	private void doSpecialMove(long gameId, SpecialMove move) {
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
 		Game game = ruleEngine.applyMoves(gameData);
 		Color color = getPlayerColor(gameData);
-		ruleEngine.applyPass(game, color);
+		move.applyMove(ruleEngine, game, color);
 		
 		if (game.isFinished()) {
 			gameData.setState(GameState.FINISHED);
@@ -96,7 +105,7 @@ public class DefaultGameRestlet implements GameRestlet {
 		entityManager.get().flush();
 		log.info("Player {} passed in game {}", player.getName(), game);
 	}
-	
+		
 	@Override
 	public void move(long gameId, RestMove restMove) {
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
@@ -189,5 +198,22 @@ public class DefaultGameRestlet implements GameRestlet {
 					gameData.getFinish(),
 					game.isFinished() ? game.getWinner().getName() : null);
 		}
+	}
+	
+	private enum SpecialMove {
+		PASS {
+			@Override
+			void applyMove(GoRuleEngine ruleEngine, Game game, Color color) {
+				ruleEngine.applyPass(game, color);				
+			}
+		},
+		SURRENDER {
+			@Override
+			void applyMove(GoRuleEngine ruleEngine, Game game, Color color) {
+				ruleEngine.applySurrender(game, color);				
+			}
+		};
+		
+		abstract void applyMove(GoRuleEngine ruleEngine, Game game, Color color);
 	}
 }

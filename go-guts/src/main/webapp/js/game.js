@@ -40,6 +40,9 @@ var Game = function(gameRest) {
 		$("#cancel").click(function() {
 			that.cancel(board);
 		});		
+		$("#surrender").click(function() {
+			that.surrender(board);
+		});		
 	};
 	
 	that.updateBoard = function(id) {
@@ -96,11 +99,13 @@ var Game = function(gameRest) {
 	that.activateInitMode = function(board) {
 		$("#cancel").removeClass("hidden");
 		$("#pass").addClass("hidden");
+		$("#surrender").addClass("hidden");
 		board.setEnabled(false);
 	}
 	
 	that.activateGameMode = function() {
 		$("#pass").removeClass("hidden");
+		$("#surrender").removeClass("hidden");
 		$("#cancel").addClass("hidden");
 	}
 	
@@ -111,6 +116,12 @@ var Game = function(gameRest) {
 	
 	that.cancel = function(board) {
 		gameRest.cancelGame(gameId, function() {			
+			that.disableGameMode(board);
+		});
+	}
+	
+	that.surrender = function(board) {
+		gameRest.surrenderGame(gameId, function() {			
 			that.disableGameMode(board);
 		});
 	}

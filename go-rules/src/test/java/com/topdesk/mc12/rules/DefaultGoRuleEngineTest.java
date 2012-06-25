@@ -47,7 +47,19 @@ public class DefaultGoRuleEngineTest {
 		ruleEngine.applyPass(game, Color.BLACK);
 		ruleEngine.applyMove(game, Color.WHITE, 0, 0);
 		assertThat(totalMoves + 2, is(game.getTotalMoves()));
-		
+	}
+	
+	@Test
+	public void blackCanSurrender() {
+		ruleEngine.applySurrender(game, Color.BLACK);
+		assertThat(game.getWinner(), is(PLAYER_WHITE));
+	}
+	
+	@Test
+	public void whiteCanSurrender() {
+		ruleEngine.applyPass(game, Color.BLACK);
+		ruleEngine.applySurrender(game, Color.WHITE);
+		assertThat(game.getWinner(), is(PLAYER_BLACK));
 	}
 	
 	@Test

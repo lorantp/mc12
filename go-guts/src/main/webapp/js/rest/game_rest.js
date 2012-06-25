@@ -34,5 +34,9 @@ var GameRest = function(rest) {
 		rest.postData(prefix + gameId + '/cancel', {}, success, error);
 	};
 	
+	that.surrenderGame = function(gameId, success, error) {
+		rest.postData(prefix + gameId + '/surrender', {}, success, error);
+	};
+	
 	return that;
 }
