@@ -2,6 +2,7 @@ package com.topdesk.mc12.authentication;
  
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.Iterator;
 
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
@@ -10,8 +11,18 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import org.scribe.builder.ServiceBuilder;
+import org.scribe.builder.api.FacebookApi;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
+import org.scribe.model.Token;
+import org.scribe.model.Verb;
+import org.scribe.model.Verifier;
+import org.scribe.oauth.OAuthService;
+
 import lombok.extern.slf4j.Slf4j;
 
+import com.google.common.collect.Iterators;
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
 import com.topdesk.mc12.common.GoException;
@@ -38,10 +49,10 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
  
     @Override
     public ContainerRequest filter(ContainerRequest request) {
-    	log.trace("Authorizing request: {}", request);
-    	if (uriInfo.getPath().startsWith("context")) { // User is trying to login
-    		return request;
-    	}
+//    	log.trace("Authorizing request: {}", request);
+//    	if (uriInfo.getPath().startsWith("context")) { // User is trying to login
+//    		return request;
+//    	}
     	
     	if (request.getUserPrincipal() != null) {
     		log.trace("Request already authenticated");
@@ -50,7 +61,8 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     	
     	if (httpRequest.getCookies() != null ) {
     		for (Cookie cookie : Arrays.asList(httpRequest.getCookies())) {
-    			log.trace("Cookie found: cookieName: {} cookieValue: {}", cookie.getName(), cookie.getValue());
+    			String cookieValue = cookie.getValue();
+				log.info("Cookie found: cookieName: {} cookieValue: {}", cookie.getName(), cookieValue);
     			if (cookie.getName().equals("contextId")) {
     				PlayerContext context = contextMap.getById(Integer.valueOf(cookie.getValue()), httpRequest);
     				if (context == null) {
@@ -61,6 +73,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     			}
     		}
     	}
+    	
 
         throw GoException.createUnauthorized("No authorization");
     }
