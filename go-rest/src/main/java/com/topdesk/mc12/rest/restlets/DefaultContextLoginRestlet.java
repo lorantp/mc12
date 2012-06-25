@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -16,6 +17,7 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.FacebookApi;
+import org.scribe.builder.api.GoogleApi;
 import org.scribe.builder.api.TwitterApi;
 import org.scribe.model.OAuthRequest;
 import org.scribe.model.Token;
@@ -38,6 +40,7 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 	private final ObjectMapper mapper;
 	
 	private final OAuthService facebookService;
+	private final OAuthService googleService;
 	private final OAuthService twitterService;
 	
 	@Inject
@@ -52,6 +55,13 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 				.apiKey("256317947803042")
 				.apiSecret("2d078c77b98e9be0d798d9f71b1669e6")
 				.callback("http://mc12.topdesk.com/test/rest/login/facebook")
+				.build();
+		
+		this.googleService = new ServiceBuilder()
+				.provider(GoogleApi.class)
+				.apiKey("73477428485.apps.googleusercontent.com")
+				.apiSecret("xLZFOen9KvQItfQKFV__eVca")
+				.callback("http://mc12.topdesk.com/test/rest/login/google")
 				.debug()
 				.build();
 		
@@ -86,19 +96,23 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 	}
 	
 	@Override
-	public Response twitterLogin(String code) {
-		Token requestToken = (Token) request.getSession(false).getAttribute("twitterToken");
+	public Response twitterLogin(String token, String code) {
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			throw GoException.createUnauthorized("No token");
+		}
+		
+		Token requestToken = (Token) session.getAttribute("twitterToken");
 		if (requestToken == null) {
 			throw GoException.createUnauthorized("No token");
 		}
-		request.getSession().removeAttribute("twitterToken");
+		session.removeAttribute("twitterToken");
 		
 		Token accessToken = twitterService.getAccessToken(requestToken, new Verifier(code));
 		OAuthRequest authRequest = new OAuthRequest(Verb.GET, "account/verify_credentials");
 		twitterService.signRequest(accessToken, authRequest);
 		String response = authRequest.send().getBody();
 		System.err.println(response);
-		JsonNode data = parse(response);
 		
 		Player player = loginHelper.getOrCreate(accessToken.getToken()); // FIXME find decent player name
 		PlayerContext context = loginHelper.login(player, request);
@@ -134,6 +148,37 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 				.seeOther(URI.create("../"))
 				.cookie(new NewCookie("contextId", contextId, "/", null, null, -1, false))
 				.build();
+	}
+	
+	@Override
+	public Response googleLoginForward() {
+		Token requestToken = googleService.getRequestToken();
+		request.getSession(true).setAttribute("googleToken", requestToken);
+		String url = googleService.getAuthorizationUrl(requestToken);
+		return Response.seeOther(URI.create(url)).build();
+	}
+	
+	@Override
+	public Response googleLogin(String token) {
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			throw GoException.createUnauthorized("No token");
+		}
+		
+		Token requestToken = (Token) session.getAttribute("googleToken");
+		if (requestToken == null) {
+			throw GoException.createUnauthorized("No token");
+		}
+		session.removeAttribute("googleToken");
+		
+		Token accessToken = googleService.getAccessToken(requestToken, new Verifier(token));
+		OAuthRequest authRequest = new OAuthRequest(Verb.GET, ""); // url?
+		googleService.signRequest(accessToken, authRequest);
+		String response = authRequest.send().getBody();
+		System.err.println(response);
+		
+		// TODO finish
+		return null;
 	}
 	
 	@SneakyThrows(IOException.class)
