@@ -6,6 +6,7 @@ var initGame = function() {
 	
 	var rest = Rest("rest");
 	var playerContext = PlayerContext($("#content"), rest);
+	$("#logout").click(playerContext.logout);
 	
 	var gameRest = GameRest(rest);
 	var game = Game(gameRest, playerContext);
@@ -22,7 +23,8 @@ var Game = function(gameRest, context) {
 	var gameId;
 	var board;
 	var metaData;
-	var currentTurn;
+	
+	var currentGame;
 
 	that.redirect = function() {
 		window.location = "./";
@@ -43,12 +45,12 @@ var Game = function(gameRest, context) {
 	}
 	
 	that.initButtons = function(board) {
-		$("#pass").click(that.pass);
-		$("#cancel").click(function() {
+		$("#pass").button().click(that.pass);
+		$("#cancel").button().click(function() {
 			that.cancel(board);
 		});
 		
-		$("#surrender").click(function() {
+		$("#surrender").button().click(function() {
 			var dialogContent = $("<div title='Surrender'/>").append("<p>Are you sure you want to surrender?</p>");			
 			dialogContent.dialog({
 				resizable: false,
@@ -66,9 +68,25 @@ var Game = function(gameRest, context) {
 		});		
 	};
 	
+	var gameChanged = function(initial, updated) {
+		if (initial == undefined) {
+			return true;
+		}
+		if (initial.totalMoves != updated.totalMoves) {
+			return true;
+		}
+		if (initial.black != updated.black || initial.white != updated.white) {
+			return true;
+		}
+		if (initial.finished != game.finished) {
+			return true;
+		}
+		return false;
+	};
+	
 	that.updateBoard = function(id) {
 		var update = function(game) {
-			if (currentTurn == game.totalMoves) {
+			if (!gameChanged(currentGame, game)) {
 				return;
 			}
 			
@@ -76,18 +94,21 @@ var Game = function(gameRest, context) {
 			gameId = game.id;				
 			
 			board.placeStones(game.stones);
-			board.setEnabled(that.itApostropheSPlayersTurn(game));
+			board.setEnabled(that.isOwnTurn(game));
 			that.updateGameState(board, initMode, game.finished);
 			metaData.showData(game);
-			currentTurn = game.totalMoves;
+			currentGame = game;
 		};
 		setInterval(function() {
 			gameRest.getGame(id, update, that.redirect);
 		}, 1000);
 	};
 	
-	that.itApostropheSPlayersTurn = function(game) {
-		return game.totalMoves % 2 === 0 ? 
+	that.isOwnTurn = function(game) {
+		if (game.black == null || game.white == null) {
+			return false;
+		}
+		return game.totalMoves % 2 == 0 ? 
 				(game.black.id == context.playerId) :
 				(game.white.id == context.playerId)
 	}
@@ -106,10 +127,10 @@ var Game = function(gameRest, context) {
 	};
 	
 	that.colorOfPlayer = function(game) {
-		if (game.black.id == context.playerId) {
+		if (game.black && game.black.id == context.playerId) {
 			return "BLACK";
 		}
-		if (game.white.id == context.playerId) {
+		if (game.white && game.white.id == context.playerId) {
 			return "WHITE";
 		}
 		return null;

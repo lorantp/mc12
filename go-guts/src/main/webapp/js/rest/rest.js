@@ -17,7 +17,8 @@ var Rest = function() {
 				console.log('success');
 			},
 			error: error || function(jqXHR, textStatus, errorThrown) {
-				alert(jqXHR.responseText);
+				var alertContent = $("<div title='Game master says'/>").append("<p>" + jqXHR.responseText + "</p>");			
+				alertContent.dialog({ modal: true });
 			}
 		});
 	};

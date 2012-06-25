@@ -32,6 +32,7 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 						bind(TestData.class);
 					}
 				});
+		
 		injector.injectMembers(this);
 		service.start();
 		

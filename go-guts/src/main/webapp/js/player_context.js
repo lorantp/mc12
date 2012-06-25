@@ -1,6 +1,7 @@
 var PlayerContext = function($login, rest) {
     var that = {};
 
+    var cookieName = "contextId";
     var match = /contextId=(-?\d+)/.exec(document.cookie);
     var contextId = match ? match[1] : undefined;
     that.playerId;
@@ -8,14 +9,21 @@ var PlayerContext = function($login, rest) {
     var setKnownValues = function(data) {
 		contextId = data.contextHash;
 		that.playerId = data.playerId;
-    }
+    };
+    
+    that.logout = function() {
+    	setKnownValues({});
+    	var likeYesterday = new Date();
+    	likeYesterday.setDate(likeYesterday.getDate() - 1);
+    	that.setCookie(cookieName, "", likeYesterday);
+    };
     
     that.login = function(success) {
 		var userName = $login.find("#login_username").val();
         rest.getData("context/" + userName, {}, function(data) {
         	setKnownValues(data);
         	
-            that.setCookie("contextId", contextId);
+            that.setCookie(cookieName, contextId);
             $login.addClass("hidden");            
             success();
         });
@@ -23,9 +31,7 @@ var PlayerContext = function($login, rest) {
     
     that.authenticate = function(success, error) {
 		var forceLogin = function() {
-        	contextId = undefined;
-        	that.playerId = undefined;
-        	
+			that.logout();
 			$login.load("login.html", function() {
 				$login.find("#login_button").button();				
 	    		$login.find("#login_form").submit(function() {

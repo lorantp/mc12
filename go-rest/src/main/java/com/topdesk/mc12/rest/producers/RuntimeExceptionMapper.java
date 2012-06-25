@@ -1,5 +1,6 @@
 package com.topdesk.mc12.rest.producers;
 
+import javax.inject.Singleton;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Provider
+@Singleton
 public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException> {
 	@Override
 	public Response toResponse(RuntimeException exception) {
