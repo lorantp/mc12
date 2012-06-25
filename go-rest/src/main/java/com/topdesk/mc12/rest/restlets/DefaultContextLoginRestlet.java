@@ -109,12 +109,12 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 		session.removeAttribute("twitterToken");
 		
 		Token accessToken = twitterService.getAccessToken(requestToken, new Verifier(code));
-		OAuthRequest authRequest = new OAuthRequest(Verb.GET, "account/verify_credentials");
+		OAuthRequest authRequest = new OAuthRequest(Verb.GET, "http://twitter.com/account/verify_credentials");
 		twitterService.signRequest(accessToken, authRequest);
 		String response = authRequest.send().getBody();
-		System.err.println(response);
+		log.warn(response);
 		
-		Player player = loginHelper.getOrCreate(accessToken.getToken()); // FIXME find decent player name
+		Player player = loginHelper.getOrCreate(parse(response).get("username").asText());
 		PlayerContext context = loginHelper.login(player, request);
 		String contextId = Integer.toString(context.hashCode());
 		return Response
