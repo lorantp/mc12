@@ -1,18 +1,18 @@
 var initGameLauncher = function() {
-	var rest = REST("rest");
-	var player_context = PLAYER_CONTEXT($("#login"), rest);
+	var rest = Rest("rest");
+	var player_context = PlayerContext($("#login"), rest);
 	
 	player_context.authenticate(function() {
-		var gameRest = GAME_REST(rest);	
-		var launcher = new GAME_LAUNCHER($("#launch_game"), gameRest);
+		var gameRest = GameRest(rest);	
+		var launcher = GameLauncher($("#launch_game"), gameRest);
 		launcher.init();
 		
-		var gameList = GAME_LIST($("#game_states"), gameRest);	
+		var gameList = GameList($("#game_states"), gameRest);	
 		gameList.showGames();
 	});
 };
 
-var GAME_LAUNCHER = function($controls, gameRest) {
+var GameLauncher = function($controls, gameRest) {
 	that = {};
 	
 	that.init = function() {

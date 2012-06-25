@@ -14,8 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.topdesk.mc12.common.GoException;
+import com.topdesk.mc12.common.PlayerContext;
 import com.topdesk.mc12.common.PlayerContextMap;
 import com.topdesk.mc12.persistence.entities.Player;
+import com.topdesk.mc12.rest.entities.ContextData;
 
 @Slf4j
 public class DefaultContextLoginRestlet implements ContextLoginRestlet {
@@ -30,23 +32,23 @@ public class DefaultContextLoginRestlet implements ContextLoginRestlet {
 	
 	@Override
 	@Transactional
-	public int get(HttpServletRequest request, String playerName) {
+	public ContextData get(HttpServletRequest request, String playerName) {
 		List<Player> players = selectByField("name", playerName, Player.class);
 		
 		if (players.isEmpty()) {
 			Player player = Player.create(playerName, playerName + "@topdesk.com");
 			entityManager.get().persist(player);
 			log.info("Created new player and logged in for {}", player);
-			return contextMap.startNew(player, request).hashCode();
+			return createData(contextMap.startNew(player, request));
 		}
 		
 		Player player = players.get(0);
 		if (contextMap.hasContextFor(player, request)) {
 			log.info("Using existing login for {}", player);
-			return contextMap.getByPlayer(player, request).hashCode();
+			return createData(contextMap.getByPlayer(player, request));
 		}
 		log.info("Logged in for {}", player);
-		return contextMap.startNew(player, request).hashCode();
+		return createData(contextMap.startNew(player, request));
 	}
 	
 	private <E> List<E> selectByField(String fieldName, String value, Class<E> entity) {
@@ -59,11 +61,15 @@ public class DefaultContextLoginRestlet implements ContextLoginRestlet {
 	}
 
 	@Override
-	public boolean checkId(HttpServletRequest request, String id) {
-		boolean validId = contextMap.getById(Integer.valueOf(id), request) != null;
-		if (!validId) {
+	public ContextData checkId(HttpServletRequest request, String id) {
+		PlayerContext context = contextMap.getById(Integer.valueOf(id), request);
+		if (context == null) {
 			throw GoException.createNotAcceptable("Id is invalid.");
 		}
-		return true;
+		return createData(context);
+	}
+
+	private ContextData createData(PlayerContext context) {
+		return new ContextData(context.hashCode(), context.getPlayer().getId());
 	}
 }

@@ -1,4 +1,4 @@
-var GAME_REST = function(rest) {
+var GameRest = function(rest) {
 	var prefix = 'game/';
 	var that = {};
 	
@@ -32,6 +32,10 @@ var GAME_REST = function(rest) {
 	
 	that.cancelGame = function(gameId, success, error) {
 		rest.postData(prefix + gameId + '/cancel', {}, success, error);
+	};
+	
+	that.surrenderGame = function(gameId, success, error) {
+		rest.postData(prefix + gameId + '/surrender', {}, success, error);
 	};
 	
 	return that;

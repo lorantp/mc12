@@ -30,4 +30,5 @@ public interface GameRestlet {
 	@POST @Path("/new") long newGame(NewGame newGame);
 	@POST @Path("/{id}/start") void startGame(@PathParam("id") long gameId);
 	@POST @Path("/{id}/cancel") void cancelGame(@PathParam("id") long gameId);
+	@POST @Path("/{id}/surrender") void surrenderGame(@PathParam("id") long gameId);
 }

@@ -4,7 +4,7 @@ var board;
 var initBoard = function() {
 	container = $("<div id='test' />");
 	
-	board = BOARD(
+	board = Board(
 			container,
 			boardMock.size,
 			"BLACK",

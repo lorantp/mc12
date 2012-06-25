@@ -4,14 +4,17 @@ var initGame = function() {
 		window.location = "./";
 	}
 	
-	var rest = REST("rest");
+	var rest = Rest("rest");
+	var playerContext = PlayerContext($("#content"), rest);
 	
-	var gameRest = GAME_REST(rest);
-	var game = GAME(gameRest);
-	game.draw(id);
+	var gameRest = GameRest(rest);
+	var game = Game(gameRest, playerContext);
+	playerContext.authenticate(function() {
+		game.draw(id);
+	}, game.redirect);
 };
 
-var GAME = function(gameRest) {
+var Game = function(gameRest) {
 	var that = {};
 	
 	var nextStone = {};
@@ -20,11 +23,15 @@ var GAME = function(gameRest) {
 	var board;
 	var metaData;
 	var currentTurn;
+
+	that.redirect = function() {
+		window.location = "./";
+	};
 	
 	that.draw = function(id) {
 		gameRest.getGame(id, function(game) {			
-			metaData = METADATA($("#content"));
-			board = BOARD(
+			metaData = MetaData($("#content"));
+			board = Board(
 					$("#board"),
 					game.size,
 					that.colorOfTurn(game.totalMoves),
@@ -39,6 +46,9 @@ var GAME = function(gameRest) {
 		$("#pass").click(that.pass);
 		$("#cancel").click(function() {
 			that.cancel(board);
+		});		
+		$("#surrender").click(function() {
+			that.surrender(board);
 		});		
 	};
 	
@@ -56,11 +66,8 @@ var GAME = function(gameRest) {
 			metaData.showData(game);
 			currentTurn = game.totalMoves;
 		};
-		var redirect = function() {
-			window.location = "./";
-		};
 		setInterval(function() {
-			gameRest.getGame(id, update, redirect);
+			gameRest.getGame(id, update, that.redirect);
 		}, 1000);
 	};
 	
@@ -96,11 +103,13 @@ var GAME = function(gameRest) {
 	that.activateInitMode = function(board) {
 		$("#cancel").removeClass("hidden");
 		$("#pass").addClass("hidden");
+		$("#surrender").addClass("hidden");
 		board.setEnabled(false);
 	}
 	
 	that.activateGameMode = function() {
 		$("#pass").removeClass("hidden");
+		$("#surrender").removeClass("hidden");
 		$("#cancel").addClass("hidden");
 	}
 	
@@ -111,6 +120,12 @@ var GAME = function(gameRest) {
 	
 	that.cancel = function(board) {
 		gameRest.cancelGame(gameId, function() {			
+			that.disableGameMode(board);
+		});
+	}
+	
+	that.surrender = function(board) {
+		gameRest.surrenderGame(gameId, function() {			
 			that.disableGameMode(board);
 		});
 	}

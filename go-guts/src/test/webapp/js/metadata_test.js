@@ -4,9 +4,13 @@ var container = $("<div id='test' />")
 	.append("<div id='turn' />")
 	.append("<div id='starttime' />");
 
-var md = METADATA(container);
-
 describe("showing data format", function() {
+	var md;
+
+	beforeEach(function() {
+		md = MetaData(container);
+	});
+	
 	it('should show player nick and captured stones', function() {
 		var checkFunction = expect$methodToBeCalledWithXTimesFunction("append", ["WONDERFUL WIZZARD"], [17]);
 		md.showPlayer(mockPlayer, "", 17, "turqoise");
