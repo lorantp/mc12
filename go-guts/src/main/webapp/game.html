@@ -21,6 +21,7 @@
 
 		<!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
 
+		<link rel="stylesheet" href="css/trontastic/jquery-ui-1.8.21.custom.css"  />	
 		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="css/login.css">
 		<link rel="stylesheet" href="css/board.css">
@@ -48,6 +49,7 @@
 					<div class="left">
 						<div id="blackcaptured" class="bordered capture cell"></div>
 					</div>
+					<label id="turndata"> </label>				
 					<div class="right">
 						<div id="whitecaptured" class="bordered capture cell"></div>
 					</div>
@@ -55,6 +57,7 @@
 			</div>
 			<div id="battlebox" class="shadowed bordered infobox">
 				battle started on:
+				<label id="gametime"> </label>				
 				<div id="buttons" class="right">
 					<button id="pass">Pass</button>
 					<button id="cancel">Cancel Game</button>
@@ -62,7 +65,7 @@
 			</div>
 			
 			<div id="box" class="shadowed bordered">
-				<div id="board"></div>
+				<div id="board"> </div>
 			</div>
 			<div>
 				<a id="return" href="">List of games</a>
@@ -70,16 +73,16 @@
 		</div>
 		<!-- JavaScript at the bottom for fast page loading -->
 		<!-- scripts concatenated and minified via build script -->
-		<script src="js/libs/jquery-1.7.2.js"></script>
-		<script src="js/libs/jquery.dateFormat-1.0.js"></script>
-		<script src="js/rest/rest.js"></script>
-		<script src="js/rest/game_rest.js"></script>
-		<script src="js/player_context.js"></script>
-		<script src="js/debug.js"></script>
-		<script src="js/board.js"></script>
-		<script src="js/metadata.js"></script>
-		<script src="js/game.js"></script>
-		<script src="js/plugins.js"></script>
+		<script src="js/libs/jquery-1.7.2.js"> </script>
+		<script src="js/libs/jquery.dateFormat-1.0.js"> </script>
+		<script src="js/libs/jquery-ui-1.8.21.custom.min.js"> </script>		
+		<script src="js/rest/rest.js"> </script>
+		<script src="js/rest/game_rest.js"> </script>
+		<script src="js/debug.js"> </script>
+		<script src="js/board.js"> </script>
+		<script src="js/metadata.js"> </script>
+		<script src="js/game.js"> </script>
+		<script src="js/plugins.js"> </script>
 		<!-- end scripts -->
 	</body>
 </html>

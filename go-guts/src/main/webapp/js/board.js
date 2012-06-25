@@ -1,4 +1,4 @@
-var BOARD = function($parent, size, stones, turnColor, actions) {
+var BOARD = function($parent, size, playerColor, actions) {
 	var that = {};
 	
 	var cellSize = 48;
@@ -9,7 +9,7 @@ var BOARD = function($parent, size, stones, turnColor, actions) {
 	}
 	
 	var clearMarkers = function() {
-		$parent.find("[target=" + turnColor + "]").attr("target", "false");
+		$parent.find("[target=" + playerColor + "]").attr("target", "false");
 	};
 	
 	that.draw = function() {
@@ -20,7 +20,6 @@ var BOARD = function($parent, size, stones, turnColor, actions) {
 				$parent.append(that.buildCell(x, y));
 			}
 		}
-		that.placeStones(stones);
 	};
 	
 	that.buildCell = function(x, y) {
@@ -35,6 +34,7 @@ var BOARD = function($parent, size, stones, turnColor, actions) {
 	};
 	
 	that.placeStones = function(stones) {
+		$parent.find("[stone]").removeAttr("stone");
 		stones.forEach(function(stone) {
 			$parent.find("#x" + stone.x + "y" + stone.y).attr("stone", stone.color);
 		});
@@ -46,13 +46,14 @@ var BOARD = function($parent, size, stones, turnColor, actions) {
 			return;
 		}
 		var stoneToSelect = $parent.find(idSelector);
-		if (stoneToSelect.attr("target") != turnColor) {
+		if (stoneToSelect.attr("target") != playerColor) {
 			actions.updateNextStone(x, y);
 			clearMarkers();		
-			stoneToSelect.attr("target", turnColor);
+			stoneToSelect.attr("target", playerColor);
 		}
 		else {			
 			actions.confirmMove();
+			clearMarkers();
 		}
 	};
 	
