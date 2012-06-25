@@ -14,7 +14,7 @@ var initGame = function() {
 	}, game.redirect);
 };
 
-var Game = function(gameRest) {
+var Game = function(gameRest, context) {
 	var that = {};
 	
 	var nextStone = {};
@@ -22,7 +22,8 @@ var Game = function(gameRest) {
 	var gameId;
 	var board;
 	var metaData;
-	var currentTurn;
+	
+	var currentGame;
 
 	that.redirect = function() {
 		window.location = "./";
@@ -34,7 +35,7 @@ var Game = function(gameRest) {
 			board = Board(
 					$("#board"),
 					game.size,
-					that.colorOfTurn(game.totalMoves),
+					that.colorOfPlayer(game),
 					that.actions);
 			board.draw();
 			that.initButtons(board);
@@ -46,15 +47,45 @@ var Game = function(gameRest) {
 		$("#pass").click(that.pass);
 		$("#cancel").click(function() {
 			that.cancel(board);
-		});		
+		});
+		
 		$("#surrender").click(function() {
-			that.surrender(board);
+			var dialogContent = $("<div title='Surrender'/>").append("<p>Are you sure you want to surrender?</p>");			
+			dialogContent.dialog({
+				resizable: false,
+				modal: true,
+				buttons: {
+					Surrender: function() {
+						that.surrender(board);
+						$(this).dialog( "close" );
+					},
+					Cancel: function() {
+						$(this).dialog( "close" );
+					}
+				}
+			});
 		});		
+	};
+	
+	var gameChanged = function(initial, updated) {
+		if (initial == undefined) {
+			return true;
+		}
+		if (initial.totalMoves != updated.totalMoves) {
+			return true;
+		}
+		if (initial.black != updated.black || initial.white != updated.white) {
+			return true;
+		}
+		if (initial.finished != game.finished) {
+			return true;
+		}
+		return false;
 	};
 	
 	that.updateBoard = function(id) {
 		var update = function(game) {
-			if (currentTurn == game.totalMoves) {
+			if (!gameChanged(currentGame, game)) {
 				return;
 			}
 			
@@ -62,14 +93,21 @@ var Game = function(gameRest) {
 			gameId = game.id;				
 			
 			board.placeStones(game.stones);
+			board.setEnabled(that.itApostropheSPlayersTurn(game));
 			that.updateGameState(board, initMode, game.finished);
 			metaData.showData(game);
-			currentTurn = game.totalMoves;
+			currentGame = game;
 		};
 		setInterval(function() {
 			gameRest.getGame(id, update, that.redirect);
 		}, 1000);
 	};
+	
+	that.itApostropheSPlayersTurn = function(game) {
+		return game.totalMoves % 2 === 0 ? 
+				(game.black.id == context.playerId) :
+				(game.white.id == context.playerId)
+	}
 	
 	that.actions = {
 			updateNextStone: function(x, y) {
@@ -84,8 +122,14 @@ var Game = function(gameRest) {
 			}
 	};
 	
-	that.colorOfTurn = function(turn) {
-		return turn % 2 === 0 ? "BLACK" : "WHITE";
+	that.colorOfPlayer = function(game) {
+		if (game.black && game.black.id == context.playerId) {
+			return "BLACK";
+		}
+		if (game.white && game.white.id == context.playerId) {
+			return "WHITE";
+		}
+		return null;
 	}
 	
 	that.updateGameState = function(board, initMode, finished) {
@@ -124,7 +168,7 @@ var Game = function(gameRest) {
 		});
 	}
 	
-	that.surrender = function(board) {
+	that.surrender = function(board) {		
 		gameRest.surrenderGame(gameId, function() {			
 			that.disableGameMode(board);
 		});

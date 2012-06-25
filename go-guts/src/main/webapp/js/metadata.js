@@ -11,7 +11,7 @@ var MetaData = function($parent) {
 			that.showCurrentTurn(game.totalMoves + 1, blackTurn ? "BLACK" : "WHITE");
 		}
 		else {
-//			that.showResults(game.winner.name.toUpperCase());
+			that.showResults(game.winner.name.toUpperCase());
 		}
 	};
 	
@@ -33,7 +33,7 @@ var MetaData = function($parent) {
 	};
 	
 	that.showResults = function(winner) {
-		$parent.find("#gamedata").empty().append(String(winner.toUpperCase()) + " WON");
+		$parent.find("#turndata").empty().append(String(winner.toUpperCase()) + " WON");
 		$parent.find("#blackcaptured").remove();
 		$parent.find("#whitecaptured").remove();
 	};

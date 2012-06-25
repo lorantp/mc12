@@ -46,7 +46,7 @@ public class DefaultFacebookLoginRestlet implements FacebookLoginRestlet {
 				.provider(FacebookApi.class)
 				.apiKey("256317947803042")
 				.apiSecret("2d078c77b98e9be0d798d9f71b1669e6")
-				.callback("http://localhost/rest/login/facebook")
+				.callback("http://mc12.topdesk.com/test/rest/login/facebook")
 				.debug()
 				.build();
 		

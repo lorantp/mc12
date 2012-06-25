@@ -3,11 +3,11 @@ var PlayerContext = function($login, rest) {
 
     var match = /contextId=(-?\d+)/.exec(document.cookie);
     var contextId = match ? match[1] : undefined;
-    var playerId;
+    that.playerId;
     
     var setKnownValues = function(data) {
 		contextId = data.contextHash;
-		playerId = data.playerId;
+		that.playerId = data.playerId;
     }
     
     that.login = function(success) {
@@ -24,7 +24,7 @@ var PlayerContext = function($login, rest) {
     that.authenticate = function(success, error) {
 		var forceLogin = function() {
         	contextId = undefined;
-        	playerId = undefined;
+        	that.playerId = undefined;
         	
 			$login.load("login.html", function() {
 				$login.find("#login_button").button();				
