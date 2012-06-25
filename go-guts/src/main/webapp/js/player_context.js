@@ -15,7 +15,7 @@ var PlayerContext = function($login, rest) {
     	setKnownValues({});
     	var likeYesterday = new Date();
     	likeYesterday.setDate(likeYesterday.getDate() - 1);
-    	setCookie(cookieName, "", likeYesterday);
+    	that.setCookie(cookieName, "", likeYesterday);
     };
     
     that.login = function(success) {
