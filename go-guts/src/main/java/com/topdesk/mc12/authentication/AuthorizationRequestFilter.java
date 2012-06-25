@@ -1,7 +1,6 @@
 package com.topdesk.mc12.authentication;
  
 import java.security.Principal;
-import java.util.Arrays;
 
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;

@@ -1,6 +1,5 @@
 package com.topdesk.mc12.rest.restlets;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -17,9 +16,7 @@ import javax.ws.rs.core.Response;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.scribe.builder.ServiceBuilder;
@@ -32,7 +29,6 @@ import org.scribe.oauth.OAuthService;
 
 import com.google.common.base.Throwables;
 import com.google.inject.servlet.RequestScoped;
-import com.topdesk.mc12.common.PlayerContext;
 import com.topdesk.mc12.common.PlayerContextMap;
 import com.topdesk.mc12.persistence.entities.Player;
 
