@@ -26,7 +26,7 @@ body {
 
 .infobox {
 	resize: both;
-	min-width:30em;
+	min-width: 480px;
 	margin-left: 50px;
 	margin-right: 50px;
 }
@@ -109,6 +109,7 @@ body {
 	padding: 8px;
 	
 	font-variant: small-caps;
+	font-size: 75%;
 	font-weight: bold;
 	text-align: left;
 }
