@@ -1,4 +1,4 @@
-var PLAYER_CONTEXT = function($login, rest) {
+var PlayerContext = function($login, rest) {
     var that = {};
 
     var match = /contextId=(-?\d+)/.exec(document.cookie);

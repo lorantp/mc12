@@ -1,4 +1,4 @@
-var GAME_LIST = function($content, gameRest) {
+var GameList = function($content, gameRest) {
 	that = {};
 
 	var toJoinId = function(gameId) {
@@ -40,11 +40,12 @@ var GAME_LIST = function($content, gameRest) {
 	
 	that.showInitiatedGame = function(metaData) {
 		var joinButton = $("<button>Join</button>")
+				.attr({id: "join_to_" + metaData.id})
 				.button()
 				.click(function() {
 					that.join(metaData.id);
 				});
-		$("#initiated_games tr:last").after(
+		$content.find("#initiated_games tr:last").after(
 				$("<tr />")
 				.append("<td>" + (metaData.blackPlayer ? metaData.blackPlayer : "?") + "</td>")
 				.append("<td>" + (metaData.whitePlayer ? metaData.whitePlayer : "?") + "</td>")
@@ -56,6 +57,7 @@ var GAME_LIST = function($content, gameRest) {
 	
 	that.createOpenButton = function(id) {		
 		return $("<button>Open Game</button>")
+				.attr({id: "open_game_" + id})
 				.button()
 				.click(function() {
 					that.openGame(id);
@@ -63,7 +65,7 @@ var GAME_LIST = function($content, gameRest) {
 	};
 	
 	that.showStartedGame = function(metaData) {
-		$("#running_games tr:last").after(
+		$content.find("#running_games tr:last").after(
 				$("<tr />")
 				.append("<td>" + metaData.blackPlayer + "</td>")
 				.append("<td>" + metaData.whitePlayer + "</td>")
@@ -74,7 +76,7 @@ var GAME_LIST = function($content, gameRest) {
 	};
 	
 	that.showFinishedGame = function(metaData) {
-		$("#finished_games tr:last").after(
+		$content.find("#finished_games tr:last").after(
 			$("<tr />")
 				.append("<td>" + metaData.blackPlayer + "</td>")
 				.append("<td>" + metaData.whitePlayer + "</td>")

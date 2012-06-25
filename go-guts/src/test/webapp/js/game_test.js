@@ -1,4 +1,4 @@
-var game = GAME(restMock);
+var game = Game(restMock);
 
 describe("updating game state", function() {	
 	it("should put the game in init mode", function() {

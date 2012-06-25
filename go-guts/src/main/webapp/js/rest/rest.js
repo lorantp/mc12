@@ -1,4 +1,4 @@
-var REST = function() {
+var Rest = function() {
 	var prefix = 'rest/';
 	var that = {};
 	

@@ -4,14 +4,14 @@ var initGame = function() {
 		window.location = "./";
 	}
 	
-	var rest = REST("rest");
+	var rest = Rest("rest");
 	
-	var gameRest = GAME_REST(rest);
-	var game = GAME(gameRest);
+	var gameRest = GameRest(rest);
+	var game = Game(gameRest);
 	game.draw(id);
 };
 
-var GAME = function(gameRest) {
+var Game = function(gameRest) {
 	var that = {};
 	
 	var nextStone = {};
@@ -23,8 +23,8 @@ var GAME = function(gameRest) {
 	
 	that.draw = function(id) {
 		gameRest.getGame(id, function(game) {			
-			metaData = METADATA($("#content"));
-			board = BOARD(
+			metaData = MetaData($("#content"));
+			board = Board(
 					$("#board"),
 					game.size,
 					that.colorOfTurn(game.totalMoves),

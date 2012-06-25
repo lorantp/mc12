@@ -1,4 +1,4 @@
-var METADATA = function($parent) {
+var MetaData = function($parent) {
 	var that = {};
 	
 	that.showData = function(game) {
@@ -13,12 +13,12 @@ var METADATA = function($parent) {
 		else {
 //			that.showResults(game.winner.name.toUpperCase());
 		}
-	}
+	};
 	
 	that.showPlayer = function(player, idSelector, captured, color) {
 		$parent.find(idSelector).empty().append(player ? player.name.toUpperCase() : "?");
 		$parent.find("#" + color + "captured").empty().append(captured);
-	}
+	};
 	
 	that.showStartTime = function(date) {
 		// prevent adding timezone info, just display in browser locale
@@ -26,17 +26,17 @@ var METADATA = function($parent) {
 		element.empty().append(date.toLocaleDateString());
 		element.append(" ");
 		element.append(date.toLocaleTimeString()); 
-	}
+	};
 	
 	that.showCurrentTurn = function(turn, color) {
 		$parent.find("#turndata").empty().append("TURN: " + String(turn) + " - " + color + " MOVES");
-	}
+	};
 	
 	that.showResults = function(winner) {
 		$parent.find("#gamedata").empty().append(String(winner.toUpperCase()) + " WON");
 		$parent.find("#blackcaptured").remove();
 		$parent.find("#whitecaptured").remove();
-	}
+	};
 	
 	return that;
 };

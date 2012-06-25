@@ -1,4 +1,4 @@
-var GAME_REST = function(rest) {
+var GameRest = function(rest) {
 	var prefix = 'game/';
 	var that = {};
 	

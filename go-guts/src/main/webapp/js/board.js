@@ -1,4 +1,4 @@
-var BOARD = function($parent, size, playerColor, actions) {
+var Board = function($parent, size, playerColor, actions) {
 	var that = {};
 	
 	var cellSize = 48;
