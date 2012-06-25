@@ -22,7 +22,8 @@ var Game = function(gameRest, context) {
 	var gameId;
 	var board;
 	var metaData;
-	var currentTurn;
+	
+	var currentGame;
 
 	that.redirect = function() {
 		window.location = "./";
@@ -66,9 +67,25 @@ var Game = function(gameRest, context) {
 		});		
 	};
 	
+	var gameChanged = function(initial, updated) {
+		if (initial == undefined) {
+			return true;
+		}
+		if (initial.totalMoves != updated.totalMoves) {
+			return true;
+		}
+		if (initial.black != updated.black || initial.white != updated.white) {
+			return true;
+		}
+		if (initial.finished != game.finished) {
+			return true;
+		}
+		return false;
+	};
+	
 	that.updateBoard = function(id) {
 		var update = function(game) {
-			if (currentTurn == game.totalMoves) {
+			if (!gameChanged(currentGame, game)) {
 				return;
 			}
 			
@@ -79,7 +96,7 @@ var Game = function(gameRest, context) {
 			board.setEnabled(that.itApostropheSPlayersTurn(game));
 			that.updateGameState(board, initMode, game.finished);
 			metaData.showData(game);
-			currentTurn = game.totalMoves;
+			currentGame = game;
 		};
 		setInterval(function() {
 			gameRest.getGame(id, update, that.redirect);

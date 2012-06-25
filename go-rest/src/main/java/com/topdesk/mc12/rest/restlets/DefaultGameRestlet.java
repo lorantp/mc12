@@ -72,8 +72,11 @@ public class DefaultGameRestlet implements GameRestlet {
 		}
 		else {
 			query.where(stateField.in(GameState.INITIATED, GameState.STARTED, GameState.FINISHED));
-			query.orderBy(builder.asc(stateField), builder.desc(root.get("start")));
 		}
+		query.orderBy(
+				builder.asc(stateField), 
+				builder.desc(root.get("finish")), 
+				builder.desc(root.get("start")));
 		
 		List<GameData> games = entityManager.get().createQuery(query).getResultList();
 		return ImmutableList.copyOf(Lists.transform(games, new MetaDataFunction()));
