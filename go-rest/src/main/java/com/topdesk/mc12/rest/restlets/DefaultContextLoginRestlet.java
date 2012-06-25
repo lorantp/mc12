@@ -16,7 +16,7 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.FacebookApi;
-import org.scribe.builder.api.GoogleApi;
+import org.scribe.builder.api.TwitterApi;
 import org.scribe.model.OAuthRequest;
 import org.scribe.model.Token;
 import org.scribe.model.Verb;
@@ -38,7 +38,7 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 	private final ObjectMapper mapper;
 	
 	private final OAuthService facebookService;
-	private final OAuthService googleService;
+	private final OAuthService twitterService;
 	
 	@Inject
 	public DefaultContextLoginRestlet(@Context HttpServletRequest request, ObjectMapper mapper, LoginHelper loginHelper) {
@@ -55,12 +55,11 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 				.debug()
 				.build();
 		
-		this.googleService = new ServiceBuilder()
-				.provider(GoogleApi.class)
-				.apiKey("73477428485.apps.googleusercontent.com")
-				.apiSecret("xLZFOen9KvQItfQKFV__eVca")
-				.callback("http://mc12.topdesk.com/test/rest/login/google")
-				.scope("https://docs.google.com/feeds")
+		this.twitterService = new ServiceBuilder()
+				.provider(TwitterApi.class)
+				.apiKey("666p5JUyzJy9CdnE9wNTQ")
+				.apiSecret("JnNmoZS6FDYnKUQw8toDrz6pTDOjEifLPHFr1MkuWY")
+				.callback("http://mc12.topdesk.com/test/rest/login/twitter")
 				.debug()
 				.build();
 	}
@@ -78,13 +77,50 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 		return createData(context);
 	}
 	
+	@Override
+	public Response twitterLoginForward() {
+		Token requestToken = twitterService.getRequestToken();
+		request.getSession(true).setAttribute("twitterToken", requestToken);
+		String url = twitterService.getAuthorizationUrl(requestToken);
+		return Response.seeOther(URI.create(url)).build();
+	}
+	
+	@Override
+	public Response twitterLogin(String code) {
+		Token requestToken = (Token) request.getSession(false).getAttribute("twitterToken");
+		if (requestToken == null) {
+			throw GoException.createUnauthorized("No token");
+		}
+		request.getSession().removeAttribute("twitterToken");
+		
+		Token accessToken = twitterService.getAccessToken(requestToken, new Verifier(code));
+		OAuthRequest authRequest = new OAuthRequest(Verb.GET, "account/verify_credentials");
+		twitterService.signRequest(accessToken, authRequest);
+		String response = authRequest.send().getBody();
+		System.err.println(response);
+		JsonNode data = parse(response);
+		
+		Player player = loginHelper.getOrCreate(accessToken.getToken()); // FIXME find decent player name
+		PlayerContext context = loginHelper.login(player, request);
+		String contextId = Integer.toString(context.hashCode());
+		return Response
+				.seeOther(URI.create("../"))
+				.cookie(new NewCookie("contextId", contextId, "/", null, null, -1, false))
+				.build();
+	}
+	
 	private ContextData createData(PlayerContext context) {
 		return new ContextData(context.hashCode(), context.getPlayer().getId());
 	}
 	
 	@Override
 	public Response facebookLogin(String code) {
-		String response = verifyFacebook(code);
+		Token accessToken = facebookService.getAccessToken(null, new Verifier(code));
+		OAuthRequest authRequest = new OAuthRequest(Verb.GET, "https://graph.facebook.com/me");
+		facebookService.signRequest(accessToken, authRequest);
+		log.debug("Verifying login with Facebook server");
+		String response = authRequest.send().getBody();
+		
 		JsonNode data = parse(response);
 		if (!data.get("verified").asBoolean()) {
 			throw GoException.createUnauthorized("Facebook login rejected");
@@ -100,55 +136,9 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 				.build();
 	}
 	
-	private String verifyFacebook(String code) {
-		Token accessToken = facebookService.getAccessToken(null, new Verifier(code));
-		OAuthRequest request = new OAuthRequest(Verb.GET, "https://graph.facebook.com/me");
-		facebookService.signRequest(accessToken, request);
-		log.debug("Verifying login with Facebook server");
-		return request.send().getBody();
-	}
-	
-	@Override
-	public Response googleLoginRedirect() {
-		Token requestToken = googleService.getRequestToken();
-		request.getSession().setAttribute("googleToken", requestToken);
-		System.err.println("Storing token in session: " + requestToken);
-		String url = "https://www.google.com/accounts/OAuthAuthorizeToken?oauth_token=" + requestToken.getToken();
-		return Response.seeOther(URI.create(url)).build();
-	}
-	
-	@Override
-	public Response googleLogin(String code) {
-		Token requestToken = (Token) request.getSession().getAttribute("googleToken");
-		System.err.println("Got token " + requestToken);
-		if (requestToken == null) {
-			throw GoException.createUnauthorized("No token");
-		}
-		Token accessToken = googleService.getAccessToken(requestToken, new Verifier(code));
-		OAuthRequest authRequest = new OAuthRequest(Verb.GET, "https://www.googleapis.com/oauth2/v1/userinfo");
-		googleService.signRequest(accessToken, authRequest);
-		log.debug("Verifying login with Google server");
-		
-		String response = authRequest.send().getBody();
-		System.err.println("Response: " + response);
-		JsonNode data = parse(response);
-		if (!data.get("verified").asBoolean()) {
-			throw GoException.createUnauthorized("Google login rejected");
-		}
-		
-		String playerName = data.get("username").asText();
-		Player player = loginHelper.getOrCreate(playerName);
-		PlayerContext context = loginHelper.login(player, request);
-		String contextId = Integer.toString(context.hashCode());
-		return Response
-				.seeOther(URI.create("../"))
-				.cookie(new NewCookie("contextId", contextId, "/", null, null, -1, false)).build();
-	}
-	
 	@SneakyThrows(IOException.class)
 	private JsonNode parse(String jsonString) {
-		JsonParser parser = mapper.getJsonFactory()
-				.createJsonParser(jsonString);
+		JsonParser parser = mapper.getJsonFactory().createJsonParser(jsonString);
 		return mapper.readTree(parser);
 	}
 }

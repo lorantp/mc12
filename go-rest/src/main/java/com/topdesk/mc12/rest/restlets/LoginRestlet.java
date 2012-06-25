@@ -20,8 +20,7 @@ public interface LoginRestlet {
 	@GET @Path("/check/{id}") ContextData checkId(@Context HttpServletRequest request, @PathParam("id") String id);
 	
 	@GET @Path("/facebook") Response facebookLogin(@QueryParam("code") String code);
-	@GET @Path("/google") Response googleLogin(@QueryParam("code") String code);
-	@GET @Path("/google/forward") Response googleLoginRedirect();
 	@GET @Path("/unsafe/{name}") ContextData unsafeLogin(@PathParam("name") String playerName);
-
+	@GET @Path("/twitter/forward") Response twitterLoginForward();
+	@GET @Path("/twitter") Response twitterLogin(@QueryParam("oauth_token") String token);
 }
