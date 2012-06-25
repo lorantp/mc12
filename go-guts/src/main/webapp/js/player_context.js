@@ -5,35 +5,44 @@ var PlayerContext = function($login, rest) {
     var contextId = match ? match[1] : undefined;
     var playerId;
     
-    var login = function(success) {
+    var setKnownValues = function(data) {
+		contextId = data.contextHash;
+		playerId = data.playerId;
+    }
+    
+    that.login = function(success) {
 		var userName = $login.find("#login_username").val();
         rest.getData("context/" + userName, {}, function(data) {
-            contextId = data;
-            
+        	setKnownValues(data);
+        	
             that.setCookie("contextId", contextId);
             $login.addClass("hidden");            
             success();
         });
     };
     
-    that.authenticate = function(success) {
+    that.authenticate = function(success, error) {
 		var forceLogin = function() {
         	contextId = undefined;
+        	playerId = undefined;
         	
 			$login.load("login.html", function() {
 				$login.find("#login_button").button();				
 	    		$login.find("#login_form").submit(function() {
-	    			login(success);
+	    			that.login(success);
 					return false;
 	    		});
 			});
 		};
 		
         if (contextId) {
-			rest.getData("context/check/" + contextId, {}, success, forceLogin);
+			rest.getData("context/check/" + contextId, {}, function(data) {
+				setKnownValues(data);
+				success();
+			}, error || forceLogin);
         }
 		else {
-			forceLogin();
+			(error || forceLogin)();
         }
     };
     

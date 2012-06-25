@@ -5,10 +5,13 @@ var initGame = function() {
 	}
 	
 	var rest = Rest("rest");
+	var playerContext = PlayerContext($("#content"), rest);
 	
 	var gameRest = GameRest(rest);
-	var game = Game(gameRest);
-	game.draw(id);
+	var game = Game(gameRest, playerContext);
+	playerContext.authenticate(function() {
+		game.draw(id);
+	}, game.redirect);
 };
 
 var Game = function(gameRest) {
@@ -20,6 +23,10 @@ var Game = function(gameRest) {
 	var board;
 	var metaData;
 	var currentTurn;
+
+	that.redirect = function() {
+		window.location = "./";
+	};
 	
 	that.draw = function(id) {
 		gameRest.getGame(id, function(game) {			
@@ -59,11 +66,8 @@ var Game = function(gameRest) {
 			metaData.showData(game);
 			currentTurn = game.totalMoves;
 		};
-		var redirect = function() {
-			window.location = "./";
-		};
 		setInterval(function() {
-			gameRest.getGame(id, update, redirect);
+			gameRest.getGame(id, update, that.redirect);
 		}, 1000);
 	};
 	
