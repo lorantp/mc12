@@ -123,10 +123,10 @@ var Game = function(gameRest, context) {
 	};
 	
 	that.colorOfPlayer = function(game) {
-		if (game.black.id == context.playerId) {
+		if (game.black && game.black.id == context.playerId) {
 			return "BLACK";
 		}
-		if (game.white.id == context.playerId) {
+		if (game.white && game.white.id == context.playerId) {
 			return "WHITE";
 		}
 		return null;
