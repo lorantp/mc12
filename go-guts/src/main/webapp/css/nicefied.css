@@ -75,7 +75,7 @@ body {
 
 #playerdata {
 	font-family: Impact;
-	font-size: 5em;
+	font-size: 250%;
 }
 
 #playerone {
@@ -95,13 +95,14 @@ body {
 	margin-bottom: 5px;
 	
 	font-family: Impact;
-	font-size: 2.2em;
+	font-size: 150%;
 	text-align: center;
 }
 
 #battlebox {
 	margin-top: 8px;
 	padding-left: 10px;
+	resize: horizontal;
 	height: 1.6em;
 	background-color: #AADE22;
 	padding: 8px;
