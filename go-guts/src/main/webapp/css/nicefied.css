@@ -47,6 +47,10 @@ body {
 	padding: 15px;
 }
 
+.smallpadded {
+	padding: 8px;
+}
+
 .capture {
 	background-color: #AADE22;
 }
@@ -67,10 +71,6 @@ body {
 
 #content {
 	margin-top: 12px;
-}
-
-#metadata {
-	background-color: #22AADD;
 }
 
 #playerdata {
@@ -104,6 +104,7 @@ body {
 	padding-left: 10px;
 	height: 1.6em;
 	background-color: #AADE22;
+	padding: 8px;
 	
 	font-variant: small-caps;
 	font-weight: bold;
@@ -112,7 +113,7 @@ body {
 
 #box {
 	display: inline-block;
-	background-color: #BE8640;
+	background-color: #505050;
 	padding: 12px;
 	margin-top: 12px;
 	margin-left: auto;

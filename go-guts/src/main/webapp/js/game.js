@@ -44,12 +44,12 @@ var Game = function(gameRest, context) {
 	}
 	
 	that.initButtons = function(board) {
-		$("#pass").click(that.pass);
-		$("#cancel").click(function() {
+		$("#pass").button().click(that.pass);
+		$("#cancel").button().click(function() {
 			that.cancel(board);
 		});
 		
-		$("#surrender").click(function() {
+		$("#surrender").button().click(function() {
 			var dialogContent = $("<div title='Surrender'/>").append("<p>Are you sure you want to surrender?</p>");			
 			dialogContent.dialog({
 				resizable: false,
