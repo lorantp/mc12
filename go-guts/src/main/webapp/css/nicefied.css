@@ -26,6 +26,7 @@ body {
 
 .infobox {
 	resize: both;
+	min-width:30em;
 	margin-left: 50px;
 	margin-right: 50px;
 }
