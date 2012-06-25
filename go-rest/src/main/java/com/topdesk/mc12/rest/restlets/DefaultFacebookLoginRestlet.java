@@ -2,8 +2,20 @@ package com.topdesk.mc12.rest.restlets;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
+
+import lombok.extern.slf4j.Slf4j;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonNode;
@@ -20,13 +32,24 @@ import org.scribe.oauth.OAuthService;
 
 import com.google.common.base.Throwables;
 import com.google.inject.servlet.RequestScoped;
+import com.topdesk.mc12.common.PlayerContext;
+import com.topdesk.mc12.common.PlayerContextMap;
+import com.topdesk.mc12.persistence.entities.Player;
 
 @RequestScoped
+@Slf4j
 public class DefaultFacebookLoginRestlet implements FacebookLoginRestlet {
+	private final PlayerContextMap contextMap;
 	private OAuthService service;
 	private ObjectMapper mapper;
-
-	public DefaultFacebookLoginRestlet() throws Exception {
+	private final HttpServletRequest httpRequest;
+	private final Provider<EntityManager> entityManager;
+	
+	@Inject 
+	public DefaultFacebookLoginRestlet(PlayerContextMap contextMap, @Context HttpServletRequest httpRequest, Provider<EntityManager> entityManager) throws Exception {
+		this.contextMap = contextMap;
+		this.httpRequest = httpRequest;
+		this.entityManager = entityManager;
 		service = new ServiceBuilder()
 				.provider(FacebookApi.class)
 				.apiKey("256317947803042")
@@ -49,17 +72,50 @@ public class DefaultFacebookLoginRestlet implements FacebookLoginRestlet {
 		try {
 			JsonParser jp = mapper.getJsonFactory().createJsonParser(response.getBody());
 			JsonNode data = mapper.readTree(jp);
-			System.out.println(data.get("username"));
+			
+			String playerName = data.get("username").asText();
+			List<Player> players = selectByField("name", playerName, Player.class);
+			
+			int contextId;
+			if (players.isEmpty()) {
+				Player player = Player.create(playerName, playerName + "@topdesk.com");
+				entityManager.get().persist(player);
+				log.info("Created new player and logged in for {}", player);
+				contextId = contextMap.startNew(player, httpRequest).hashCode();
+			}
+			else {
+				Player player = players.get(0);
+				if (contextMap.hasContextFor(player, httpRequest)) {
+					log.info("Using existing login for {}", player);
+					contextId = contextMap.getByPlayer(player, httpRequest).hashCode();
+				}
+				else {
+					log.info("Logged in for {}", player);
+					contextId = contextMap.startNew(player, httpRequest).hashCode();
+				}
+			}
+			
+			return Response.seeOther(URI.create("../"))
+					.cookie(new NewCookie("contextId", Integer.toString(contextId), "/", null, null, -1, false))
+					.build();
 		} 
 		catch (Exception e) {
-			Throwables.propagate(e);
+			throw Throwables.propagate(e);
 		}
-	    
-		return Response.seeOther(URI.create("../")).build();
 	}
-
+	
+	private <E> List<E> selectByField(String fieldName, String value, Class<E> entity) {
+		EntityManager em = entityManager.get();
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+		CriteriaQuery<E> query = builder.createQuery(entity);
+		Root<E> root = query.from(entity);
+		query.select(root).where(builder.equal(builder.upper(root.get(fieldName).as(String.class)), value.toUpperCase()));
+		return em.createQuery(query).getResultList();
+	}
 }
 /**
+ * https://www.facebook.com/dialog/oauth?client_id=256317947803042&redirect_uri=http%3A%2F%2Flocalhost%2Frest%2Flogin%2Ffacebook
+ * 
 {"id":"100000280042812",
 "name":"Bernd Der",
 "first_name":"Bernd",
