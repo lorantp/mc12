@@ -148,7 +148,7 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 		String contextId = Integer.toString(context.hashCode());
 		return Response
 				.seeOther(URI.create("../"))
-				.cookie(new NewCookie("contextId", contextId, "/", null, null, -1, false))
+				.cookie(new NewCookie("contextId", contextId, null, null, null, -1, false))
 				.build();
 	}
 	
