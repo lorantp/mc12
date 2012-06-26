@@ -55,6 +55,7 @@ var PlayerContext = function($login, rest) {
     that.setCookie = function (name, value, expires, secure) {
         var text = escape(name) + '=' + escape(value);
         text +=    (expires ? '; EXPIRES=' + expires.toGMTString() : '');
+        text += ";PATH='/'"
         text +=    (secure ? '; SECURE' : '');
         
         document.cookie = text;

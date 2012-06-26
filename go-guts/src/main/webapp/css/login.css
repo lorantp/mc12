@@ -1,3 +1,15 @@
 #login {
 	font-size: 180%;
 }
+
+#login_form {
+	white-space: normal;
+}
+
+#login_form input {
+	margin: 8px;
+}
+
+#oauth_logins {
+	white-space: normal;
+}
