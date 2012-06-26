@@ -1,10 +1,13 @@
 package com.topdesk.mc12.rules;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.util.Set;
 
 import javax.inject.Inject;
 
 import com.topdesk.mc12.common.Color;
+import com.topdesk.mc12.common.GameState;
 import com.topdesk.mc12.common.GoException;
 import com.topdesk.mc12.common.Score;
 import com.topdesk.mc12.persistence.entities.GameData;
@@ -50,7 +53,7 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 			}
 		}
 		
-//		checkState(game.isFinished() == (gameData.getState() == GameState.FINISHED), "Inconsistent game state");
+		checkState(game.isFinished() == (gameData.getState() == GameState.FINISHED), "Inconsistent game state");
 		return game;
 	}
 	
