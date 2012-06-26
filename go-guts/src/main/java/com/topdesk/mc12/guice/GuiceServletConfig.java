@@ -11,6 +11,7 @@ import com.google.inject.Injector;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import com.google.inject.servlet.GuiceServletContextListener;
+import com.topdesk.mc12.rest.restlets.DatabaseUpgrade;
 import com.topdesk.mc12.testdata.TestData;
 
 @Slf4j
@@ -30,6 +31,7 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 					@Override
 					protected void configure() {
 						bind(TestData.class);
+						bind(DatabaseUpgrade.class);
 					}
 				});
 		
@@ -40,6 +42,7 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 		if (!PERSISTENCE_UNIT_PRODUCTION.equals(PERSISTENCE_UNIT)) {
 			injector.getInstance(TestData.class).create();
 		}
+		injector.getInstance(DatabaseUpgrade.class).version0001();
 		
 		return injector;
 	}

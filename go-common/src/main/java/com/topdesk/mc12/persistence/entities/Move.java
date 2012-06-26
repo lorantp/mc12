@@ -41,7 +41,7 @@ public final class Move implements DatabaseEntity {
 	
 	@Id @GeneratedValue private Long id;
 	@ManyToOne(optional=false) private GameData game;
-	@Column(nullable=false, updatable=false) private MoveType type;
+	@Column(nullable=false) private MoveType type;
 	@Column(nullable=false, updatable=false) private Color color;
 	@Column(updatable=false) private Integer x;
 	@Column(updatable=false) private Integer y;
