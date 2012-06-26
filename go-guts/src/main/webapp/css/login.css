@@ -9,3 +9,7 @@
 #login_form input {
 	margin: 8px;
 }
+
+#oauth_logins {
+	white-space: normal;
+}

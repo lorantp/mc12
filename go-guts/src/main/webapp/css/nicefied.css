@@ -1,7 +1,7 @@
 body {
 	font-family: verdana;
 	text-align: center;
-	white-space:nowrap;
+	white-space: nowrap;
 }
 
 button {
@@ -84,7 +84,7 @@ button {
 }
 
 #game_states {
-	min-width: 480px;
+	min-width: 520px;
 }
 
 #playerdata {
