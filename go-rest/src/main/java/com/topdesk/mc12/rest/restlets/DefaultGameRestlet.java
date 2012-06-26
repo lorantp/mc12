@@ -37,12 +37,14 @@ public class DefaultGameRestlet implements GameRestlet {
 	private final Provider<EntityManager> entityManager;
 	private final GoRuleEngine ruleEngine;
 	private final Player player;
+	private final DatabaseUtils databaseUtils;
 	
 	@Inject
-	public DefaultGameRestlet(Provider<EntityManager> entityManager, GoRuleEngine ruleEngine, Player player) {
+	public DefaultGameRestlet(Provider<EntityManager> entityManager, GoRuleEngine ruleEngine, Player player, DatabaseUtils databaseUtils) {
 		this.entityManager = entityManager;
 		this.ruleEngine = ruleEngine;
 		this.player = player;
+		this.databaseUtils = databaseUtils;
 	}
 	
 	@Override
@@ -51,7 +53,7 @@ public class DefaultGameRestlet implements GameRestlet {
 		if (gameData == null) {
 			throw GoException.createNotFound("Game with id " + gameId + " not found");
 		}
-		return ruleEngine.applyMoves(gameData);
+		return databaseUtils.update(gameData, ruleEngine.applyMoves(gameData));
 	}
 	
 	@Override
@@ -85,11 +87,13 @@ public class DefaultGameRestlet implements GameRestlet {
 	@Override
 	public void pass(long gameId) {
 		doSpecialMove(gameId, SpecialMove.PASS);
+		log.info("Player {} passed in game {}", player.getName(), gameId);
 	}
 	
 	@Override
 	public void surrenderGame(long gameId) {
 		doSpecialMove(gameId, SpecialMove.SURRENDER);
+		log.info("Player {} surrendered game {}", player.getName(), gameId);
 	}
 	
 	private void doSpecialMove(long gameId, SpecialMove move) {
@@ -108,7 +112,7 @@ public class DefaultGameRestlet implements GameRestlet {
 		entityManager.get().persist(move.create(gameData, color));
 		entityManager.get().flush();
 	}
-		
+	
 	@Override
 	public void move(long gameId, RestMove restMove) {
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
@@ -212,9 +216,8 @@ public class DefaultGameRestlet implements GameRestlet {
 			@Override
 			void applyMove(GoRuleEngine ruleEngine, Game game, Color color) {
 				ruleEngine.applyPass(game, color);
-				log.info("{} player passed in game {}", color, game);
 			}
-
+			
 			@Override
 			Move create(GameData gameData, Color color) {
 				return Move.createPass(gameData, color);
@@ -224,9 +227,8 @@ public class DefaultGameRestlet implements GameRestlet {
 			@Override
 			void applyMove(GoRuleEngine ruleEngine, Game game, Color color) {
 				ruleEngine.applySurrender(game, color);
-				log.info("{} player surrendered in game {}", color, game);
 			}
-
+			
 			@Override
 			Move create(GameData gameData, Color color) {
 				return Move.createSurrender(gameData, color);

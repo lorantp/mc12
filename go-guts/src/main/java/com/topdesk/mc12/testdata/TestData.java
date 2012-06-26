@@ -32,7 +32,7 @@ public class TestData {
 			Player.create("Bernd", "berndj@topdesk.com"),
 			Player.create("Jorn", "jornh@topdesk.com"),
 			Player.create("Krisz", "krisztianh@topdesk.com"));
-	private DateTime nextDate = new DateTime(DateTimeZone.forID("Europe/Berlin")).minusDays(3).withHourOfDay(9);
+	private DateTime nextDate = new DateTime(DateTimeZone.forID("Europe/Berlin")).minusDays(7).withHourOfDay(9);
 	private final Iterator<BoardSize> sizes = Iterables.cycle(EnumSet.allOf(BoardSize.class)).iterator();
 	
 	@Transactional
