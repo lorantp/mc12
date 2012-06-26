@@ -37,12 +37,14 @@ public class DefaultGameRestlet implements GameRestlet {
 	private final Provider<EntityManager> entityManager;
 	private final GoRuleEngine ruleEngine;
 	private final Player player;
+	private final DatabaseUtils databaseUtils;
 	
 	@Inject
-	public DefaultGameRestlet(Provider<EntityManager> entityManager, GoRuleEngine ruleEngine, Player player) {
+	public DefaultGameRestlet(Provider<EntityManager> entityManager, GoRuleEngine ruleEngine, Player player, DatabaseUtils databaseUtils) {
 		this.entityManager = entityManager;
 		this.ruleEngine = ruleEngine;
 		this.player = player;
+		this.databaseUtils = databaseUtils;
 	}
 	
 	@Override
@@ -51,7 +53,7 @@ public class DefaultGameRestlet implements GameRestlet {
 		if (gameData == null) {
 			throw GoException.createNotFound("Game with id " + gameId + " not found");
 		}
-		return ruleEngine.applyMoves(gameData);
+		return databaseUtils.update(gameData, ruleEngine.applyMoves(gameData));
 	}
 	
 	@Override
@@ -74,8 +76,8 @@ public class DefaultGameRestlet implements GameRestlet {
 			query.where(stateField.in(GameState.INITIATED, GameState.STARTED, GameState.FINISHED));
 		}
 		query.orderBy(
-				builder.asc(stateField), 
-				builder.desc(root.get("finish")), 
+				builder.asc(stateField),
+				builder.desc(root.get("finish")),
 				builder.desc(root.get("start")));
 		
 		List<GameData> games = entityManager.get().createQuery(query).getResultList();
@@ -85,11 +87,13 @@ public class DefaultGameRestlet implements GameRestlet {
 	@Override
 	public void pass(long gameId) {
 		doSpecialMove(gameId, SpecialMove.PASS);
+		log.info("Player {} passed in game {}", player.getName(), gameId);
 	}
 	
 	@Override
 	public void surrenderGame(long gameId) {
 		doSpecialMove(gameId, SpecialMove.SURRENDER);
+		log.info("Player {} surrendered game {}", player.getName(), gameId);
 	}
 	
 	private void doSpecialMove(long gameId, SpecialMove move) {
@@ -101,13 +105,14 @@ public class DefaultGameRestlet implements GameRestlet {
 		if (game.isFinished()) {
 			gameData.setState(GameState.FINISHED);
 			gameData.setFinish(new DateTime().getMillis());
+			gameData.setWinner(game.getWinner());
 			entityManager.get().merge(gameData);
 		}
 		
-		entityManager.get().persist(Move.createPass(gameData, color));
+		entityManager.get().persist(move.create(gameData, color));
 		entityManager.get().flush();
 	}
-		
+	
 	@Override
 	public void move(long gameId, RestMove restMove) {
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
@@ -186,20 +191,23 @@ public class DefaultGameRestlet implements GameRestlet {
 		throw GoException.createUnauthorized("Player " + player.getName() + " does not participate in game " + game.getId());
 	}
 	
-	private final class MetaDataFunction implements Function<GameData, GameMetaData> {
+	private static final class MetaDataFunction implements Function<GameData, GameMetaData> {
 		@Override
 		public GameMetaData apply(GameData gameData) {
-			Game game = ruleEngine.applyMoves(gameData);
 			return new GameMetaData(
 					gameData.getId(),
 					gameData.getState(),
 					gameData.getBoardSize().getSize(),
-					gameData.getBlack() == null ? null : game.getBlack().getName(),
-					gameData.getWhite() == null ? null : game.getWhite().getName(),
+					name(gameData.getBlack()),
+					name(gameData.getWhite()),
 					gameData.getInitiate(),
 					gameData.getStart(),
 					gameData.getFinish(),
-					game.isFinished() ? game.getWinner().getName() : null);
+					name(gameData.getWinner()));
+		}
+		
+		private static String name(Player player) {
+			return player == null ? null : player.getName();
 		}
 	}
 	
@@ -208,17 +216,26 @@ public class DefaultGameRestlet implements GameRestlet {
 			@Override
 			void applyMove(GoRuleEngine ruleEngine, Game game, Color color) {
 				ruleEngine.applyPass(game, color);
-				log.info("{} player passed in game {}", color, game);
+			}
+			
+			@Override
+			Move create(GameData gameData, Color color) {
+				return Move.createPass(gameData, color);
 			}
 		},
 		SURRENDER {
 			@Override
 			void applyMove(GoRuleEngine ruleEngine, Game game, Color color) {
 				ruleEngine.applySurrender(game, color);
-				log.info("{} player surrendered in game {}", color, game);
+			}
+			
+			@Override
+			Move create(GameData gameData, Color color) {
+				return Move.createSurrender(gameData, color);
 			}
 		};
 		
 		abstract void applyMove(GoRuleEngine ruleEngine, Game game, Color color);
+		abstract Move create(GameData gameData, Color color);
 	}
 }
