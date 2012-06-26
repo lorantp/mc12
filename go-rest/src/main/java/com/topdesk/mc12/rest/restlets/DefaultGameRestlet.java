@@ -74,8 +74,8 @@ public class DefaultGameRestlet implements GameRestlet {
 			query.where(stateField.in(GameState.INITIATED, GameState.STARTED, GameState.FINISHED));
 		}
 		query.orderBy(
-				builder.asc(stateField), 
-				builder.desc(root.get("finish")), 
+				builder.asc(stateField),
+				builder.desc(root.get("finish")),
 				builder.desc(root.get("start")));
 		
 		List<GameData> games = entityManager.get().createQuery(query).getResultList();
@@ -101,10 +101,11 @@ public class DefaultGameRestlet implements GameRestlet {
 		if (game.isFinished()) {
 			gameData.setState(GameState.FINISHED);
 			gameData.setFinish(new DateTime().getMillis());
+			gameData.setWinner(game.getWinner());
 			entityManager.get().merge(gameData);
 		}
 		
-		entityManager.get().persist(Move.createPass(gameData, color));
+		entityManager.get().persist(move.create(gameData, color));
 		entityManager.get().flush();
 	}
 		
@@ -186,20 +187,23 @@ public class DefaultGameRestlet implements GameRestlet {
 		throw GoException.createUnauthorized("Player " + player.getName() + " does not participate in game " + game.getId());
 	}
 	
-	private final class MetaDataFunction implements Function<GameData, GameMetaData> {
+	private static final class MetaDataFunction implements Function<GameData, GameMetaData> {
 		@Override
 		public GameMetaData apply(GameData gameData) {
-			Game game = ruleEngine.applyMoves(gameData);
 			return new GameMetaData(
 					gameData.getId(),
 					gameData.getState(),
 					gameData.getBoardSize().getSize(),
-					gameData.getBlack() == null ? null : game.getBlack().getName(),
-					gameData.getWhite() == null ? null : game.getWhite().getName(),
+					name(gameData.getBlack()),
+					name(gameData.getWhite()),
 					gameData.getInitiate(),
 					gameData.getStart(),
 					gameData.getFinish(),
-					game.isFinished() ? game.getWinner().getName() : null);
+					name(gameData.getWinner()));
+		}
+		
+		private static String name(Player player) {
+			return player == null ? null : player.getName();
 		}
 	}
 	
@@ -210,6 +214,11 @@ public class DefaultGameRestlet implements GameRestlet {
 				ruleEngine.applyPass(game, color);
 				log.info("{} player passed in game {}", color, game);
 			}
+
+			@Override
+			Move create(GameData gameData, Color color) {
+				return Move.createPass(gameData, color);
+			}
 		},
 		SURRENDER {
 			@Override
@@ -217,8 +226,14 @@ public class DefaultGameRestlet implements GameRestlet {
 				ruleEngine.applySurrender(game, color);
 				log.info("{} player surrendered in game {}", color, game);
 			}
+
+			@Override
+			Move create(GameData gameData, Color color) {
+				return Move.createSurrender(gameData, color);
+			}
 		};
 		
 		abstract void applyMove(GoRuleEngine ruleEngine, Game game, Color color);
+		abstract Move create(GameData gameData, Color color);
 	}
 }

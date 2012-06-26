@@ -74,7 +74,7 @@ public class TestData {
 		persist(GameData.createStarted(black, white, nextDate(), nextDate(), sizes.next()));
 		log.debug("Created started game {} vs {}", black.getName(), white.getName());
 		
-		GameData game = GameData.createFinished(black, white, nextDate(), nextDate(), nextDate(), sizes.next());
+		GameData game = GameData.createFinished(black, white, nextDate(), nextDate(), nextDate(), sizes.next(), white);
 		persist(game);
 		
 		Iterator<Color> colors = Iterables.cycle(EnumSet.allOf(Color.class)).iterator();

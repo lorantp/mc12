@@ -59,7 +59,7 @@ public final class GameData implements DatabaseEntity {
 		return gameData;
 	}
 	
-	public static GameData createFinished(Player black, Player white, long initiate, long start, long finish, BoardSize size) {
+	public static GameData createFinished(Player black, Player white, long initiate, long start, long finish, BoardSize size, Player winner) {
 		GameData gameData = new GameData();
 		gameData.setState(GameState.FINISHED);
 		gameData.setInitiate(initiate);
@@ -68,16 +68,18 @@ public final class GameData implements DatabaseEntity {
 		gameData.setBoardSize(size);
 		gameData.setBlack(black);
 		gameData.setWhite(white);
+		gameData.setWinner(winner);
 		return gameData;
 	}
 	
 	@Id @GeneratedValue private Long id;
-	@ManyToOne() private Player black;
-	@ManyToOne() private Player white;
+	@ManyToOne private Player black;
+	@ManyToOne private Player white;
 	@OrderBy("id") @OneToMany(mappedBy="game") private List<Move> moves;
 	private long initiate = -1;
 	private Long start;
 	private Long finish;
 	private BoardSize boardSize;
 	private GameState state;
+	@ManyToOne private Player winner;
 }

@@ -1,5 +1,7 @@
 package com.topdesk.mc12.rules;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -37,21 +39,21 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 				gameData.getBoardSize().getSize(),
 				gameData.getStart());
 		
-		Color lastColor = Color.WHITE; 
-		for (Move move: gameData.getMoves()) {
-			lastColor = move.getColor();
-			if (move.isPass()) {
-				applyPass(game, move.getColor());
-			}
-			else {
+		for (Move move : gameData.getMoves()) {
+			switch (move.getType()) {
+			case MOVE:
 				applyMove(game, move.getColor(), move.getX(), move.getY());
+				break;
+			case PASS:
+				applyPass(game, move.getColor());
+				break;
+			case SURRENDER:
+				applySurrender(game, move.getColor());
+				break;
 			}
 		}
 		
-		if (gameData.getState() == GameState.FINISHED) {			
-			Player winner = lastColor == Color.BLACK ? gameData.getWhite() : gameData.getBlack();
-			game.setWinner(winner);
-		}
+		checkState(game.isFinished() == (gameData.getState() == GameState.FINISHED), "Inconsistent game state");
 		return game;
 	}
 	
@@ -66,7 +68,7 @@ public class DefaultGoRuleEngine implements GoRuleEngine {
 			game.setWinner(winner);
 		}
 	}
-
+	
 	@Override
 	public void applySurrender(Game game, Color color) {
 		checkTurn(game, color);
