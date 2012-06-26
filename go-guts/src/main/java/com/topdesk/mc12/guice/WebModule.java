@@ -17,7 +17,7 @@ import com.topdesk.mc12.persistence.entities.Player;
 import com.topdesk.mc12.rest.RestInterfaceConfig;
 import com.topdesk.mc12.rest.producers.GoExceptionMapper;
 import com.topdesk.mc12.rest.producers.RuntimeExceptionMapper;
-import com.topdesk.mc12.rest.restlets.DatabaseUtils;
+import com.topdesk.mc12.rest.restlets.DatabaseUpgrade;
 import com.topdesk.mc12.rest.restlets.DefaultContextLoginRestlet;
 import com.topdesk.mc12.rest.restlets.DefaultGameRestlet;
 import com.topdesk.mc12.rest.restlets.GameRestlet;
@@ -38,7 +38,7 @@ public class WebModule extends JerseyServletModule {
 		bind(PlayerContextMap.class).to(SessionPlayerContextMap.class);
 		bind(AuthorizationRequestFilter.class);
 		
-		bind(DatabaseUtils.class);
+		bind(DatabaseUpgrade.class);
 		bind(GameRestlet.class).to(DefaultGameRestlet.class);
 		
 		bind(LoginHelper.class);

@@ -37,14 +37,12 @@ public class DefaultGameRestlet implements GameRestlet {
 	private final Provider<EntityManager> entityManager;
 	private final GoRuleEngine ruleEngine;
 	private final Player player;
-	private final DatabaseUtils databaseUtils;
 	
 	@Inject
-	public DefaultGameRestlet(Provider<EntityManager> entityManager, GoRuleEngine ruleEngine, Player player, DatabaseUtils databaseUtils) {
+	public DefaultGameRestlet(Provider<EntityManager> entityManager, GoRuleEngine ruleEngine, Player player) {
 		this.entityManager = entityManager;
 		this.ruleEngine = ruleEngine;
 		this.player = player;
-		this.databaseUtils = databaseUtils;
 	}
 	
 	@Override
@@ -53,7 +51,7 @@ public class DefaultGameRestlet implements GameRestlet {
 		if (gameData == null) {
 			throw GoException.createNotFound("Game with id " + gameId + " not found");
 		}
-		return databaseUtils.update(gameData, ruleEngine.applyMoves(gameData));
+		return ruleEngine.applyMoves(gameData);
 	}
 	
 	@Override
