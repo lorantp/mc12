@@ -26,31 +26,28 @@
 		Create your own custom Modernizr build: www.modernizr.com/download/ -->
 		<script src="js/libs/modernizr-2.5.3.min.js"></script>
 	</head>
-	<body style="cursor: auto; ">
+	<body style="cursor: auto;">
 		<!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
 		chromium.org/developers/how-tos/chrome-frame-getting-started -->
 		<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
-		<div id="content">
-			<div id="metadata" class="ui-widget-content ui-corner-all main-section">
+		<div id="content" gosize="9">
+			<div id="metadata" class="main-section ui-widget-content ui-corner-all">
 				<div id="playerdata">
-					<div id="playerone" class="left">KRISZTIAN HORVATH</div>
-					VS
-					<div id="playertwo" class="right">KRISZTAN MILESZ</div>
+					<div class="left"><p id="black_player" class="player-name">KRISZTIAN HORVATH</p></div>
+					<label>VS</label> 
+					<div class="right"><p id="white_player" class="player-name">KRISZTIAN MILESZ</p></div>
 				</div>
 				<div id="gamedata">
-					<div class="left">
-						<div id="blackcaptured" class="ui-corner-all ui-widget-header smallpadded">11</div>
-					</div>
+					<div id="blackcaptured" class="left ui-corner-all ui-widget-header smallpadded">11</div>
 					<label id="turndata">TURN: 55 - BLACK MOVES</label>				
-					<div class="right">
-						<div id="whitecaptured" class="ui-corner-all ui-widget-header smallpadded">2</div>
-					</div>
+					<div id="whitecaptured" class="right ui-corner-all ui-widget-header smallpadded">2</div>
 				</div>
 			</div>
+			
 			<div id="battlebox" class="ui-widget-content ui-corner-all main-section">
-				started on:
+				<span>started on:</span>
 				<label id="gametime">Tuesday, June 26, 2012 18:07:49</label>				
-				<div id="buttons" class="right">
+				<div id="buttons">
 					<button id="surrender" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Surrender</span></button>
 					<button id="pass" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Pass</span></button>
 					<button id="cancel" class="hidden ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Cancel Game</span></button>

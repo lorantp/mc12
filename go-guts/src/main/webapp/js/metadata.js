@@ -2,9 +2,11 @@ var MetaData = function($parent) {
 	var that = {};
 	
 	that.showData = function(game) {
+		$parent.attr("gosize", new String(game.size));
+		
 		var blackTurn = game.totalMoves % 2 === 0;
-		that.showPlayer(game.black, "#playerone", game.whiteStonesCaptured, "black");
-		that.showPlayer(game.white, "#playertwo", game.blackStonesCaptured, "white");
+		that.showPlayer(game.black, "#black_player", game.whiteStonesCaptured, "black");
+		that.showPlayer(game.white, "#white_player", game.blackStonesCaptured, "white");
 		that.showStartTime(new Date(game.start));
 		
 		if (!game.finished) {

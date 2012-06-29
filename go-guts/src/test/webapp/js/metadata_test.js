@@ -1,6 +1,6 @@
 var container = $("<div id='test' />")
-	.append("<div id='playerone' />")
-	.append("<div id='playertwo' />")
+	.append("<div id='black_player' />")
+	.append("<div id='white_player' />")
 	.append("<div id='turn' />")
 	.append("<div id='starttime' />");
 

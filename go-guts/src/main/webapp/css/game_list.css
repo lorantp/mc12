@@ -1,3 +1,7 @@
+#content {
+	text-align: left;
+}
+
 #game_states {
 	min-width: 520px;
 }

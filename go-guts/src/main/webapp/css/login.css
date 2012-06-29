@@ -1,6 +1,7 @@
 #login {
 	font-size: 180%;
 	text-align: center;
+	padding: 16px;
 }
 
 #login_form {
@@ -13,4 +14,5 @@
 
 #oauth_logins {
 	white-space: normal;
+	padding: 16px;
 }
