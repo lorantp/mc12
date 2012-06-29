@@ -1,0 +1,7 @@
+#game_states {
+	min-width: 520px;
+}
+
+#launch_game > * {
+	margin: 8px;
+}

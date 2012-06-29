@@ -1,0 +1,96 @@
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" lang="en"><script id="tinyhippos-injected" src="chrome-extension://geelfhphabnejjhdalkjhgipohgpdnoc/controllers/injector.js"></script><!--<![endif]--><head>
+		<meta charset="utf-8">
+
+		<!-- Use the .htaccess and remove these lines to avoid edge case issues.
+		More info: h5bp.com/i/378 -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+		<title>Go!</title>
+		<meta name="description" content="">
+
+		<!-- Mobile viewport optimized: h5bp.com/viewport -->
+		<meta name="viewport" content="width=device-width">
+
+		<!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
+
+		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/app_style.css">
+		<link rel="stylesheet" href="css/game_list.css">
+		<link rel="stylesheet" href="css/login.css">
+		<link rel="stylesheet" href="css/eggplant/jquery-ui-1.8.21.custom.css">
+		<!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
+
+		<!-- All JavaScript at the bottom, except this Modernizr build.
+		Modernizr enables HTML5 elements & feature detects for optimal performance.
+		Create your own custom Modernizr build: www.modernizr.com/download/ -->
+		<script src="js/libs/modernizr-2.5.3.min.js"> </script>
+	</head>
+	<body>
+		<!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
+		chromium.org/developers/how-tos/chrome-frame-getting-started -->
+		<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+		<div id="content" class="left_aligned main-section">
+			<div id="login" class="centered" data-role="page"> </div> 
+			<div id="launch_game" class="">
+				<div id="board_size" class="margined ui-buttonset">
+					<input type="radio" id="size19" value="19" name="board_size" checked="checked" class="ui-helper-hidden-accessible">
+					<label for="size19" class="ui-state-active ui-button ui-widget ui-state-default ui-button-text-only ui-corner-left" aria-pressed="true" role="button" aria-disabled="false"><span class="ui-button-text">19x19 Board</span></label>
+					
+					<input type="radio" id="size13" value="13" name="board_size" class="ui-helper-hidden-accessible">
+					<label for="size13" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">13x13 Board</span></label>
+					
+					<input type="radio" id="size9" value="9" name="board_size" class="ui-helper-hidden-accessible">
+					<label for="size9" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-button-text-only ui-corner-right" role="button" aria-disabled="false"><span class="ui-button-text">9x9 Board</span></label>
+				</div>
+				<div id="player_color" class="margined ui-buttonset">
+					<input type="radio" id="color_black" value="BLACK" name="player_color" checked="checked" class="ui-helper-hidden-accessible"><label for="color_black" class="ui-state-active ui-button ui-widget ui-state-default ui-button-text-only ui-corner-left" aria-pressed="true" role="button" aria-disabled="false"><span class="ui-button-text">Play as Black</span></label>
+					<input type="radio" id="color_white" value="WHITE" name="player_color" class="ui-helper-hidden-accessible"><label for="color_white" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-button-text-only ui-corner-right" role="button" aria-disabled="false"><span class="ui-button-text">Play as White</span></label>
+				</div>
+				<button id="initiate" class="margined ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Initiate game</span></button>
+			</div>
+			<div id="game_states" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons" role="tablist">
+				<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" role="tab" aria-expanded="false" aria-selected="false" tabindex="-1"><span class="ui-icon ui-icon-triangle-1-e"></span><a href="#">Initiated Games</a></h3>
+				<div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" style="height: 205px; overflow: auto; display: none; padding-top: 17.600000381469727px; padding-bottom: 17.600000381469727px; " role="tabpanel"><table width="100%" id="initiated_games"><thead><tr>
+					<th>Black</th>
+					<th>White</th>
+					<th>Board size</th>
+					<th>Initiated</th>
+					<th>Play</th>
+				</tr><tr><td>?</td><td>bart</td><td>9x9</td><td>2012.06.29 10:04</td><td><button id="join_to_11" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Join</span></button></td></tr></thead></table></div>
+				<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" role="tab" aria-expanded="false" aria-selected="false" tabindex="-1"><span class="ui-icon ui-icon-triangle-1-e"></span><a href="#">Running Games</a></h3>
+				<div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" style="height: 205px; overflow: auto; display: none; padding-top: 17.600000381469727px; padding-bottom: 17.600000381469727px; " role="tabpanel"><table width="100%" id="running_games"><thead><tr>
+					<th>Black</th>
+					<th>White</th>
+					<th>Board size</th>
+					<th>Started</th>
+					<th>Play</th>
+				</tr><tr><td>kati</td><td>krisztian.milesz</td><td>19x19</td><td>2012.06.29 13:26</td><td><button id="open_game_8" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Open</span></button></td></tr><tr><td>bart</td><td>krisztian.milesz</td><td>9x9</td><td>2012.06.29 13:26</td><td><button id="open_game_10" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Open</span></button></td></tr><tr><td>kati</td><td>Krisz</td><td>19x19</td><td>2012.06.27 20:06</td><td><button id="open_game_7" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Open</span></button></td></tr><tr><td>Krisz</td><td>kati</td><td>9x9</td><td>2012.06.27 20:04</td><td><button id="open_game_5" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Open</span></button></td></tr><tr><td>kati</td><td>Krisz</td><td>19x19</td><td>2012.06.27 20:03</td><td><button id="open_game_6" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Open</span></button></td></tr><tr><td>Krisz</td><td>jorn</td><td>9x9</td><td>2012.06.27 12:17</td><td><button id="open_game_2" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Open</span></button></td></tr><tr><td>bnor</td><td>Krisz</td><td>19x19</td><td>2012.06.26 18:19</td><td><button id="open_game_3" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Open</span></button></td></tr><tr><td>Krisz</td><td>jorn</td><td>13x13</td><td>2012.06.26 18:07</td><td><button id="open_game_4" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Open</span></button></td></tr></thead></table></div>
+				<h3 class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-top" role="tab" aria-expanded="true" aria-selected="true" tabindex="0"><span class="ui-icon ui-icon-triangle-1-s"></span><a href="#">Finished Games</a></h3>
+				<div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active" style="height: 205px; overflow: auto; display: block; padding-top: 17.600000381469727px; padding-bottom: 17.600000381469727px; " role="tabpanel"><table width="100%" id="finished_games"><thead><tr>
+					<th>Black</th>
+					<th>White</th>
+					<th>Winner</th>
+					<th>Board size</th>
+					<th>Finished</th>
+					<th>View</th>
+				</tr><tr><td>jorn</td><td>bnor</td><td>bnor</td><td>19x19</td><td>2012.06.26 16:55</td><td><button id="open_game_1" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Open</span></button></td></tr></thead></table></div>
+			</div>
+			<div style="text-align: center">
+				<a id="logout" href="" class="">Logout</a>
+			</div>
+		</div>
+		<!-- JavaScript at the bottom for fast page loading -->
+		<!-- scripts concatenated and minified via build script -->
+		<script src="js/libs/jquery-1.7.2.js"> </script>
+		<script src="js/libs/jquery.dateFormat-1.0.js"> </script>
+		<script src="js/libs/jquery-ui-1.8.21.custom.min.js"> </script>		
+		<script src="js/rest/rest.js"> </script>
+		<script src="js/rest/game_rest.js"> </script>
+		<script src="js/player_context.js"> </script>
+		<script src="js/game_launcher.js"> </script>
+		<script src="js/game_list.js"> </script>
+		<script src="js/debug.js"> </script>
+		<script src="js/plugins.js"> </script>
+		<!-- end scripts -->
+	
+<div style="display: none; " id="orbiousinterest_dialog"><div class="container">  <div class="header">Mark as unread</div>  URL <input type="text" value="" class="url" readonly="readonly"><br>  Title <input type="text" value="" class="title"><br>  Tags <input type="text" value="tags, seperated by commas" class="tags empty">  <div class="buttons">     <input type="button" value="Cancel" class="cancel">     <input type="button" value="Save" class="save">  </div></div></div><a id="ORBVIOUS_DOMWindowHost" href="#orbiousinterest_dialog"></a></body></html>

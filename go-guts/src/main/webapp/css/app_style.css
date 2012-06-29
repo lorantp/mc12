@@ -1,0 +1,31 @@
+/* Overriding jQuery UI defaults */
+
+.ui-button-text { 
+	padding: .1em .4em ! important;
+}
+
+body {
+	font-family: verdana;
+	text-align: center;
+	padding: 25px;
+}
+
+button {
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+.hidden {
+	display: none;
+}
+
+.main-section {
+	min-width: 420px;
+	resize: horizontal;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.left_aligned {
+	text-align: left;
+}

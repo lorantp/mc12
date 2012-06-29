@@ -1,0 +1,125 @@
+/* Game state */
+
+#battlebox {
+	margin-top: 8px;
+	padding-left: 10px;
+	min-width: 500px;
+	resize: horizontal;
+	height: 1.6em;
+	padding: 8px;
+	vertical-align: middle;
+	
+	font-variant: small-caps;
+	font-size: 75%;
+	font-weight: bold;
+	text-align: left;
+}
+
+#box {
+	display: inline-block;
+	background-color: #505050;
+	padding: 12px;
+	margin-top: 12px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#metadata {
+	padding: 15px;
+}
+
+#gamedata {
+	height: 60px;
+	margin-bottom: 5px;
+	
+	font-family: Impact;
+	font-size: 150%;
+	text-align: center;
+}
+
+#playerdata {
+	font-family: Impact;
+	font-size: 250%;
+}
+
+#playerone {
+	color: #000000;
+	font-weight: bold;
+	text-shadow: -1px 0 #FFFFFF, 0 1px #FFFFFF, 1px 0 #FFFFFF, 0 -1px #FFFFFF;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+#playertwo {
+	color: #FFFFFF;
+	font-weight: bold;
+	text-shadow: -1px 0 #000000, 0 1px #000000, 1px 0 #000000, 0 -1px #000000;
+}
+
+.left {
+	float: left;
+	margin-left: 50px;
+}
+
+.right {
+	float: right;
+	margin-right: 50px;
+}
+
+.smallpadded {
+	padding: 8px;
+}
+
+/* Board */
+
+#board {
+	position: relative;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-color: #C9FAC9;
+}
+
+#board[gosize="19"] {
+	height: 912px;
+	width: 912px;
+	background-image: url("../img/grid19x19.svg");
+}
+
+#board[gosize="13"] {
+	height: 624px;
+	width: 624px;
+	background-image: url("../img/grid13x13.svg");
+}
+
+#board[gosize="9"] {
+	height: 432px;
+	width: 432px;
+	background-image: url("../img/grid9x9.svg");
+}
+
+/* Stones and cells */
+
+div .abs {
+	position: absolute;
+}
+
+div .cell {
+	height: 48px;
+	width: 48px;
+}
+
+[stone=BLACK] {
+	background-image: url("../img/black.png");
+}
+
+[stone=WHITE] {
+	background-image: url("../img/white.png");
+}
+
+[target=BLACK] {
+	background-image: url("../img/target_black.png");
+}
+
+[target=WHITE] {
+	background-image: url("../img/target_white.png");
+}
