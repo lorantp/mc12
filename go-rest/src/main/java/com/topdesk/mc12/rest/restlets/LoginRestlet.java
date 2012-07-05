@@ -19,8 +19,9 @@ import com.topdesk.mc12.rest.entities.ContextData;
 public interface LoginRestlet {
 	@GET @Path("/check/{id}") ContextData checkId(@Context HttpServletRequest request, @PathParam("id") String id);
 	
-	@GET @Path("/facebook") Response facebookLogin(@QueryParam("code") String code);
 	@GET @Path("/unsafe/{name}") ContextData unsafeLogin(@PathParam("name") String playerName);
+	
+	@GET @Path("/facebook") Response facebookLogin(@QueryParam("code") String code);
 	@GET @Path("/twitter/forward") Response twitterLoginForward();
 	@GET @Path("/twitter") String twitterLogin(@QueryParam("oauth_token") String token, @QueryParam("oauth_verifier") String code);
 	@GET @Path("/google/forward") Response googleLoginForward();

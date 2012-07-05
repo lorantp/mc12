@@ -18,7 +18,7 @@ import com.topdesk.mc12.rest.RestInterfaceConfig;
 import com.topdesk.mc12.rest.producers.GoExceptionMapper;
 import com.topdesk.mc12.rest.producers.RuntimeExceptionMapper;
 import com.topdesk.mc12.rest.restlets.DatabaseUpgrade;
-import com.topdesk.mc12.rest.restlets.DefaultContextLoginRestlet;
+import com.topdesk.mc12.rest.restlets.DefaultLoginRestlet;
 import com.topdesk.mc12.rest.restlets.DefaultGameRestlet;
 import com.topdesk.mc12.rest.restlets.GameRestlet;
 import com.topdesk.mc12.rest.restlets.LoginHelper;
@@ -42,7 +42,7 @@ public class WebModule extends JerseyServletModule {
 		bind(GameRestlet.class).to(DefaultGameRestlet.class);
 		
 		bind(LoginHelper.class);
-		bind(LoginRestlet.class).to(DefaultContextLoginRestlet.class);
+		bind(LoginRestlet.class).to(DefaultLoginRestlet.class);
 		
 		bind(ObjectMapper.class).in(SINGLETON);
 		

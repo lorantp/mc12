@@ -4,7 +4,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
 http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="2.0">
 	<!-- used on local workspaces -->
-	<persistence-unit name="com.topdesk.mc12.go.test">
+	<persistence-unit name="com.topdesk.mc12.go.local">
 		<class>com.topdesk.mc12.persistence.entities.GameData</class>
 		<class>com.topdesk.mc12.persistence.entities.Move</class>
 		<class>com.topdesk.mc12.persistence.entities.Player</class>

@@ -6,8 +6,9 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public class WebServer {
+	private static final String LOCALHOST_PROPERTY = "go_test_on_localhost";
 	static {
-		System.setProperty("GoPersistence", "com.topdesk.mc12.go.test");
+		System.setProperty(LOCALHOST_PROPERTY, "true");
 	}
 	
 	private final Server server;

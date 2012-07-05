@@ -2,6 +2,7 @@ package com.topdesk.mc12.rest.restlets;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,6 +17,7 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.scribe.builder.ServiceBuilder;
+import org.scribe.builder.api.Api;
 import org.scribe.builder.api.FacebookApi;
 import org.scribe.builder.api.GoogleApi;
 import org.scribe.builder.api.TwitterApi;
@@ -34,7 +36,10 @@ import com.topdesk.mc12.rest.entities.ContextData;
 
 @Slf4j
 @RequestScoped
-public class DefaultContextLoginRestlet implements LoginRestlet {
+public class DefaultLoginRestlet implements LoginRestlet {
+	private static final String LOCALHOST_PROPERTY = "go_test_on_localhost";
+	private static final boolean IS_LOCALHOST = "true".equals(System.getProperty(LOCALHOST_PROPERTY));
+	
 	private final HttpServletRequest request;
 	private final LoginHelper loginHelper;
 	private final ObjectMapper mapper;
@@ -44,35 +49,32 @@ public class DefaultContextLoginRestlet implements LoginRestlet {
 	private final OAuthService twitterService;
 	
 	@Inject
-	public DefaultContextLoginRestlet(@Context HttpServletRequest request, ObjectMapper mapper, LoginHelper loginHelper) {
+	public DefaultLoginRestlet(@Context HttpServletRequest request, ObjectMapper mapper, LoginHelper loginHelper) {
 		this.request = request;
-		
 		this.mapper = mapper;
 		this.loginHelper = loginHelper;
 		
-		this.facebookService = new ServiceBuilder()
-				.provider(FacebookApi.class)
-				.apiKey("256317947803042")
-				.apiSecret("2d078c77b98e9be0d798d9f71b1669e6")
-				.callback("http://mc12.topdesk.com/test/rest/login/facebook")
-				.build();
-		
-		this.googleService = new ServiceBuilder()
-				.provider(GoogleApi.class)
-				.apiKey("73477428485.apps.googleusercontent.com")
-				.apiSecret("xLZFOen9KvQItfQKFV__eVca")
-				.callback("http://mc12.topdesk.com/test/rest/login/google")
-				.scope("https://apps-apis.google.com/a/feeds/user/#readonly")
-				.debug()
-				.build();
-		
-		this.twitterService = new ServiceBuilder()
-				.provider(TwitterApi.class)
-				.apiKey("666p5JUyzJy9CdnE9wNTQ")
-				.apiSecret("JnNmoZS6FDYnKUQw8toDrz6pTDOjEifLPHFr1MkuWY")
-				.callback("http://mc12.topdesk.com/test/rest/login/twitter")
-				.debug()
-				.build();
+		Properties properties = loadProperties();
+		this.facebookService = createServiceBuilder(FacebookApi.class, properties, "facebook").build();
+		this.googleService = createServiceBuilder(GoogleApi.class, properties, "google")
+				.scope("https://apps-apis.google.com/a/feeds/user/#readonly").build();
+		this.twitterService = createServiceBuilder(TwitterApi.class, properties, "twitter").build();
+	}
+	
+	private static ServiceBuilder createServiceBuilder(Class<? extends Api> apiType, Properties properties, String authKey) {
+		String keyPrefix = authKey + (IS_LOCALHOST ? ".local." : ".test.");
+		return new ServiceBuilder()
+				.provider(apiType)
+				.apiKey(properties.getProperty(keyPrefix + "key"))
+				.apiSecret(properties.getProperty(keyPrefix + "secret"))
+				.callback(properties.getProperty(keyPrefix + "callback"));
+	}
+	
+	@SneakyThrows(IOException.class)
+	private static Properties loadProperties() {
+		Properties properties = new Properties();
+		properties.load(DefaultLoginRestlet.class.getResourceAsStream("/login.properties"));
+		return properties;
 	}
 	
 	@Override

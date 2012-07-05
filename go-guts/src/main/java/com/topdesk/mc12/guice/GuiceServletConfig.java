@@ -16,16 +16,20 @@ import com.topdesk.mc12.testdata.TestData;
 
 @Slf4j
 public class GuiceServletConfig extends GuiceServletContextListener {
+	private static final String PERSISTENCE_UNIT_LOCAL = "com.topdesk.mc12.go.local";
 	private static final String PERSISTENCE_UNIT_PRODUCTION = "com.topdesk.mc12.go";
-	private static final String PERSISTENCE_UNIT = System.getProperty("GoPersistence", PERSISTENCE_UNIT_PRODUCTION);
+	
+	private static final String LOCALHOST_PROPERTY = "go_test_on_localhost";
+	private static final boolean IS_LOCALHOST = "true".equals(System.getProperty(LOCALHOST_PROPERTY));
 	@Inject private PersistService service;
 	
 	@Override
 	protected Injector getInjector() {
-		log.info("Using persistence unit {}", PERSISTENCE_UNIT);
+		String persistenceUnit = IS_LOCALHOST ? PERSISTENCE_UNIT_LOCAL : PERSISTENCE_UNIT_PRODUCTION;
+		log.info("Using persistence unit {}", persistenceUnit);
 		Injector injector = Guice.createInjector(
 				new RuleModule(),
-				new JpaPersistModule(PERSISTENCE_UNIT),
+				new JpaPersistModule(persistenceUnit),
 				new WebModule(),
 				new AbstractModule() {
 					@Override
@@ -39,7 +43,7 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 		service.start();
 		
 		// We only need test data in local since it's already in the production database.
-		if (!PERSISTENCE_UNIT_PRODUCTION.equals(PERSISTENCE_UNIT)) {
+		if (IS_LOCALHOST) {
 			injector.getInstance(TestData.class).create();
 		}
 		injector.getInstance(DatabaseUpgrade.class).version0001();
