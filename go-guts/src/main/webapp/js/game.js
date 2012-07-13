@@ -31,7 +31,7 @@ var Game = function(gameRest, context) {
 	};
 	
 	that.draw = function(id) {
-		gameRest.getGame(id, function(game) {			
+		gameRest.getGame(id, function(game) {
 			metaData = MetaData($("#content"));
 			board = Board(
 					$("#board"),

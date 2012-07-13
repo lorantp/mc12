@@ -27,11 +27,12 @@ var Rest = function() {
 		return $.ajax({
 			url: prefix + url,
 			data: data,
-			success: success || function(data) {
+			success: success || function(data, textStatus, jqXHR) {
 				DEBUG.toString(data)
 			},
-			error: error || function() {
-				console.log('failed');
+			error: error || function(jqXHR, textStatus, errorThrown) {
+				var alertContent = $("<div title='Game master says'/>").append("<p>" + jqXHR.responseText + "</p>");			
+				alertContent.dialog({ modal: true });
 			}
 		});
 	}

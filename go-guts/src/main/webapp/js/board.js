@@ -24,13 +24,13 @@ var Board = function($parent, size, playerColor, actions) {
 	
 	that.buildCell = function(x, y) {
 		return $('<div />')
-		.addClass("abs")
-		.addClass("cell")
-		.attr({id: createId(x, y)})
-		.css({top: (y * cellSize) + "px", left: (x * cellSize) + "px"})
-		.click(function () {
-			that.placeMove(x, y);
-		});
+			.addClass("abs")
+			.addClass("cell")
+			.attr({id: createId(x, y)})
+			.css({top: (y * cellSize) + "px", left: (x * cellSize) + "px"})
+			.click(function () {
+				that.placeMove(x, y);
+			});
 	};
 	
 	that.placeStones = function(stones) {
