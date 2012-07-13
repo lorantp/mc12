@@ -47,6 +47,7 @@ public class DefaultGameRestlet implements GameRestlet {
 	
 	@Override
 	public Game get(long gameId) {
+		log.info("Got request for game {} from {}", gameId, player.getName());
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
 		try {
 			if (gameData == null) {
@@ -67,6 +68,7 @@ public class DefaultGameRestlet implements GameRestlet {
 	
 	@Override
 	public List<GameMetaData> getAll(GameState state) {
+		log.info("Got request for all games {}from {}", state != null ? "(" + state + ") " : "", player.getName());
 		CriteriaBuilder builder = entityManager.get().getCriteriaBuilder();
 		CriteriaQuery<GameData> query = builder.createQuery(GameData.class);
 		Root<GameData> root = query.from(GameData.class);
