@@ -48,10 +48,16 @@ public class DefaultGameRestlet implements GameRestlet {
 	@Override
 	public Game get(long gameId) {
 		GameData gameData = entityManager.get().find(GameData.class, gameId);
-		if (gameData == null) {
-			throw GoException.createNotFound("Game with id " + gameId + " not found");
+		try {
+			if (gameData == null) {
+				throw GoException.createNotFound("Game with id " + gameId + " not found");
+			}
+			return ruleEngine.applyMoves(gameData);
 		}
-		return ruleEngine.applyMoves(gameData);
+		catch (GoException e) {
+			log.error("Invalid database state, got this while reconstructing game:", e);
+			throw e;
+		}
 	}
 	
 	@Override
